@@ -1,5 +1,5 @@
 (ns kibit.core
-  (:require [clojure.core.logic :as l]
+  (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
             [clojure.string :as string]
             [kibit.arithmetic :as arith]
@@ -28,10 +28,10 @@
      (when-not (= form ::eof)
        (cons form (read-ns r))))))
 
-(defn check [expr]
-  (doseq [[rule alt] all-rules]
+(defn check [expr rules]
+  (doseq [[rule alt] rules]
     (when (and (sequential? expr)
-               (l/unifier expr rule))
+               (logic/unifier expr rule))
       (println "[Kibit] Consider" alt "instead of" expr))))
 
 (defn expr-seq [expr]
@@ -43,6 +43,6 @@
   ([ns-sym rules]
      (with-open [reader (-> ns-sym source-file src)]
        (doseq [form (mapcat expr-seq (read-ns reader))]
-         (check form))))
+         (check form rules))))
   ([ns-sym]
      (check-ns ns-sym all-rules)))
