@@ -41,6 +41,7 @@ Bugs can be reported using the github bug tracker.
 * Figure out how to report line numbers.
 * More rules
 * Remove reflection warnings (how?)
+* Can core.logic be used to its full potential?
 
 ## License
 
