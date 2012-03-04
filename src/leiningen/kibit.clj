@@ -1,7 +1,7 @@
 (ns leiningen.kibit
   (:require [clojure.tools.namespace :as ns]
             [clojure.java.io :as io]
-            [kibit.core :as kibit]))
+            [jonase.kibit.core :as kibit]))
 
 (defn kibit [project]
   (let [namespaces (-> project

@@ -1,4 +1,4 @@
-(ns kibit.arithmetic)
+(ns jonase.kibit.arithmetic)
 
 (def rules
   '{(+ ?x 1) inc

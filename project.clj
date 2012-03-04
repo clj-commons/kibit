@@ -1,4 +1,4 @@
-(defproject kibit "0.0.1-SNAPSHOT"
+(defproject jonase/kibit "0.0.1"
   :description "There's a function for that!"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/core.logic "0.6.7"]

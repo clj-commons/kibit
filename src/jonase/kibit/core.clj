@@ -1,10 +1,10 @@
-(ns kibit.core
+(ns jonase.kibit.core
   (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
             [clojure.string :as string]
-            [kibit.arithmetic :as arith]
-            [kibit.control-structures :as control]
-            [kibit.misc :as misc])
+            [jonase.kibit.arithmetic :as arith]
+            [jonase.kibit.control-structures :as control]
+            [jonase.kibit.misc :as misc])
   (:import [java.io PushbackReader]))
 
 (def all-rules (merge control/rules

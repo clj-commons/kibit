@@ -1,4 +1,4 @@
-(ns kibit.misc)
+(ns jonase.kibit.misc)
 
 (def rules
   '{(apply str (interpose ?x ?y)) clojure.string/join

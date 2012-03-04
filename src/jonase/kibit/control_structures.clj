@@ -1,4 +1,4 @@
-(ns kibit.control-structures)
+(ns jonase.kibit.control-structures)
 
 (def rules
   '{(if ?x ?y nil) when
