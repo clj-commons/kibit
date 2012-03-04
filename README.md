@@ -15,15 +15,14 @@ it will make the suggestion to use the `while` macro instead of `if`.
 
 ## Usage
 
-Add
+Add `[jonase/kibit "0.0.1"]` to your `:plugins` vector in your `:user`
+profile (Leiningen 2) or if you are using Leiningen 1:
 
-    :dev-dependencies [...
-                       [jonase/kibit "0.0.1"]
-                       ...]
+    $ lein plugin install jonase/kibit 0.0.1
 
-to your `project.clj` file and run
+Then you can run
 
-    lein kibit
+    $ lein kibit
 
 to analyze your namespaces.
 
@@ -47,6 +46,6 @@ Bugs can be reported using the github bug tracker.
 
 ## License
 
-Copyright (C) 2012 Jonas Enlund
+Copyright © 2012 Jonas Enlund
 
 Distributed under the Eclipse Public License, the same as Clojure.
