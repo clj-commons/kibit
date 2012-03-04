@@ -18,7 +18,7 @@ it will make the suggestion to use the `while` macro instead of `if`.
 Add
 
     :dev-dependencies [...
-                       ["jonase/kibit" "0.0.1"]
+                       [jonase/kibit "0.0.1"]
                        ...]
 
 to your `project.clj` file and run
