@@ -18,7 +18,7 @@ it will make the suggestion to use the `while` macro instead of `if`.
 Add
 
     :dev-dependencies [...
-                       [kibit "0.0.1"]
+                       ["jonase/kibit" "0.0.1"]
                        ...]
 
 to your `project.clj` file and run
@@ -29,10 +29,11 @@ to analyze your namespaces.
 
 ## Contributing
 
-It is very easy to write new patterns for `kibit` to look for. Take a
-look at [`arithmetic.clj`] how new patterns are created. If you know
-of a reaccuring pattern of code that can be simplified, please
-consider sending me a pull request. 
+It is very easy to write new patterns for `kibit`. Take a look at
+[`controle-structures.clj`](http://github.com/jonase/kibit/src/jonase/kibit/controle_structures.clj)
+to see how new patterns are created. If you know of a reaccuring
+pattern of code that can be simplified, please consider sending me a
+pull request.
 
 Bugs can be reported using the github bug tracker.
 
@@ -42,6 +43,7 @@ Bugs can be reported using the github bug tracker.
 * More rules
 * Remove reflection warnings (how?)
 * Can core.logic be used to its full potential?
+* Analyse ClojureScript files?
 
 ## License
 
