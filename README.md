@@ -40,6 +40,7 @@ Bugs can be reported using the github bug tracker.
 
 * Figure out how to report line numbers.
 * More rules
+* Remove reflection warnings (how?)
 
 ## License
 
