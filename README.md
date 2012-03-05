@@ -45,7 +45,6 @@ Bugs can be reported using the github bug tracker.
 
 ## TODO
 
-* The `check-form` should generate a map to open up extensions, not strings which are closed off
 * Rules for function definitions (make this more of a lint tool)
 * Rules for collection lookup; "2 is a bad smell" [see this blog post](http://tech.puredanger.com/2011/10/12/2-is-a-smell/)
 * Extract the "when to use" rules from [Joy of Clojure](http://joyofclojure.com/)
