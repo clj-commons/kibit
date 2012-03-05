@@ -1,5 +1,5 @@
 (ns leiningen.kibit
-  (:require [clojure.tools.namespace :as ns]
+  (:require [clojure.tools.namespace :as clj-ns]
             [clojure.java.io :as io]
             [jonase.kibit.core :as kibit]))
 
@@ -8,7 +8,7 @@
   [project]
   (let [paths (or (:source-paths project) [(:source-path project)])
         namespaces (apply concat (for [path paths]
-                                   (ns/find-namespaces-in-dir (io/file path))))]
+                                   (clj-ns/find-namespaces-in-dir (io/file path))))]
     (doseq [ns-sym namespaces]
       (try
         (println "==" ns-sym "==")
