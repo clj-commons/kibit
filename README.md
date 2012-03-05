@@ -11,7 +11,7 @@ idiomatic function or macro. For example if kibit finds the code
       (some action)
       nil)
 
-it will make the suggestion to use the `while` macro instead of `if`.
+it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
@@ -29,7 +29,7 @@ to analyze your namespaces.
 ## Contributing
 
 It is very easy to write new patterns for `kibit`. Take a look at
-[`controle-structures.clj`](https://github.com/jonase/kibit/blob/master/src/jonase/kibit/control_structures.clj)
+[`control-structures.clj`](https://github.com/jonase/kibit/blob/master/src/jonase/kibit/control_structures.clj)
 to see how new patterns are created. If you know of a recurring
 pattern of code that can be simplified, please consider sending me a
 pull request.
