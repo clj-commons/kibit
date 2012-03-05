@@ -11,7 +11,7 @@ idiomatic function or macro. For example if kibit finds the code
       (some action)
       nil)
 
-it will make the suggestion to use the `while` macro instead of `if`.
+it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
