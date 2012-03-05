@@ -12,15 +12,18 @@
                       misc/rules))
 
 (defn src [path]
-  (if-let [res (io/resource path)]
+  (if-let [res (io/file path)]
     (PushbackReader. (io/reader res))
     (throw (RuntimeException. (str "File not found: " path)))))
 
-(defn source-file [ns-sym]
-  (-> (name ns-sym)
-      (string/replace "." "/")
-      (string/replace "-" "_")
-      (str ".clj")))
+(defn source-file [path-prefix ns-sym]
+  (str
+    path-prefix
+    "/"
+    (-> (name ns-sym)
+        (string/replace "." "/")
+        (string/replace "-" "_")
+        (str ".clj"))))
 
 (defn read-ns [r]
   (lazy-seq
@@ -53,9 +56,11 @@
             expr))
 
 (defn check-ns
-  ([ns-sym rules]
-     (with-open [reader (-> ns-sym source-file src)]
+  ([ns-sym path rules]
+     (with-open [reader (src (source-file path ns-sym))]
        (doseq [form (mapcat expr-seq (read-ns reader))]
          (check form rules))))
+  ([ns-sym path]
+     (check-ns ns-sym path all-rules))
   ([ns-sym]
-     (check-ns ns-sym all-rules)))
+     (check-ns ns-sym "" all-rules)))

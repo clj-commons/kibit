@@ -6,12 +6,11 @@
 (defn kibit
   "Suggest idiomatic replacements for patterns of code."
   [project]
-  (let [paths (or (:source-paths project) [(:source-path project)])
-        namespaces (apply concat (for [path paths]
-                                   (clj-ns/find-namespaces-in-dir (io/file path))))]
-    (doseq [ns-sym namespaces]
-      (try
-        (println "==" ns-sym "==")
-        (kibit/check-ns ns-sym)
-        (catch RuntimeException e (println ns-sym "not found.")))
-    (println "done."))))
+  (let [paths (or (:source-paths project) [(:source-path project)])]
+    (doseq [path paths]
+      (doseq [ns-sym (clj-ns/find-namespaces-in-dir (io/file path))]
+        (try
+          (println "==" ns-sym "==")
+          (kibit/check-ns ns-sym path)
+          (catch RuntimeException e (println ns-sym "not found.")))
+        (println "done.")))))
