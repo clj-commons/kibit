@@ -1,9 +1,31 @@
-/pom.xml
+# Java related
+pom.xml
 *jar
-/lib
+*.class
+
+# Leiningen
 /classes
+/lib
 /native
-/.lein-failures
 /checkouts
-/.lein-deps-sum
+.lein-deps-sum
+.lein-failures
+
+# Temp Files
+*.orig
 *~
+.*.swp
+.*.swo
+*.tmp
+*.bak
+
+# OS X
+.DS_Store
+
+# Logging
+*.log
+
+# Docs
+/autodoc
+/docs
+

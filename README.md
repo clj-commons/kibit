@@ -36,9 +36,21 @@ pull request.
 
 Bugs can be reported using the github bug tracker.
 
+## Contributors
+
+* Jonas Enlund
+* Phil Hagelberg
+* Alan Malloy
+* Paul deGrandis
+
 ## TODO
 
 * Figure out how to report line numbers.
+* Rules for function definitions (make this more of a lint tool)
+* Rules for collection lookup; "2 is a bad smell" [see this blog post](http://tech.puredanger.com/2011/10/12/2-is-a-smell/)
+* Extract the "when to use" rules from [Joy of Clojure](http://joyofclojure.com/)
+* Leiningen project.clj setting for rule exclusion
+* Leiningen project.clj setting for a directory of rules to include
 * More rules
 * Remove reflection warnings (how?)
 * Can core.logic be used to its full potential?
@@ -49,3 +61,4 @@ Bugs can be reported using the github bug tracker.
 Copyright © 2012 Jonas Enlund
 
 Distributed under the Eclipse Public License, the same as Clojure.
+

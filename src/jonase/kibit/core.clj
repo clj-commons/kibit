@@ -28,11 +28,24 @@
      (when-not (= form ::eof)
        (cons form (read-ns r))))))
 
-(defn check [expr rules]
-  (doseq [[rule alt] rules]
-    (when (and (sequential? expr)
-               (logic/unifier expr rule))
-      (println "[Kibit] Consider" alt "instead of" expr))))
+(defn check-form
+  ([expr]
+   (check-form expr all-rules))
+  ([expr rules]
+   (for [[rule alt] rules
+         :let [broken-rule (and (sequential? expr)
+                                (logic/unifier expr rule))]
+         :when (not (nil? broken-rule))]
+       (str "[Kibit] Consider " alt " instead of " expr))))
+
+(defn check
+  "This is a presentation version of check-form,
+  used to print broken-rules to stdout"
+  ([expr]
+   (check expr all-rules))
+  ([expr rules]
+   (doseq [broken-rule (check-form expr rules)]
+     (println broken-rule))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
