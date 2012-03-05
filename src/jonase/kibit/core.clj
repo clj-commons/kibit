@@ -4,8 +4,7 @@
             [clojure.string :as string]
             [jonase.kibit.arithmetic :as arith]
             [jonase.kibit.control-structures :as control]
-            [jonase.kibit.misc :as misc])
-  (:import [java.io PushbackReader]))
+            [jonase.kibit.misc :as misc]))
 
 (def all-rules (merge control/rules
                       arith/rules
@@ -13,7 +12,7 @@
 
 (defn src [path]
   (if-let [res (io/resource path)]
-    (PushbackReader. (io/reader res))
+    (clojure.lang.LineNumberingPushbackReader. (io/reader res))
     (throw (RuntimeException. (str "File not found: " path)))))
 
 (defn source-file [ns-sym]
@@ -24,9 +23,10 @@
 
 (defn read-ns [r]
   (lazy-seq
-   (let [form (read r false ::eof)]
+   (let [form (read r false ::eof)
+         line-num (.getLineNumber r)]
      (when-not (= form ::eof)
-       (cons form (read-ns r))))))
+       (cons (with-meta form {:line line-num}) (read-ns r))))))
 
 (defn check-form
   ([expr]
@@ -36,7 +36,7 @@
          :let [broken-rule (and (sequential? expr)
                                 (logic/unifier expr rule))]
          :when (not (nil? broken-rule))]
-       (str "[Kibit] Consider " alt " instead of " expr))))
+       (str "[Kibit] Consider " alt " instead of " expr " at line " (-> expr meta :line)))))
 
 (defn check
   "This is a presentation version of check-form,
