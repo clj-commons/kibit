@@ -13,5 +13,5 @@
       (try
         (println "==" ns-sym "==")
         (kibit/check-ns ns-sym)
-        (catch RuntimeException e (println ns-sym "not found.")))
-    (println "done."))))
+        (catch RuntimeException e (println ns-sym "not found."))))))
+      
