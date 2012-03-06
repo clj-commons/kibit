@@ -32,12 +32,16 @@
   ([expr]
    (check-form expr all-rules))
   ([expr rules]
-   (for [[rule alt] rules
-         :let [rule-broke (not (nil?
+   (for [rule rules
+         ; See if a rule is broken, if it is, show a unified alternative
+         :let [[_ alt :as unified-rule]  (logic/unifier rule  [expr '?alt])
+               rule-broke (not (nil?
                                  (and (sequential? expr)
-                                      (logic/unifier expr rule))))]
+                                       unified-rule)))]
          :when rule-broke]
-       {:message (str "[Kibit] Consider " alt " instead of " expr " at line " (-> expr meta :line))
+       {:message (str "[Kibit] Consider " (if (sequential? alt) (seq alt) alt) " instead of " expr " at line " (-> expr meta :line))
+        :rule rule
+        :unified-rule unified-rule
         :line (-> expr meta :line)})))
 
 (defn check
