@@ -4,22 +4,12 @@
             [clojure.string :as string]
             [jonase.kibit.arithmetic :as arith]
             [jonase.kibit.control-structures :as control]
-            [jonase.kibit.misc :as misc]))
+            [jonase.kibit.misc :as misc])
+  (:import [clojure.lang LineNumberingPushbackReader]))
 
 (def all-rules (merge control/rules
                       arith/rules
                       misc/rules))
-
-(defn src [path]
-  (if-let [res (io/resource path)]
-    (clojure.lang.LineNumberingPushbackReader. (io/reader res))
-    (throw (RuntimeException. (str "File not found: " path)))))
-
-(defn source-file [ns-sym]
-  (-> (name ns-sym)
-      (string/replace "." "/")
-      (string/replace "-" "_")
-      (str ".clj")))
 
 (defn read-ns [r]
   (lazy-seq
@@ -28,20 +18,27 @@
      (when-not (= form ::eof)
        (cons (with-meta form {:line line-num}) (read-ns r))))))
 
+(defn broke-rule? [expr rules]
+  (some (fn [rule] (and (sequential? expr)
+                        (logic/unifier rule  [expr '?alt])
+                        (vector rule (logic/unifier rule  [expr '?alt]))))
+    rules))
+
 (defn check-form
+  "Return the single best suggestion for a given form"
   ([expr]
-   (check-form expr all-rules))
+     (check-form expr all-rules))
   ([expr rules]
-   (for [rule rules
-         ; See if a rule is broken, if it is, show a unified alternative
-         :let [[_ alt :as unified-rule]  (logic/unifier rule  [expr '?alt])
-               rule-broke (not (nil?
-                                 (and (sequential? expr)
-                                       unified-rule)))]
-         :when rule-broke]
+     (when-let [[[rule _ :as orig-rule][_ alt :as unified-rule]]
+                (loop [ex expr
+                       rules-vec nil]
+                  (let [[[_ _][_ alt] :as rvec] (broke-rule? ex rules)]
+                    (if (nil? alt)
+                      (try rules-vec (catch Exception e nil))
+                      (recur alt rvec))))]
        {:expr expr
         :alt alt
-        :rule rule
+        :rule orig-rule
         :unified-rule unified-rule
         :line (-> expr meta :line)})))
 
@@ -51,7 +48,7 @@
   ([expr]
    (check expr all-rules))
   ([expr rules]
-   (doseq [{:keys [line alt expr]} (check-form expr rules)]
+   (let [{:keys [line alt expr]} (check-form expr rules)]
      (printf "[Kibit:%s] Consider %s instead of %s\n" line (reverse (into '() alt)) expr))))
 
 (defn expr-seq [expr]
@@ -59,10 +56,10 @@
             seq
             expr))
 
-(defn check-ns
-  ([ns-sym rules]
-     (with-open [reader (-> ns-sym source-file src)]
-       (doseq [form (mapcat expr-seq (read-ns reader))]
-         (check form rules))))
-  ([ns-sym]
-     (check-ns ns-sym all-rules)))
+(defn check-file
+  ([reader]
+     (check-file reader all-rules))
+  ([reader rules]
+     (keep check-form
+           (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
+
