@@ -12,9 +12,9 @@
 ;; rule sets.
 
 (deftest control-structures
-  (helper/check-form-test '(if true (println "X")) ['(println "X")] 22)
+  (helper/check-form-test '(if true (println "X")) ['(println "X")])
   (helper/check-form-test '(if true (println "X") nil) ['(when true (println "X"))
-                                                        '(println "X")]23 )
-  (helper/check-form-test '(if test nil else) ['(when-not test else)] 25)
-  (helper/check-form-test '(if test then nil) ['(when test then)] 26))
+                                                        '(println "X")])
+  (helper/check-form-test '(if test nil else) ['(when-not test else)])
+  (helper/check-form-test '(if test then nil) ['(when test then)]))
 

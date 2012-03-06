@@ -6,5 +6,6 @@
     (if ?x (do . ?y)) (when ?x ?y)
     (if (not ?x) ?y ?z) (if-not ?x ?y ?z)
     (when (not ?x) . ?y) (when-not ?x ?y)
-    (if true ?x . ?y) ?x})
+    (if true ?x . ?y) ?x
+    (when true ?x) ?x}) 
 

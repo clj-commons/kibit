@@ -39,7 +39,8 @@
                                  (and (sequential? expr)
                                        unified-rule)))]
          :when rule-broke]
-       {:message (str "[Kibit] Consider " (if (sequential? alt) (seq alt) alt) " instead of " expr " at line " (-> expr meta :line))
+       {:expr expr
+        :alt alt
         :rule rule
         :unified-rule unified-rule
         :line (-> expr meta :line)})))
@@ -50,8 +51,8 @@
   ([expr]
    (check expr all-rules))
   ([expr rules]
-   (doseq [broken-rule-map (check-form expr rules)]
-     (println (:message broken-rule-map)))))
+   (doseq [{:keys [line alt expr]} (check-form expr rules)]
+     (printf "[Kibit:%s] Consider %s instead of %s\n" line (reverse (into '() alt)) expr))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
