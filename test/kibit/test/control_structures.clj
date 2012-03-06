@@ -1,5 +1,6 @@
 (ns kibit.test.control-structures
-  (:require [jonase.kibit.core :as kibit])
+  (:require [jonase.kibit.core :as kibit]
+            [kibit.test.kibit-helper :as helper])
   (:use [clojure.test]))
 
 ;; ==========
@@ -10,10 +11,10 @@
 ;; Please ensure that new rules generate fully expected results across all
 ;; rule sets.
 
-(deftest sloppy-if  
-  (let [exp-data '(if true (println "X"))
-        expected "[Kibit] Consider do or removing the if instead of (if true (println \"X\"))"
-        actual (doall (kibit/check-form exp-data))]
-    (is (= (count actual) 1))
-    (is (= expected (first actual)))))
+(deftest control-structures
+  (helper/check-form-test '(if true (println "X")) ['(println "X")] 22)
+  (helper/check-form-test '(if true (println "X") nil) ['(when true (println "X"))
+                                                        '(println "X")]23 )
+  (helper/check-form-test '(if test nil else) ['(when-not test else)] 25)
+  (helper/check-form-test '(if test then nil) ['(when test then)] 26))
 
