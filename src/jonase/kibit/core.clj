@@ -34,7 +34,7 @@
                        rules-vec nil]
                   (let [[[_ _][_ alt] :as rvec] (broke-rule? ex rules)]
                     (if (nil? alt)
-                      (try rules-vec (catch Exception e nil))
+                      rules-vec
                       (recur alt rvec))))]
        {:expr expr
         :alt alt
