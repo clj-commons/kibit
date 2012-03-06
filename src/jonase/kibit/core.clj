@@ -30,24 +30,24 @@
 
 (defn check-form
   ([expr]
-   (check-form expr all-rules))
+     (check-form expr all-rules))
   ([expr rules]
-   (for [[rule alt] rules
-         :let [rule-broke (not (nil?
-                                 (and (sequential? expr)
-                                      (logic/unifier expr rule))))]
-         :when rule-broke]
-       {:message (str "[Kibit] Consider " alt " instead of " expr " at line " (-> expr meta :line))
+     (for [[rule alt] rules
+           :let [rule-broke (and (sequential? expr)
+                                 (logic/unifier expr rule))]
+           :when rule-broke]
+       {:expr expr
+        :alt alt
         :line (-> expr meta :line)})))
 
 (defn check
   "This is a presentation version of check-form,
   used to print broken-rules to stdout"
   ([expr]
-   (check expr all-rules))
+     (check expr all-rules))
   ([expr rules]
-   (doseq [broken-rule-map (check-form expr rules)]
-     (println (:message broken-rule-map)))))
+     (doseq [{:keys [line alt expr]} (check-form expr rules)]
+       (printf "[Kibit:%s] Consider %s instead of %s\n" line alt expr))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
