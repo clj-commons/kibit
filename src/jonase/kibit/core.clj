@@ -52,7 +52,7 @@
    (check expr all-rules))
   ([expr rules]
    (doseq [{:keys [line alt expr]} (check-form expr rules)]
-     (printf "[Kibit:%s] Consider %s instead of %s\n" line alt expr))))
+     (printf "[Kibit:%s] Consider %s instead of %s\n" line (reverse (into '() alt)) expr))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
