@@ -32,11 +32,12 @@
   ([expr]
    (check-form expr all-rules))
   ([expr rules]
-   (for [[rule alt] rules
-         :let [broken-rule (and (sequential? expr)
-                                (logic/unifier expr rule))]
+   (for [rule rules
+         :let [[_ alt :as unified] (logic/unifier rule [expr '?alt])
+               broken-rule (and (sequential? expr)
+                               unified)]
          :when (not (nil? broken-rule))]
-       (str "[Kibit] Consider " alt " instead of " expr))))
+     (str "[Kibit] Consider " (if (sequential? alt) (seq alt) alt) " instead of " expr))))
 
 (defn check
   "This is a presentation version of check-form,
