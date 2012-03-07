@@ -18,17 +18,23 @@
      (when-not (= form ::eof)
        (cons (with-meta form {:line line-num}) (read-ns r))))))
 
+(defn unify [expr rule]
+  (let [[r s] (#'logic/prep rule)
+        alt (first (logic/run* [alt]
+                     (logic/== expr r)
+                     (logic/== s alt)))]
+    (when alt
+      {:expr expr
+       :rule rule
+       :alt (seq alt)
+       :line (-> expr meta :line)})))
+
 (defn check-form
   ([expr]
      (check-form expr all-rules))
   ([expr rules]
-     (when-let [alt (some (fn [[rule alt]] (and (sequential? expr)
-                                                (logic/unifier expr rule)
-                                                alt))
-                          rules)]
-       {:expr expr
-        :alt alt
-        :line (-> expr meta :line)})))
+     (when (sequential? expr)
+       (some #(unify expr %) rules))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
