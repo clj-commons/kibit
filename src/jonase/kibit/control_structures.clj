@@ -6,5 +6,6 @@
     (if ?x (do . ?y)) when
     (if (not ?x) ?y ?z) if-not
     (when (not ?x) . ?y) when-not
-    #_(if true ?x . ?y) #_"do or removing the if"})
+    (if true ?x . ?y) ?x
+    (when true ?x) ?x}) ; Maybe this should be (do ?x)
 
