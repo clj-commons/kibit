@@ -10,10 +10,11 @@
 ;; Please ensure that new rules generate fully expected results across all
 ;; rule sets.
 
-(deftest sloppy-if  
-  (let [exp-data '(if true (println "X"))
-        expected "[Kibit] Consider do or removing the if instead of (if true (println \"X\"))"
-        actual (doall (kibit/check-form exp-data))]
-    (is (= (count actual) 1))
-    (is (= expected (first actual)))))
+(deftest control-structures-are
+  (are [expected-alt-form test-form] 
+       (= expected-alt-form (:alt (kibit/check-form test-form)))
+    '(println "X") '(if true (println "X") nil)
+    '(println "X") '(if true (println "X"))
+    '(when-not test else) '(if test nil else)
+    '(when test then) '(if test then nil)))
 
