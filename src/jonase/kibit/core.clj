@@ -4,22 +4,12 @@
             [clojure.string :as string]
             [jonase.kibit.arithmetic :as arith]
             [jonase.kibit.control-structures :as control]
-            [jonase.kibit.misc :as misc]))
+            [jonase.kibit.misc :as misc])
+  (:import [clojure.lang LineNumberingPushbackReader]))
 
 (def all-rules (merge control/rules
                       arith/rules
                       misc/rules))
-
-(defn src [path]
-  (if-let [res (io/resource path)]
-    (clojure.lang.LineNumberingPushbackReader. (io/reader res))
-    (throw (RuntimeException. (str "File not found: " path)))))
-
-(defn source-file [ns-sym]
-  (-> (name ns-sym)
-      (string/replace "." "/")
-      (string/replace "-" "_")
-      (str ".clj")))
 
 (defn read-ns [r]
   (lazy-seq
@@ -28,41 +18,38 @@
      (when-not (= form ::eof)
        (cons (with-meta form {:line line-num}) (read-ns r))))))
 
+(defn unify [expr rule]
+  (let [[r s] (#'logic/prep rule)
+        alt (first (logic/run* [alt]
+                     (logic/== expr r)
+                     (logic/== s alt)))]
+    (when alt
+      {:expr expr
+       :rule rule
+       :alt (seq alt)
+       :line (-> expr meta :line)})))
+
 (defn check-form
   ([expr]
-   (check-form expr all-rules))
+     (check-form expr all-rules))
   ([expr rules]
-   (for [rule rules
-         ; See if a rule is broken, if it is, show a unified alternative
-         :let [[_ alt :as unified-rule]  (logic/unifier rule  [expr '?alt])
-               rule-broke (not (nil?
-                                 (and (sequential? expr)
-                                       unified-rule)))]
-         :when rule-broke]
-       {:expr expr
-        :alt alt
-        :rule rule
-        :unified-rule unified-rule
-        :line (-> expr meta :line)})))
-
-(defn check
-  "This is a presentation version of check-form,
-  used to print broken-rules to stdout"
-  ([expr]
-   (check expr all-rules))
-  ([expr rules]
-   (doseq [{:keys [line alt expr]} (check-form expr rules)]
-     (printf "[Kibit:%s] Consider %s instead of %s\n" line (reverse (into '() alt)) expr))))
+     (when (sequential? expr)
+       (loop [expr expr
+              alt-map nil]
+          (if-let [new-alt-map (some #(unify expr %) rules)]
+            (recur (:alt new-alt-map)
+                   new-alt-map)
+            alt-map)))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
             seq
             expr))
 
-(defn check-ns
-  ([ns-sym rules]
-     (with-open [reader (-> ns-sym source-file src)]
-       (doseq [form (mapcat expr-seq (read-ns reader))]
-         (check form rules))))
-  ([ns-sym]
-     (check-ns ns-sym all-rules)))
+(defn check-file
+  ([reader]
+     (check-file reader all-rules))
+  ([reader rules]
+     (keep check-form
+           (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
+

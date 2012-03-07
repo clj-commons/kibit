@@ -7,11 +7,12 @@
   "Suggest idiomatic replacements for patterns of code."
   [project]
   (let [paths (or (:source-paths project) [(:source-path project)])
-        namespaces (apply concat (for [path paths]
-                                   (clj-ns/find-namespaces-in-dir (io/file path))))]
-    (doseq [ns-sym namespaces]
-      (try
-        (println "==" ns-sym "==")
-        (kibit/check-ns ns-sym)
-        (catch RuntimeException e (println ns-sym "not found.")))
-    (println "done."))))
+        source-files (mapcat #(-> % io/file clj-ns/find-clojure-sources-in-dir)
+                             paths)]
+    (doseq [source-file source-files]
+      (printf "== %s ==\n"
+              (or (second (clj-ns/read-file-ns-decl source-file)) source-file))
+      (with-open [reader (io/reader source-file)]
+        (doseq [{:keys [line expr alt]} (kibit/check-file reader)]
+          (printf "[%s] Consider %s instead of %s\n" line alt expr)))
+      (flush))))
