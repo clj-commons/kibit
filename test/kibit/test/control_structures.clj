@@ -1,6 +1,5 @@
 (ns kibit.test.control-structures
-  (:require [jonase.kibit.core :as kibit]
-            [kibit.test.kibit-helper :as helper])
+  (:require [jonase.kibit.core :as kibit])
   (:use [clojure.test]))
 
 ;; ==========
