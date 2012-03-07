@@ -9,3 +9,9 @@
     (if true ?x . ?y) ?x
     (when true ?x) ?x}) ; Maybe this should be (do ?x)
 
+(comment
+  (when true
+    (if (pred? x)
+      (do
+        (action a)
+        (action b)))))
