@@ -34,12 +34,7 @@
      (check-form expr all-rules))
   ([expr rules]
      (when (sequential? expr)
-       (loop [expr expr
-              alt-map nil]
-          (if-let [new-alt-map (some #(unify expr %) rules)]
-            (recur (:alt new-alt-map)
-                   new-alt-map)
-            alt-map)))))
+       (some #(unify expr %) rules))))
 
 (defn expr-seq [expr]
   (tree-seq sequential?
