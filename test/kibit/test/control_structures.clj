@@ -1,6 +1,5 @@
 (ns kibit.test.control-structures
-  (:require [jonase.kibit.core :as kibit]
-            [kibit.test.kibit-helper :as helper])
+  (:require [jonase.kibit.core :as kibit])
   (:use [clojure.test]))
 
 ;; ==========
@@ -12,8 +11,10 @@
 ;; rule sets.
 
 (deftest control-structures
-  (helper/check-form-test '(if true (println "X")) '(println "X"))
-  (helper/check-form-test '(if true (println "X") nil) '(println "X"))
-  (helper/check-form-test '(if test nil else) '(when-not test else))
-  (helper/check-form-test '(if test then nil) '(when test then)))
+  (are [form expected-alt-list] 
+       (= expected-alt-list (:alt (kibit/check-form form)))
+    '(if true (println "X")) '(println "X")
+    '(if true (println "X") nil) '(println "X")
+    '(if test nil else) '(when-not test else)
+    '(if test then nil) '(when test then)))
 

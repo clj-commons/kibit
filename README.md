@@ -42,6 +42,7 @@ Bugs can be reported using the github bug tracker.
 * Phil Hagelberg
 * Alan Malloy
 * Paul deGrandis
+* Yuan Mai
 
 ## TODO
 
