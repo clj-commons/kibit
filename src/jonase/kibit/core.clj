@@ -3,6 +3,7 @@
    replacements for patterns of code and remove general code lint"
   (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
+            [clojure.walk :as walk]
             [jonase.kibit.rules :as core-rules])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
@@ -52,6 +53,16 @@
   ([expr rules]
      (when (sequential? expr)
        (some #(unify expr %) rules))))
+
+(declare expr-seq)
+;; This walks across all the forms within a seq'd form/expression, checking each inner form
+;; We have to restore `:expr` because it gets munged in the tree/expr walk
+(defn check-expr
+  "Given a full expression/form-of-forms/form, a map containing the alternative suggestion info, or `nil`"
+  [expr]
+  (if-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
+    (assoc new-expr :expr expr)
+    nil))
 
 ;; Building the parsable forms
 ;; ---------------------------
