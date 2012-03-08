@@ -41,8 +41,7 @@
        :alt (seq alt)
        :line (-> expr meta :line)})))
 
-;; Loop over the rule set, recursively applying unification to find the best
-;; possible alternative
+;; Loop over the rule set.
 (defn check-form
   "Given an expression/line/form, return a map containing the alternative suggestion info, or `nil`"
   ([expr]
@@ -58,7 +57,7 @@
 ;; The line numbers are added to the lines/forms' to metadata, `^{:line}`
 
 (defn read-ns
-  "Generate a lazy sequence of lines from a [`LineNumberingPushbackReader`]( https://github.com/clojure/clojure/blob/master/src/jvm/clojure/lang/LineNumberingPushbackReader.java )."
+  "Generate a lazy sequence of top level forms from a [`LineNumberingPushbackReader`]( https://github.com/clojure/clojure/blob/master/src/jvm/clojure/lang/LineNumberingPushbackReader.java )."
   [r]
   (lazy-seq
    (let [form (read r false ::eof)
