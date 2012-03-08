@@ -1,4 +1,4 @@
-(ns jonase.kibit.misc)
+(ns jonase.kibit.rules.misc)
 
 (def rules
   '{(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)
@@ -23,4 +23,3 @@
 
   (map (fn [x] (inc x)) [1 2 3])
   (map #(dec %) [1 2 3]))
-

@@ -1,4 +1,4 @@
-(ns jonase.kibit.arithmetic)
+(ns jonase.kibit.rules.arithmetic)
 
 (def rules
   '{(+ ?x 1) (inc ?x)
@@ -14,10 +14,8 @@
     (> ?x 0)  (pos? ?x)
     (<= 1 ?x) (pos? ?x)
 
-    (< ?x 0) (neg? ?x)})
-
-(comment
-  (< (+ 1 x) 0))
-
+    (< ?x 0) (neg? ?x)
     
-   
+    (= ?x ?x)  true
+    (== ?x ?x) true})
+

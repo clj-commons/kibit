@@ -1,24 +1,36 @@
 (ns jonase.kibit.core
+  "Kibit's core functionality uses core.logic to suggest idiomatic
+   replacements for patterns of code and remove general code lint"
   (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
-            [clojure.string :as string]
-            [jonase.kibit.arithmetic :as arith]
-            [jonase.kibit.control-structures :as control]
-            [jonase.kibit.misc :as misc])
+            [jonase.kibit.rules :as core-rules])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
-(def all-rules (merge control/rules
-                      arith/rules
-                      misc/rules))
+;; The rule sets
+;; -------------
+;;
+;; Rule sets are stored in individual files that have a top level
+;; `(def rules '{...})`.  The collection of rules are in the `rules`
+;; directory.
+;;
+;; For more information, see: [rule](#jonase.kibit.rules) namespace
+(def all-rules core-rules/all-rules)
 
-(defn read-ns [r]
-  (lazy-seq
-   (let [form (read r false ::eof)
-         line-num (.getLineNumber r)]
-     (when-not (= form ::eof)
-       (cons (with-meta form {:line line-num}) (read-ns r))))))
 
-(defn unify [expr rule]
+;; Parsing the lines/forms
+;; -----------------------
+;;
+;; The unifier compares a form/line against a single rule.
+
+;; The unification generates a map.
+;;
+;; The `:rule` is a vector of the matching rule/alt pair that was used
+;; to produce the `:alt`, the ideal alternative.
+;; The line number (`:line`) is extracted from the metadata of the line,
+;; courtesy of LineNumberingPushbackReader (See `read-ns` and `check-file`)
+(defn unify
+  "TODO jonas"
+  [expr rule]
   (let [[r s] (#'logic/prep rule)
         alt (first (logic/run* [alt]
                      (logic/== expr r)
@@ -29,21 +41,43 @@
        :alt (seq alt)
        :line (-> expr meta :line)})))
 
+;; Loop over the rule set, recursively applying unification to find the best
+;; possible alternative
 (defn check-form
+  "Given an expression/line/form, return a map containing the alternative suggestion info, or `nil`"
   ([expr]
      (check-form expr all-rules))
   ([expr rules]
      (when (sequential? expr)
        (some #(unify expr %) rules))))
 
-(defn expr-seq [expr]
+;; Building the parsable forms
+;; ---------------------------
+;;
+;; We treat each line as a single form, since logic will match any form sequence on the line
+;; The line numbers are added to the lines/forms' to metadata, `^{:line}`
+
+(defn read-ns
+  "Generate a lazy sequence of lines from a [`LineNumberingPushbackReader`]( https://github.com/clojure/clojure/blob/master/src/jvm/clojure/lang/LineNumberingPushbackReader.java )."
+  [r]
+  (lazy-seq
+   (let [form (read r false ::eof)
+         line-num (.getLineNumber r)]
+     (when-not (= form ::eof)
+       (cons (with-meta form {:line line-num}) (read-ns r))))))
+ 
+(defn expr-seq
+  "TODO jonas, just a quick one"
+  [expr]
   (tree-seq sequential?
             seq
             expr))
 
 (defn check-file
+  "TODO jonas, just a quick one"
   ([reader]
      (check-file reader all-rules))
   ([reader rules]
      (keep check-form
            (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
+
