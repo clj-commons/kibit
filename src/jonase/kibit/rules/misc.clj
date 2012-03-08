@@ -11,9 +11,8 @@
     (filter (complement ?pred) ?coll) (remove ?pred ?coll) 
     (filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)
 
-    ;; fn -- TODO: doesn't work yet
-    (fn [. ?arg] (?fun . ?arg)) ?fun
-    (fn* [. ?args] (?fun . ?args)) ?fun
+    (fn ?args (?fun . ?args)) ?fun
+    (fn* ?args (?fun . ?args)) ?fun
 
     })
 
