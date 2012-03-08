@@ -9,7 +9,8 @@
     (if true ?x ?y) ?x
     (when true . ?x) (do . ?x)
     (do ?x) ?x
-    (when-not true ?x) "removing this dead code"})
+    (when-not true ?x) "removing this dead code"
+    (when false ?x) "removing this dead code"})
 
 (comment
   (when true
