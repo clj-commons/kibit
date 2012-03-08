@@ -66,7 +66,7 @@
        (cons (with-meta form {:line line-num}) (read-ns r))))))
  
 (defn expr-seq
-  "TODO jonas, just a quick one"
+  "Returns a lazy (depth-first) sequence of expr and its children"
   [expr]
   (tree-seq sequential?
             seq
