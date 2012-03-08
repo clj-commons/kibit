@@ -39,9 +39,10 @@
     (when alt
       {:expr expr
        :rule rule
-       :alt (if (seq? alt)
-              (seq alt)
-              alt)
+       :alt (if (or (string? alt)
+                    (not (sequential? alt)))
+              alt
+              (seq alt))
        :line (-> expr meta :line)})))
 
 ;; Loop over the rule set.
