@@ -17,5 +17,6 @@
     (< ?x 0) (neg? ?x)
     
     (= ?x ?x)  true
-    (== ?x ?x) true})
+    (== ?x ?x) true
+    (zero? 0)  true})
 
