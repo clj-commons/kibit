@@ -1,6 +1,6 @@
 (ns jonase.kibit.core
   "Kibit's core functionality uses core.logic to suggest idiomatic
-   replacements for patterns of code and remove general code lint"
+   replacements for patterns of code."
   (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
             [clojure.walk :as walk]
@@ -17,20 +17,31 @@
 ;; For more information, see: [rule](#jonase.kibit.rules) namespace
 (def all-rules core-rules/all-rules)
 
-
-;; Parsing the lines/forms
-;; -----------------------
+;; Unification
+;; -----------
 ;;
-;; The unifier compares a form/line against a single rule.
-
-;; The unification generates a map.
+;; `unify` takes an expression and a `rule`. A rule is a pair
+;; consisting of
 ;;
-;; The `:rule` is a vector of the matching rule/alt pair that was used
-;; to produce the `:alt`, the ideal alternative.
-;; The line number (`:line`) is extracted from the metadata of the line,
-;; courtesy of LineNumberingPushbackReader (See `read-ns` and `check-file`)
+;; * a pattern expression (e.g. `(+ ?x 1)`)
+;; * a substitution expression (e.g. `(inc ?x)`
+;;
+;; If the pattern matches the expression the substitution expression
+;; is used to build an alternative expression. For example, given the
+;; expression `(+ (f x) 1)` and the rule `[(+ ?x 1) (inc ?x)]`, the
+;; expression `(inc (f x))` is built. This is all handled by
+;; `core.logic`.
+;;
+;; Finally, if unification succeeds, a map containing the original
+;; expression (`:expr`), the line where it appeared in the source file
+;; (`:line`), the rule which was used (`rule`) and the suggested
+;; alternative built by `core.logic` (`:alt`) is returned. If the
+;; unification failed `nil` is returned.
+
 (defn unify
-  "TODO jonas"
+  "Attempts to unify expr with rule. On success a map is returned
+  containing :rule, :expression, :line and :alt (suggested
+  alternative) keys. Returns nil if unification fails"
   [expr rule]
   (let [[r s] (#'logic/prep rule)
         alt (first (logic/run* [alt]
@@ -44,52 +55,73 @@
               alt)
        :line (-> expr meta :line)})))
 
-;; Loop over the rule set.
+;; The `check-form` function does a linear search over the rules and
+;; returns the map created by the first successful unification with
+;; expr.
 (defn check-form
-  "Given an expression/line/form, return a map containing the alternative suggestion info, or `nil`"
+  "Returns the first successful unification for expr against the
+  rules. Returns nil if no rule unifies with expr"
   ([expr]
      (check-form expr all-rules))
   ([expr rules]
      (when (sequential? expr)
        (some #(unify expr %) rules))))
 
-(declare expr-seq)
-;; This walks across all the forms within a seq'd form/expression, checking each inner form
-;; We have to restore `:expr` because it gets munged in the tree/expr walk
+;; This walks across all the forms within a seq'd form/expression,
+;; checking each inner form. We have to restore `:expr` because it
+;; gets munged in the tree/expr walk
 (defn check-expr
-  "Given a full expression/form-of-forms/form, a map containing the alternative suggestion info, or `nil`"
+  "Given a full expression/form-of-forms/form, a map containing the
+  alternative suggestion info, or `nil`"
   [expr]
   (if-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
     (assoc new-expr :expr expr)
     nil))
 
-;; Building the parsable forms
-;; ---------------------------
+;; Reading source files
+;; --------------------
 ;;
-;; We treat each line as a single form, since logic will match any form sequence on the line
-;; The line numbers are added to the lines/forms' to metadata, `^{:line}`
-
+;; `read-ns` reads a Clojure source file and returns a sequence of the
+;; top level forms. Line numbers are added as `:line` metadata to the
+;; forms.
 (defn read-ns
-  "Generate a lazy sequence of top level forms from a [`LineNumberingPushbackReader`]( https://github.com/clojure/clojure/blob/master/src/jvm/clojure/lang/LineNumberingPushbackReader.java )."
+  "Generate a lazy sequence of top level forms from a
+  LineNumberingPushbackReader"
   [r]
   (lazy-seq
    (let [form (read r false ::eof)
          line-num (.getLineNumber r)]
      (when-not (= form ::eof)
        (cons (with-meta form {:line line-num}) (read-ns r))))))
- 
+
+;; `Expr-seq` takes an expression and returns a lazy sequence of the
+;; expression itself and all its sub-expressions in a depth-first
+;; manner:
+;;
+;;    user=> (expr-seq '(if (pred? x) (inc x) x))
+;;    ((if (pred? x) (inc x) x)
+;;     if
+;;     (pred? x)
+;;     pred?
+;;     x
+;;     (inc x)
+;;     inc
+;;     x
+;;     x)
 (defn expr-seq
-  "Returns a lazy (depth-first) sequence of expr and its children"
+  "Returns a lazy (depth-first) sequence of expr and all its
+  sub-expressions"
   [expr]
   (tree-seq sequential?
             seq
             expr))
 
 (defn check-file
-  "TODO jonas, just a quick one"
+  "Checks every expression (including sub-expressions) in a clojure
+  source file against the rules and returns a lazy sequence of the
+  result of unification"
   ([reader]
      (check-file reader all-rules))
   ([reader rules]
      (keep check-form
            (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
-
