@@ -23,11 +23,10 @@
 ;; [core](#jonase.kibit.core) namespace
 
 
-
-(def "A map of the individual rule sets, keyed by rule group"
-  rule-map {:control-structures control/rules
-            :arithmetic arith/rules
-            :misc misc/rules})
+;; A map of the individual rule sets, keyed by rule group
+(def rule-map {:control-structures control/rules
+               :arithmetic arith/rules
+               :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`

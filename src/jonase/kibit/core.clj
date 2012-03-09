@@ -30,7 +30,7 @@
 ;; given the expression `(+ (f x) 1)` and the rule `[(+ ?x 1) (inc ?x)]`,
 ;; the expression `(inc (f x))` is built. This is all handled by `core.logic`.
 
-;; TODO run*, ==, and why `first` needs to be called
+;; (More docs on use of `run*` and `==` to come)
 ;;
 ;; Finally, if unification succeeds, a map containing the original
 ;; expression (`:expr`), the line where it appeared in the source file
@@ -82,7 +82,8 @@
 ;; --------------------
 
 ;; `read-ns` is intended to be used with a  Clojure source file,
-;; but will work for anything wrapped in a LinNumberingPushbackReader.
+;; read in by a LineNumberingPushbackReader.  Expressions are
+;; extracted using the clojure reader (ala `read`).
 ;; Line numbers are added as `:line` metadata to the forms.
 (defn read-ns
   "Generate a lazy sequence of top level forms from a
@@ -110,8 +111,8 @@
 ;;      x)`
 ;;
 (defn expr-seq
-  "Given an expreesion seq, return a lazy (depth-first) sequence of expr and all its
-  sub-expressions"
+  "Given an expression (any piece of Clojure data), return a lazy (depth-first)
+  sequence of the expr and all its sub-expressions"
   [expr]
   (tree-seq sequential?
             seq
