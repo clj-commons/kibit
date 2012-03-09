@@ -17,31 +17,29 @@
 ;; For more information, see: [rule](#jonase.kibit.rules) namespace
 (def all-rules core-rules/all-rules)
 
-;; Unification
-;; -----------
+;; Building an alternative form
+;; ----------------------------
 ;;
-;; `unify` takes an expression and a `rule`. A rule is a pair
-;; consisting of
+;; ### Unification
+;; `unify` takes an expression and a `rule` pair (pattern and substitution).
+;; For more information on rule pairs,
+;; see: [rules](#jonase.kibit.rules) namespace
 ;;
-;; * a pattern expression (e.g. `(+ ?x 1)`)
-;; * a substitution expression (e.g. `(inc ?x)`
-;;
-;; If the pattern matches the expression the substitution expression
-;; is used to build an alternative expression. For example, given the
-;; expression `(+ (f x) 1)` and the rule `[(+ ?x 1) (inc ?x)]`, the
-;; expression `(inc (f x))` is built. This is all handled by
-;; `core.logic`.
+;; If the expression-under-analysis matches the pattern, the substitution
+;; expression is used to build an alternative expression. For example,
+;; given the expression `(+ (f x) 1)` and the rule `[(+ ?x 1) (inc ?x)]`,
+;; the expression `(inc (f x))` is built. This is all handled by `core.logic`.
+
+;; TODO run*, ==, and why `first` needs to be called
 ;;
 ;; Finally, if unification succeeds, a map containing the original
 ;; expression (`:expr`), the line where it appeared in the source file
-;; (`:line`), the rule which was used (`rule`) and the suggested
+;; (`:line`), the rule which was used (`:rule`) and the suggested
 ;; alternative built by `core.logic` (`:alt`) is returned. If the
 ;; unification failed `nil` is returned.
-
 (defn unify
-  "Attempts to unify expr with rule. On success a map is returned
-  containing :rule, :expression, :line and :alt (suggested
-  alternative) keys. Returns nil if unification fails"
+  "Unify expr with a rule pair. On success, return a map keyed with
+  `:rule, :expr, :line and :alt`, otherwise return `nil`"
   [expr rule]
   (let [[r s] (#'logic/prep rule)
         alt (first (logic/run* [alt]
@@ -55,6 +53,8 @@
               alt)
        :line (-> expr meta :line)})))
 
+;; ### Applying unification
+
 ;; The `check-form` function does a linear search over the rules and
 ;; returns the map created by the first successful unification with
 ;; expr.
@@ -67,12 +67,12 @@
      (when (sequential? expr)
        (some #(unify expr %) rules))))
 
-;; This walks across all the forms within a seq'd form/expression,
+;; This walks across all the forms within an expr-sequence,
 ;; checking each inner form. We have to restore `:expr` because it
 ;; gets munged in the tree/expr walk
 (defn check-expr
-  "Given a full expression/form-of-forms/form, a map containing the
-  alternative suggestion info, or `nil`"
+  "Given a full expression/form-of-forms/form, return a map containing the
+  alternative suggestion info, or `nil` (see: `check-form`)"
   [expr]
   (if-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
     (assoc new-expr :expr expr)
@@ -80,10 +80,10 @@
 
 ;; Reading source files
 ;; --------------------
-;;
-;; `read-ns` reads a Clojure source file and returns a sequence of the
-;; top level forms. Line numbers are added as `:line` metadata to the
-;; forms.
+
+;; `read-ns` is intended to be used with a  Clojure source file,
+;; but will work for anything wrapped in a LinNumberingPushbackReader.
+;; Line numbers are added as `:line` metadata to the forms.
 (defn read-ns
   "Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader"
@@ -94,22 +94,23 @@
      (when-not (= form ::eof)
        (cons (with-meta form {:line line-num}) (read-ns r))))))
 
-;; `Expr-seq` takes an expression and returns a lazy sequence of the
-;; expression itself and all its sub-expressions in a depth-first
-;; manner:
+;; `tree-seq` returns a lazy-seq of nodes for a tree.
+;; Given an expression, we can then match rules against its pieces.
+;; This is like using `clojure.walk` with `identity`:
 ;;
-;;    user=> (expr-seq '(if (pred? x) (inc x) x))
-;;    ((if (pred? x) (inc x) x)
-;;     if
-;;     (pred? x)
-;;     pred?
-;;     x
-;;     (inc x)
-;;     inc
-;;     x
-;;     x)
+;;     user=> (expr-seq '(if (pred? x) (inc x) x))
+;;     ((if (pred? x) (inc x) x)
+;;      if
+;;      (pred? x)
+;;      pred?
+;;      x
+;;      (inc x)
+;;      inc
+;;      x
+;;      x)`
+;;
 (defn expr-seq
-  "Returns a lazy (depth-first) sequence of expr and all its
+  "Given an expreesion seq, return a lazy (depth-first) sequence of expr and all its
   sub-expressions"
   [expr]
   (tree-seq sequential?
