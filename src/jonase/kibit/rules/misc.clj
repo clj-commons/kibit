@@ -11,7 +11,6 @@
     (filter (complement ?pred) ?coll) (remove ?pred ?coll) 
     (filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)
 
-    ;; anonymous functions
     (fn ?args (?fun . ?args)) ?fun
     (fn* ?args (?fun . ?args)) ?fun
 
