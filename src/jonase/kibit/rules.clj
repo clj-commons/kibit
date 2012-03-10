@@ -4,6 +4,7 @@
   the individual rule sets, via the `rule-map`"
   (:require [jonase.kibit.rules.arithmetic :as arith]
             [jonase.kibit.rules.control-structures :as control]
+            [jonase.kibit.rules.collections :as coll]
             [jonase.kibit.rules.misc :as misc]))
 
 ;; More information on rules
@@ -26,6 +27,7 @@
 ;; A map of the individual rule sets, keyed by rule group
 (def rule-map {:control-structures control/rules
                :arithmetic arith/rules
+               :collections coll/rules
                :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function

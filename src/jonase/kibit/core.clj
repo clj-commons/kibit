@@ -7,6 +7,9 @@
             [jonase.kibit.rules :as core-rules])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
+;; ### Important notes
+;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
+
 ;; The rule sets
 ;; -------------
 ;;
@@ -74,9 +77,8 @@
   "Given a full expression/form-of-forms/form, return a map containing the
   alternative suggestion info, or `nil` (see: `check-form`)"
   [expr]
-  (if-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
-    (assoc new-expr :expr expr)
-    nil))
+  (when-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
+    (assoc new-expr :expr expr)))
 
 ;; Reading source files
 ;; --------------------
@@ -88,7 +90,7 @@
 (defn read-ns
   "Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader"
-  [r]
+  [^LineNumberingPushbackReader r]
   (lazy-seq
    (let [form (read r false ::eof)
          line-num (.getLineNumber r)]
