@@ -92,10 +92,9 @@
   LineNumberingPushbackReader"
   [^LineNumberingPushbackReader r]
   (lazy-seq
-   (let [form (read r false ::eof)
-         line-num (.getLineNumber r)]
+   (let [form (read r false ::eof)]
      (when-not (= form ::eof)
-       (cons (with-meta form {:line line-num}) (read-ns r))))))
+       (cons form (read-ns r))))))
 
 ;; `tree-seq` returns a lazy-seq of nodes for a tree.
 ;; Given an expression, we can then match rules against its pieces.
