@@ -7,6 +7,9 @@
             [jonase.kibit.rules :as core-rules])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
+;; ### Important notes
+;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
+
 ;; The rule sets
 ;; -------------
 ;;
