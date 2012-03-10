@@ -21,7 +21,10 @@
     (do ?x) ?x
 
     ;; Java stuff
-    (.toString ?x) (str ?x)})
+    (.toString ?x) (str ?x)
+
+    ;; Threading
+    (-> ?x ?y) (?y ?x)})
 
 (comment
   (apply concat (apply map f (apply str (interpose \, "Hello"))))
