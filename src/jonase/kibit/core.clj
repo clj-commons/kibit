@@ -88,7 +88,7 @@
 (defn read-ns
   "Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader"
-  [r]
+  [^LineNumberingPushbackReader r]
   (lazy-seq
    (let [form (read r false ::eof)
          line-num (.getLineNumber r)]
