@@ -3028,15 +3028,18 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>jonase/kibit -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">jonase/kibit</h1><h2 class="project-version">0.0.2-SNAPSHOT</h2><br /><p>There's a function for that!</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.3.0</td></tr><tr><td class="dep-name">org.clojure/core.logic</td><td class="dotted"><hr /></td><td class="dep-version">0.6.7</td></tr><tr><td class="dep-name">org.clojure/tools.namespace</td><td class="dotted"><hr /></td><td class="dep-version">0.1.2</td></tr></table></div><div class="dependencies"><h3>dev dependencies</h3><table><tr><td class="dep-name">lein-marginalia</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#jonase.kibit.core">jonase.kibit.core</a></li><li><a href="#jonase.kibit.rules">jonase.kibit.rules</a></li><li><a href="#jonase.kibit.rules.arithmetic">jonase.kibit.rules.arithmetic</a></li><li><a href="#jonase.kibit.rules.control-structures">jonase.kibit.rules.control-structures</a></li><li><a href="#jonase.kibit.rules.misc">jonase.kibit.rules.misc</a></li><li><a href="#leiningen.kibit">leiningen.kibit</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.core" name="jonase.kibit.core"><h1 class="project-name">jonase.kibit.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Kibit's core functionality uses core.logic to suggest idiomatic
+</script><title>jonase/kibit -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">jonase/kibit</h1><h2 class="project-version">0.0.2</h2><br /><p>There's a function for that!</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.3.0</td></tr><tr><td class="dep-name">org.clojure/core.logic</td><td class="dotted"><hr /></td><td class="dep-version">0.6.7</td></tr><tr><td class="dep-name">org.clojure/tools.namespace</td><td class="dotted"><hr /></td><td class="dep-version">0.1.2</td></tr></table></div><div class="dependencies"><h3>dev dependencies</h3><table><tr><td class="dep-name">lein-marginalia</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#jonase.kibit.core">jonase.kibit.core</a></li><li><a href="#jonase.kibit.rules">jonase.kibit.rules</a></li><li><a href="#jonase.kibit.rules.arithmetic">jonase.kibit.rules.arithmetic</a></li><li><a href="#jonase.kibit.rules.collections">jonase.kibit.rules.collections</a></li><li><a href="#jonase.kibit.rules.control-structures">jonase.kibit.rules.control-structures</a></li><li><a href="#jonase.kibit.rules.misc">jonase.kibit.rules.misc</a></li><li><a href="#leiningen.kibit">leiningen.kibit</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.core" name="jonase.kibit.core"><h1 class="project-name">jonase.kibit.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Kibit's core functionality uses core.logic to suggest idiomatic
    replacements for patterns of code.</p>
 </td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.core
   (:require [clojure.core.logic :as logic]
             [clojure.java.io :as io]
             [clojure.walk :as walk]
             [jonase.kibit.rules :as core-rules])
-  (:import [clojure.lang LineNumberingPushbackReader]))</pre></td></tr><tr><td class="docs"><h2>The rule sets</h2>
+  (:import [clojure.lang LineNumberingPushbackReader]))</pre></td></tr><tr><td class="docs"><h3>Important notes</h3>
+
+<p>Feel free to contribute rules to <a href="https://github.com/jonase/kibit">kibit's github repo</a></p>
+</td><td class="codes"></td></tr><tr><td class="docs"><h2>The rule sets</h2>
 
 <p>Rule sets are stored in individual files that have a top level
 <code>(def rules '{...})</code>.  The collection of rules are in the <code>rules</code>
@@ -3097,9 +3100,8 @@ checking each inner form. We have to restore <code>:expr</code> because it
 gets munged in the tree/expr walk</p>
 </td><td class="codes"><pre class="brush: clojure">(defn check-expr
   [expr]
-  (if-let [new-expr (walk/walk #(or (-&gt; % check-form :alt) %) check-form expr)]
-    (assoc new-expr :expr expr)
-    nil))</pre></td></tr><tr><td class="docs"><h2>Reading source files</h2>
+  (when-let [new-expr (walk/walk #(or (-&gt; % check-form :alt) %) check-form expr)]
+    (assoc new-expr :expr expr)))</pre></td></tr><tr><td class="docs"><h2>Reading source files</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader</p>
 
@@ -3108,7 +3110,7 @@ read in by a LineNumberingPushbackReader.  Expressions are
 extracted using the clojure reader (ala <code>read</code>).
 Line numbers are added as <code>:line</code> metadata to the forms.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn read-ns
-  [r]
+  [^LineNumberingPushbackReader r]
   (lazy-seq
    (let [form (read r false ::eof)
          line-num (.getLineNumber r)]
@@ -3149,6 +3151,7 @@ This is like using <code>clojure.walk</code> with <code>identity</code>:</p>
 </td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules
   (:require [jonase.kibit.rules.arithmetic :as arith]
             [jonase.kibit.rules.control-structures :as control]
+            [jonase.kibit.rules.collections :as coll]
             [jonase.kibit.rules.misc :as misc]))</pre></td></tr><tr><td class="docs"><h2>More information on rules</h2>
 
 <p>Rule sets are stored in individual files that have a top level
@@ -3168,6 +3171,7 @@ code alternatives.  For more information see:
 </td><td class="codes"></td></tr><tr><td class="docs"><p>A map of the individual rule sets, keyed by rule group</p>
 </td><td class="codes"><pre class="brush: clojure">(def rule-map {:control-structures control/rules
                :arithmetic arith/rules
+               :collections coll/rules
                :misc misc/rules})</pre></td></tr><tr><td class="docs"><p>TODO: Consider a refactor for this into a function
 <code>(defn rules-for-ns [&amp; namespaces])</code></p>
 </td><td class="codes"><pre class="brush: clojure">(def all-rules (apply merge (vals rule-map)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.arithmetic" name="jonase.kibit.rules.arithmetic"><h1 class="project-name">jonase.kibit.rules.arithmetic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -3186,20 +3190,27 @@ code alternatives.  For more information see:
     (&lt; ?x 0) (neg? ?x)
     (= ?x ?x)  true
     (== ?x ?x) true
-    (zero? 0)  true})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.control-structures" name="jonase.kibit.rules.control-structures"><h1 class="project-name">jonase.kibit.rules.control-structures</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    (zero? 0)  true})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.collections" name="jonase.kibit.rules.collections"><h1 class="project-name">jonase.kibit.rules.collections</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.collections)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def rules
+  '{;;vector
+    (conj [] . ?x) (vector . ?x)})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.control-structures" name="jonase.kibit.rules.control-structures"><h1 class="project-name">jonase.kibit.rules.control-structures</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.control-structures)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def rules
   '{(if ?x ?y nil) (when ?x ?y)
     (if ?x nil ?y) (when-not ?x ?y)
     (if ?x (do . ?y)) (when ?x ?y)
     (if (not ?x) ?y ?z) (if-not ?x ?y ?z)
-    (when (not ?x) . ?y) (when-not ?x ?y)
+    (when (not ?x) . ?y) (when-not ?x . ?y)
     (if true ?x ?y) ?x
     (when true . ?x) (do . ?x)
     (do ?x) ?x
     (when-not true ?x) &quot;removing this dead code&quot;
-    (when false ?x) &quot;removing this dead code&quot;})</pre></td></tr><tr><td class="docs">
+    (when false ?x) &quot;removing this dead code&quot;
+    (if-let ?binding ?expr nil) (when-let ?binding ?expr)})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
+  (when (not (pred? x y)) (f x y))
+  
   (when true
     (if (pred? x)
       (do
@@ -3207,20 +3218,28 @@ code alternatives.  For more information see:
         (action b)))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.misc" name="jonase.kibit.rules.misc"><h1 class="project-name">jonase.kibit.rules.misc</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.misc)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def rules
-  '{(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)
+  '{;; clojure.string
+    (apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)
+    (apply str (reverse ?x)) (clojure.string/reverse ?x)
     ;; mapcat
     (apply concat (apply map ?x ?y)) (mapcat ?x ?y)
     (apply concat (map ?x . ?y)) (mapcat ?x . ?y)
     ;; filter
     (filter (complement ?pred) ?coll) (remove ?pred ?coll) 
     (filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)
+    ;; Unneeded anonymous functions
     (fn ?args (?fun . ?args)) ?fun
     (fn* ?args (?fun . ?args)) ?fun
-    })</pre></td></tr><tr><td class="docs">
+    ;;do
+    (do ?x) ?x
+    ;; Java stuff
+    (.toString ?x) (str ?x)})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
   (apply concat (apply map f (apply str (interpose \, &quot;Hello&quot;))))
   (filter (complement nil?) [1 2 3])
 
+  (.toString (apply str (reverse &quot;Hello&quot;)))
+  
   (map (fn [x] (inc x)) [1 2 3])
   (map #(dec %) [1 2 3]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#leiningen.kibit" name="leiningen.kibit"><h1 class="project-name">leiningen.kibit</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns leiningen.kibit
