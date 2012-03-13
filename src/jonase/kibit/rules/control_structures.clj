@@ -16,8 +16,16 @@
 (comment
   (when (not (pred? x y)) (f x y))
   
-  (when true
-    (if (pred? x)
-      (do
-        (action a)
-        (action b)))))
+  (if (pred? x)
+    (do (action a)
+        (action b)
+        (if-let [x (f a b c)
+                 y (g a b c)
+                 z (h a b c)]
+          (do (+ 1 0)
+              (= 1 1)
+              (< 1 0)))
+        (action d)
+        (action f))
+    nil))
+      
