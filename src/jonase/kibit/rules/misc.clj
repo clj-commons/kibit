@@ -17,14 +17,18 @@
     (fn ?args (?fun . ?args)) ?fun
     (fn* ?args (?fun . ?args)) ?fun
 
-    ;;do
+    ;; do
     (do ?x) ?x
 
     ;; Java stuff
     (.toString ?x) (str ?x)
 
     ;; Threading
-    (-> ?x ?y) (?y ?x)})
+    (-> ?x ?y) (?y ?x)
+    (->> ?x ?y) (?y ?x)
+
+    ;; Other
+    (not (= . ?args)) (not= . ?args)})
 
 (comment
   (apply concat (apply map f (apply str (interpose \, "Hello"))))
