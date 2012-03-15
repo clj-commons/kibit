@@ -29,7 +29,7 @@ to analyze your namespaces.
 ## Contributing
 
 It is very easy to write new patterns for `kibit`. Take a look at
-[`control-structures.clj`](https://github.com/jonase/kibit/blob/master/src/jonase/kibit/control_structures.clj)
+[`control-structures.clj`](https://github.com/jonase/kibit/blob/master/src/jonase/kibit/rules/control_structures.clj)
 to see how new patterns are created. If you know of a recurring
 pattern of code that can be simplified, please consider sending me a
 pull request.
