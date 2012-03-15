@@ -13,9 +13,9 @@
     (filter (complement ?pred) ?coll) (remove ?pred ?coll) 
     (filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)
 
-    ;; Unneeded anonymous functions
-    (fn ?args (?fun . ?args)) ?fun
-    (fn* ?args (?fun . ?args)) ?fun
+    ;; Unneeded anonymous functions -- see bug #16
+    ;; (fn ?args (?fun . ?args)) ?fun
+    ;; (fn* ?args (?fun . ?args)) ?fun
 
     ;; do
     (do ?x) ?x
