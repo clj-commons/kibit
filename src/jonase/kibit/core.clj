@@ -18,7 +18,7 @@
 ;; directory.
 ;;
 ;; For more information, see: [rule](#jonase.kibit.rules) namespace
-(def all-rules core-rules/all-rules)
+(def all-rules (map logic/prep core-rules/all-rules))
 
 ;; Building an alternative form
 ;; ----------------------------
@@ -43,42 +43,19 @@
 (defn unify
   "Unify expr with a rule pair. On success, return a map keyed with
   `:rule, :expr, :line and :alt`, otherwise return `nil`"
-  [expr rule]
-  (let [[r s] (#'logic/prep rule)
-        alt (first (logic/run* [alt]
-                     (logic/== expr r)
-                     (logic/== s alt)))]
+  [expr rules]
+  (let [alt (first (logic/run* [q]
+                     (logic/fresh [pat alt]
+                       (logic/membero [pat alt] rules)
+                       (logic/== expr pat)
+                       (logic/== q alt))))]
     (when alt
       {:expr expr
-       :rule rule
+       ;:rule rule
        :alt (if (seq? alt)
               (seq alt)
               alt)
        :line (-> expr meta :line)})))
-
-;; ### Applying unification
-
-;; The `check-form` function does a linear search over the rules and
-;; returns the map created by the first successful unification with
-;; expr.
-(defn check-form
-  "Returns the first successful unification for expr against the
-  rules. Returns nil if no rule unifies with expr"
-  ([expr]
-     (check-form expr all-rules))
-  ([expr rules]
-     (when (sequential? expr)
-       (some #(unify expr %) rules))))
-
-;; This walks across all the forms within an expr-sequence,
-;; checking each inner form. We have to restore `:expr` because it
-;; gets munged in the tree/expr walk
-(defn check-expr
-  "Given a full expression/form-of-forms/form, return a map containing the
-  alternative suggestion info, or `nil` (see: `check-form`)"
-  [expr]
-  (when-let [new-expr (walk/walk #(or (-> % check-form :alt) %) check-form expr)]
-    (assoc new-expr :expr expr)))
 
 ;; Reading source files
 ;; --------------------
@@ -126,5 +103,5 @@
   ([reader]
      (check-file reader all-rules))
   ([reader rules]
-     (keep check-form
+     (keep #(unify % rules)
            (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
