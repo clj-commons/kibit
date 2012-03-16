@@ -44,18 +44,13 @@
   "Unify expr with a rule pair. On success, return a map keyed with
   `:rule, :expr, :line and :alt`, otherwise return `nil`"
   [expr rules]
-  (let [alt (first (logic/run* [q]
-                     (logic/fresh [pat alt]
-                       (logic/membero [pat alt] rules)
-                       (logic/== expr pat)
-                       (logic/== q alt))))]
-    (when alt
-      {:expr expr
-       ;:rule rule
-       :alt (if (seq? alt)
-              (seq alt)
-              alt)
-       :line (-> expr meta :line)})))
+  (first (logic/run* [q]
+           (logic/fresh [pat alt]
+             (logic/membero [pat alt] rules)
+             (logic/== expr pat)
+             (logic/== q {:expr expr
+                          :alt alt
+                          :line (-> expr meta :line)})))))
 
 ;; Reading source files
 ;; --------------------
