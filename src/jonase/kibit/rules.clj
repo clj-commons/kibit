@@ -25,12 +25,12 @@
 
 
 ;; A map of the individual rule sets, keyed by rule group
-(def rule-map {:control-structures control/rules
+#_(def rule-map {:control-structures control/rules
                :arithmetic arith/rules
                :collections coll/rules
                :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`
-(def all-rules (apply merge (vals rule-map)))
+(def all-rules misc/rules);(apply merge (vals rule-map)))
 

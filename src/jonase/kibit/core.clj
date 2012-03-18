@@ -1,56 +1,33 @@
 (ns jonase.kibit.core
   "Kibit's core functionality uses core.logic to suggest idiomatic
    replacements for patterns of code."
-  (:require [clojure.core.logic :as logic]
-            [clojure.java.io :as io]
+  (:refer-clojure :exclude [==])
+  (:require [clojure.java.io :as io]
             [clojure.walk :as walk]
             [jonase.kibit.rules :as core-rules])
+  (:use [clojure.core.logic :only [prep run* defne project fresh membero ==]])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
-;; ### Important notes
-;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
+(def all-rules (map prep core-rules/all-rules))
 
-;; The rule sets
-;; -------------
-;;
-;; Rule sets are stored in individual files that have a top level
-;; `(def rules '{...})`.  The collection of rules are in the `rules`
-;; directory.
-;;
-;; For more information, see: [rule](#jonase.kibit.rules) namespace
-(def all-rules (map logic/prep core-rules/all-rules))
+(defne check-guards [expr guards]
+  ([_ ()])
+  ([_ [guard . rest]]
+     (project [guard]
+       (guard expr))
+     (check-guards expr rest)))
 
-;; Building an alternative form
-;; ----------------------------
-;;
-;; ### Unification
-;; `unify` takes an expression and a `rule` pair (pattern and substitution).
-;; For more information on rule pairs,
-;; see: [rules](#jonase.kibit.rules) namespace
-;;
-;; If the expression-under-analysis matches the pattern, the substitution
-;; expression is used to build an alternative expression. For example,
-;; given the expression `(+ (f x) 1)` and the rule `[(+ ?x 1) (inc ?x)]`,
-;; the expression `(inc (f x))` is built. This is all handled by `core.logic`.
-
-;; (More docs on use of `run*` and `==` to come)
-;;
-;; Finally, if unification succeeds, a map containing the original
-;; expression (`:expr`), the line where it appeared in the source file
-;; (`:line`), the rule which was used (`:rule`) and the suggested
-;; alternative built by `core.logic` (`:alt`) is returned. If the
-;; unification failed `nil` is returned.
-(defn unify
-  "Unify expr with a rule pair. On success, return a map keyed with
-  `:rule, :expr, :line and :alt`, otherwise return `nil`"
+(defn simplify
   [expr rules]
-  (first (logic/run* [q]
-           (logic/fresh [pat alt]
-             (logic/membero [pat alt] rules)
-             (logic/== expr pat)
-             (logic/== q {:expr expr
-                          :alt alt
-                          :line (-> expr meta :line)})))))
+  (first (run* [q]
+           (fresh [pat guards alt]
+             (membero [pat guards alt] rules)
+             (== pat expr)
+             (check-guards expr guards)
+             (== q {:expr expr
+                    :alt alt
+                    :line (-> expr meta :line)})))))
+
 
 ;; Reading source files
 ;; --------------------
@@ -98,5 +75,5 @@
   ([reader]
      (check-file reader all-rules))
   ([reader rules]
-     (keep #(unify % rules)
+     (keep #(simplify % rules)
            (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))
