@@ -1,10 +1,11 @@
-(ns jonase.kibit.rules.collections)
+(ns jonase.kibit.rules.collections
+  (:use [jonase.kibit.rules.util :only [defrules]]))
 
-(def rules
-  '{;;vector
-    (conj [] . ?x) (vector . ?x)
-    (into [] ?coll) (vec ?coll)
+(defrules rules
+  ;;vector
+  [(conj [] . ?x) (vector . ?x)]
+  [(into [] ?coll) (vec ?coll)]
 
-    ;; set
-    (into #{} ?coll) (set ?coll)})
+  ;; set
+  [(into #{} ?coll) (set ?coll)])
 
