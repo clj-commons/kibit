@@ -17,17 +17,25 @@
        (guard expr))
      (check-guards expr rest)))
 
-(defn simplify
-  [expr rules]
-  (first (run* [q]
-           (fresh [pat guards alt]
-             (membero [pat guards alt] rules)
-             (== pat expr)
-             (check-guards expr guards)
-             (== q {:expr expr
-                    :alt alt
-                    :line (-> expr meta :line)})))))
+(defn simplify-one
+  ([expr]
+    (simplify-one expr all-rules))
+  ([expr rules]
+    (first (run* [q]
+             (fresh [pat guards alt]
+               (membero [pat guards alt] rules)
+               (== pat expr)
+               (check-guards expr guards)
+               (== q {:expr expr
+                      :alt alt
+                      :line (-> expr meta :line)}))))))
 
+(declare expr-seq)
+(defn simplify
+  ([expr]
+    (simplify expr all-rules))
+  ([expr rules]
+    (walk/postwalk identity (expr-seq expr))))
 
 ;; Reading source files
 ;; --------------------
