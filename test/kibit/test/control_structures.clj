@@ -12,8 +12,8 @@
 
 (deftest control-structures-are
   (are [expected-alt-form test-form] 
-       (= expected-alt-form (:alt (kibit/check-form test-form)))
-    ; These two below require a recursive check-form
+       (= expected-alt-form (:alt (kibit/simplify test-form)))
+    ; These two below require a recursive simplify
     ;'(println "X") '(if true (println "X") nil)
     ;'(println "X") '(if true (println "X"))
     '(when-not test else) '(if test nil else)
