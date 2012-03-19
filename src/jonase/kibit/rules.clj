@@ -29,6 +29,7 @@
 (def rule-map {:control-structures control/rules
                :arithmetic arith/rules
                :collections coll/rules
+               :perf perf/rules
                :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function

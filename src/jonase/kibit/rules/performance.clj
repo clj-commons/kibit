@@ -2,4 +2,6 @@
   (:use [jonase.kibit.rules.util :only [defrules]]))
 
 (defrules rules
-  [(reduce + ?coll) (apply + ?coll)]) 
+  ;; reduce on var-arg functions
+  [(reduce + ?coll) (apply + ?coll)])
+
