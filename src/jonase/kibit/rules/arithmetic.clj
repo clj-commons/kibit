@@ -19,5 +19,9 @@
     
   [(= ?x ?x)  true]
   [(== ?x ?x) true]
-  [(zero? 0)  true])
+  [(zero? 0)  true]
+
+  [(* ?x (* . ?xs)) (* ?x . ?xs)]
+  [(+ ?x (+ . ?xs)) (+ ?x . ?xs)])
+
 
