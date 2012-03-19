@@ -30,12 +30,17 @@
                       :alt alt
                       :line (-> expr meta :line)}))))))
 
-(declare expr-seq)
 (defn simplify
   ([expr]
     (simplify expr all-rules))
   ([expr rules]
-    (walk/postwalk identity (expr-seq expr))))
+    (let [line-num (-> expr meta :line)
+          simp-partial #(simplify-one %1 rules)
+          alt (walk/postwalk #(or (-> % simp-partial :alt) %) expr)]
+      (when-not (= expr alt)
+        {:expr expr
+         :alt alt
+         :line line-num}))))
 
 ;; Reading source files
 ;; --------------------
