@@ -5,6 +5,7 @@
   (:require [jonase.kibit.rules.arithmetic :as arith]
             [jonase.kibit.rules.control-structures :as control]
             [jonase.kibit.rules.collections :as coll]
+            [jonase.kibit.rules.equality :as equality]
             [jonase.kibit.rules.performance :as perf]
             [jonase.kibit.rules.misc :as misc]))
 
@@ -29,6 +30,7 @@
 (def rule-map {:control-structures control/rules
                :arithmetic arith/rules
                :collections coll/rules
+               :equality equality/rules
                :perf perf/rules
                :misc misc/rules})
 
