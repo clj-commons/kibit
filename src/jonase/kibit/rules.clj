@@ -5,6 +5,7 @@
   (:require [jonase.kibit.rules.arithmetic :as arith]
             [jonase.kibit.rules.control-structures :as control]
             [jonase.kibit.rules.collections :as coll]
+            [jonase.kibit.rules.performance :as perf]
             [jonase.kibit.rules.misc :as misc]))
 
 ;; More information on rules
