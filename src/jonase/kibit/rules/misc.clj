@@ -1,17 +1,6 @@
 (ns jonase.kibit.rules.misc
-  (:use
-   [jonase.kibit.rules.util :only [defrules]]
-   [clojure.core.logic :only [defne project pred]]))
-
-
-(defn not-method? [sym]
-  (not= (first (str sym)) \.))
-
-(defne fn-call? [expr]
-  ([[_ [_ . _] [fun . _]]]
-     (project [fun]
-       (pred fun symbol?)
-       (pred fun not-method?))))
+  (:require [jonase.kibit.guards :as guards])
+  (:use [jonase.kibit.rules.util :only [defrules]]))
 
 (defrules rules
   ;; clojure.string
@@ -27,8 +16,8 @@
   [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
 
   ;; Unneeded anonymous functions -- see bug #16
-  [(fn ?args (?fun . ?args)) [fn-call?] ?fun]
-  [(fn* ?args (?fun . ?args)) [fn-call?] ?fun]
+  [(fn ?args (?fun . ?args)) [guards/fn-call?] ?fun]
+  [(fn* ?args (?fun . ?args)) [guards/fn-call?] ?fun]
 
   ;; do
   [(do ?x) ?x]

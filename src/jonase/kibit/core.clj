@@ -4,9 +4,9 @@
   (:refer-clojure :exclude [==])
   (:require [clojure.java.io :as io]
             [clojure.walk :as walk]
+            [clojure.core.logic :as logic]
             [jonase.kibit.rules :as core-rules]
             [jonase.kibit.reporters :as reporters])
-  (:use [clojure.core.logic :only [prep run* defne project fresh membero ==]])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; ### Important notes
@@ -19,31 +19,34 @@
 ;; `(defrules rules ...)`. The collection of rules are in the `rules`
 ;; directory.
 ;;
+;; Here, we logically prepare all the rules, by substituting in logic vars
+;; where necessary.
+;;
 ;; For more information, see: [rules](#jonase.kibit.rules) namespace
-(def all-rules (map prep core-rules/all-rules))
+(def all-rules (map logic/prep core-rules/all-rules))
 
 ;; Building an alternative form
 ;; ----------------------------
 ;;
 ;; ### Applying unification
 
-(defne check-guards [expr guards]
+(logic/defne check-guards [expr guards]
   ([_ ()])
-  ([_ [guard . rest]]
-     (project [guard]
-       (guard expr))
+  ([_ [guard-fn . rest]]
+     (logic/project [guard-fn]
+       (guard-fn expr))
      (check-guards expr rest)))
 
 (defn simplify-one
   ([expr]
     (simplify-one expr all-rules))
   ([expr rules]
-    (first (run* [q]
-             (fresh [pat guards alt]
-               (membero [pat guards alt] rules)
-               (== pat expr)
+    (first (logic/run* [q]
+             (logic/fresh [pat guards alt]
+               (logic/membero [pat guards alt] rules)
+               (logic/== pat expr)
                (check-guards expr guards)
-               (== q {:expr expr
+               (logic/== q {:expr expr
                       :alt alt
                       :line (-> expr meta :line)}))))))
 
