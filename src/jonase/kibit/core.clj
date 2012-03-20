@@ -47,8 +47,8 @@
                (logic/== pat expr)
                (check-guards expr guards)
                (logic/== q {:expr expr
-                      :alt alt
-                      :line (-> expr meta :line)}))))))
+                            :alt alt
+                            :line (-> expr meta :line)}))))))
 
 ;; This walks across all the forms within an expression,
 ;; checking each inner form. The outcome is a potential full alternative.
