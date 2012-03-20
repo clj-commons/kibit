@@ -78,9 +78,12 @@
   LineNumberingPushbackReader"
   [^LineNumberingPushbackReader r]
   (lazy-seq
-   (let [form (read r false ::eof)]
-     (when-not (= form ::eof)
-       (cons form (read-file r))))))
+    (try
+      (let [form (read r false ::eof)]
+        (when-not (= form ::eof)
+          (cons form (read-file r))))
+      (catch Exception e
+        (println "A form was skipped because it relies on active parsing/evaluating - issue #14")))))
 
 ;; `tree-seq` returns a lazy-seq of nodes for a tree.
 ;; Given an expression, we can then match rules against its pieces.
@@ -118,8 +121,6 @@
   "Simplifies every expression (including sub-expressions) read in from
   a reader and returns a lazy sequence of the result of unification
   (`simplify` function)."
-  ([reader]
-    (check-via-reader reader :rules all-rules))
   ([reader & kw-opts]
     (let [{:keys [rules verbose]
            :or {rules   all-rules,
@@ -140,8 +141,6 @@
 (defn check-file
   "Checks every expression (including sub-expressions) in a clojure
   source file against the rules and processes them with a reporter"
-  ([source-file]
-    (check-file source-file :rules all-rules))
   ([source-file & kw-opts]
     (let [{:keys [rules verbose reporter]
            :or {rules     all-rules
