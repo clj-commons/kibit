@@ -51,9 +51,8 @@
                             :line (-> expr meta :line)}))))))
 
 ;; This walks across all the forms within an expression,
-;; checking each inner form. The outcome is a potential full alternative.
-;; We check to see if there is indeed a difference in the alternative,
-;; and if so, return a full simplify-map.
+;; checking each inner form and returning a full simplify-map.
+;; (Even if the forms are the same.)
 ;;
 ;; We build the simplify-map at the end because
 ;; Clojure 1.3 munges the metadata in transients (so also in clojure.walk).
@@ -64,10 +63,9 @@
     (let [line-num (-> expr meta :line)
           simp-partial #(simplify-one %1 rules)
           alt (walk/postwalk #(or (-> % simp-partial :alt) %) expr)]
-      (when-not (= expr alt)
-        {:expr expr
-         :alt alt
-         :line line-num}))))
+      {:expr expr
+       :alt alt
+       :line line-num})))
 
 ;; Reading source files
 ;; --------------------
