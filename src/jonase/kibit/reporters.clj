@@ -18,7 +18,7 @@
 
 (defn cli-reporter [check-map]
   (let [{:keys [line expr alt]} check-map]
-    (do 
+    (when (not= expr alt)
       (printf "[%s] Consider:\n" line)
       (pprint-code alt)
       (println "instead of:")
