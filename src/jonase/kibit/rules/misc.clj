@@ -16,8 +16,8 @@
   [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
 
   ;; Unneeded anonymous functions -- see bug #16
-  [(fn ?args (?fun . ?args)) [guards/fn-call?] ?fun]
-  [(fn* ?args (?fun . ?args)) [guards/fn-call?] ?fun]
+  [(fn ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
+  [(fn* ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
 
   ;; do
   [(do ?x) ?x]
