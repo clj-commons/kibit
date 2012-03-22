@@ -50,21 +50,37 @@
                             :alt alt
                             :line (-> expr meta :line)}))))))
 
+;; Guarding `simplify` allows for fine-grained control over what
+;; gets passed to a reporter.  This allows those using kibit
+;; as a library or building out tool compatibility to shape
+;; the results prior to reporting.
+;;
+;; Normally, you'll only want to report an alternative form if it differs
+;; from the original expression form
+;;
+;; Simplify-guards take a map and return a map or nil
+(defn unique-alt? [simplify-map]
+  (let [{:keys [expr alt line]} simplify-map]
+    (when-not (= alt expr)
+      simplify-map)))
+
 ;; This walks across all the forms within an expression,
 ;; checking each inner form. The outcome is a potential full alternative.
 ;; We check to see if there is indeed a difference in the alternative,
-;; and if so, return a full simplify-map.
+;; and if so, return a full simplify-map. See *Guarding simplify* above
 ;;
 ;; We build the simplify-map at the end because
 ;; Clojure 1.3 munges the metadata in transients (so also in clojure.walk).
 (defn simplify
   ([expr]
-    (simplify expr all-rules))
+    (simplify expr all-rules unique-alt?))
   ([expr rules]
+    (simplify expr rules unique-alt?))
+  ([expr rules simplify-guard]
     (let [line-num (-> expr meta :line)
           simp-partial #(simplify-one %1 rules)
           alt (walk/postwalk #(or (-> % simp-partial :alt) %) expr)]
-      (when-not (= expr alt)
+      (simplify-guard
         {:expr expr
          :alt alt
          :line line-num}))))
