@@ -1,7 +1,6 @@
 (ns jonase.kibit.core
   "Kibit's core functionality uses core.logic to suggest idiomatic
    replacements for patterns of code."
-  (:refer-clojure :exclude [==])
   (:require [clojure.java.io :as io]
             [clojure.walk :as walk]
             [clojure.core.logic :as logic]
