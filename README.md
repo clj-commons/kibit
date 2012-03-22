@@ -48,13 +48,9 @@ Bugs can be reported using the github bug tracker.
 * Rules for function definitions (make this more of a lint tool)
 * Rules for collection lookup; "2 is a bad smell" [see this blog post](http://tech.puredanger.com/2011/10/12/2-is-a-smell/)
 * Extract the "when to use" rules from [Joy of Clojure](http://joyofclojure.com/)
-* gh-pages of the Marginalia docs as done [here](http://www.maybetechnology.com/2011/08/literate-programming-with-marginalia.html)
 * Leiningen project.clj setting for rule exclusion
 * Leiningen project.clj setting for a directory of rules to include
-* More rules
-* Remove reflection warnings (how?)
-* Can core.logic be used to its full potential?
-* Analyse ClojureScript files?
+* Analyse ClojureScript files
 
 ## License
 
