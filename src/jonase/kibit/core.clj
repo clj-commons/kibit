@@ -55,7 +55,8 @@
 ;; the results prior to reporting.
 ;;
 ;; Normally, you'll only want to report an alternative form if it differs
-;; from the original expression form
+;; from the original expression form.  You can use `identity` to short circuit
+;; the guard.
 ;;
 ;; Simplify-guards take a map and return a map or nil
 (defn unique-alt? [simplify-map]
