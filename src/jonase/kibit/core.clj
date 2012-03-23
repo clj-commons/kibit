@@ -141,13 +141,14 @@
   a reader and returns a lazy sequence of the result of unification
   (`simplify` function)."
   ([reader & kw-opts]
-    (let [{:keys [rules verbose]
-           :or {rules   all-rules,
+    (let [{:keys [rules simplify-guard verbose]
+           :or {rules   all-rules
+                simplify-guard unique-alt?
                 verbose false}} (apply hash-map kw-opts)]
       (if verbose
-        (keep #(simplify-one % rules)
+        (keep #(simplify-one % rules simplify-guard)
               (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader))))
-        (keep  #(simplify % rules) (read-file (LineNumberingPushbackReader. reader)))))))
+        (keep #(simplify % rules simplify-guard) (read-file (LineNumberingPushbackReader. reader)))))))
 
 ;; The results from simplify get passed to a `reporter`.
 ;; A reporter can be any function that expects a single map.
@@ -161,12 +162,13 @@
   "Checks every expression (including sub-expressions) in a clojure
   source file against the rules and processes them with a reporter"
   ([source-file & kw-opts]
-    (let [{:keys [rules verbose reporter]
+    (let [{:keys [rules simplify-guard verbose reporter]
            :or {rules     all-rules
+                simplify-guard unique-alt?
                 verbose   false
                 reporter  reporters/cli-reporter}} (apply hash-map kw-opts)]
       (with-open [reader (io/reader source-file)]
         (doseq [simplify-map (check-via-reader
-                            reader :rules rules :verbose verbose)]
+                            reader :rules rules :verbose verbose :simplify-guard simplify-guard)]
           (reporter simplify-map))))))
 
