@@ -7,7 +7,9 @@
             [kibit.rules.collections :as coll]
             [kibit.rules.equality :as equality]
             [kibit.rules.performance :as perf]
-            [kibit.rules.misc :as misc]))
+            [kibit.rules.misc :as misc]
+            [clojure.core.logic :as logic]))
+
 
 ;; More information on rules
 ;; -------------------------
@@ -36,5 +38,4 @@
 
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`
-(def all-rules (apply concat (vals rule-map)))
-
+(def all-rules (map logic/prep (apply concat (vals rule-map))))
