@@ -49,6 +49,17 @@
                             :alt alt
                             :line (-> expr meta :line)}))))))
 
+(defn simplify-multipass
+  ([expr]
+    (simplify-multipass expr all-rules))
+  ([expr rules]
+    (loop [expr expr
+           simplify-map nil]
+      (if-let [new-simplify-map (simplify-one expr rules)]
+        (recur (:alt new-simplify-map)
+               new-simplify-map)
+        simplify-map))))
+
 ;; Guarding `simplify` allows for fine-grained control over what
 ;; gets passed to a reporter.  This allows those using kibit
 ;; as a library or building out tool compatibility to shape
@@ -78,7 +89,7 @@
     (simplify expr rules unique-alt?))
   ([expr rules simplify-guard]
     (let [line-num (-> expr meta :line)
-          simp-partial #(simplify-one %1 rules)
+          simp-partial #(simplify-multipass %1 rules)
           alt (walk/postwalk #(or (-> % simp-partial :alt) %) expr)]
       (simplify-guard
         {:expr expr
