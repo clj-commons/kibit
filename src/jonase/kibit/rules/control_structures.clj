@@ -11,8 +11,8 @@
   [(if true ?x) ?x]
   [(when true . ?x) (do . ?x)]
   [(do ?x) ?x]
-  [(when-not true ?x) "removing this dead code"]
-  [(when false ?x) "removing this dead code"]
+  [(when-not true ?x) _]
+  [(when false ?x) _]
   [(if-let ?binding ?expr nil) (when-let ?binding ?expr)])
 
 (comment
