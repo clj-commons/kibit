@@ -19,7 +19,7 @@
     nil             '(if (> 2 3) :one :two)))
 
 (deftest simplify-deep
-  (is (= '(when (zero? 0) :one)
+  (is (= :one
          (:alt (kibit/simplify '(if (= 0 0) :one nil))))))
 
 (deftest simplify-one
