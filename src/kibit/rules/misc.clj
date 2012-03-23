@@ -1,6 +1,6 @@
-(ns jonase.kibit.rules.misc
-  (:require [jonase.kibit.guards :as guards])
-  (:use [jonase.kibit.rules.util :only [defrules]]))
+(ns kibit.rules.misc
+  (:require [kibit.guards :as guards])
+  (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
   ;; clojure.string

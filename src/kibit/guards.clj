@@ -1,4 +1,4 @@
-(ns jonase.kibit.guards
+(ns kibit.guards
   (:require [clojure.core.logic :as logic]))
 
 (defn not-method? [sym]

@@ -1,5 +1,5 @@
-(ns jonase.kibit.rules.collections
-  (:use [jonase.kibit.rules.util :only [defrules]]))
+(ns kibit.rules.collections
+  (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
   ;;vector

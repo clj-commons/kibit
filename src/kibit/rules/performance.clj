@@ -1,5 +1,5 @@
-(ns jonase.kibit.rules.performance
-  (:use [jonase.kibit.rules.util :only [defrules]]))
+(ns kibit.rules.performance
+  (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
   ;; reduce on var-arg functions

@@ -1,7 +1,7 @@
 (ns leiningen.kibit
   (:require [clojure.tools.namespace :as clj-ns]
             [clojure.java.io :as io]
-            [jonase.kibit.core :as kibit]))
+            [kibit.core :as kibit]))
 
 (defn kibit
   "Suggest idiomatic replacements for patterns of code."

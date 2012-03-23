@@ -1,4 +1,4 @@
-(ns jonase.kibit.rules.util)
+(ns kibit.rules.util)
 
 (defmacro defrules [name & rules]
   (let [rules (for [[pat alt & {:keys [when]}] rules]

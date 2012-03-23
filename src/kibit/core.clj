@@ -1,11 +1,11 @@
-(ns jonase.kibit.core
+(ns kibit.core
   "Kibit's core functionality uses core.logic to suggest idiomatic
    replacements for patterns of code."
   (:require [clojure.java.io :as io]
             [clojure.walk :as walk]
             [clojure.core.logic :as logic]
-            [jonase.kibit.rules :as core-rules]
-            [jonase.kibit.reporters :as reporters])
+            [kibit.rules :as core-rules]
+            [kibit.reporters :as reporters])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; ### Important notes

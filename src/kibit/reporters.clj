@@ -1,4 +1,4 @@
-(ns jonase.kibit.reporters
+(ns kibit.reporters
   (:require [clojure.string :as string]
             [clojure.pprint :as pp])
   (:import [java.io StringWriter]))
