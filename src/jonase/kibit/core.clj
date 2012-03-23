@@ -157,7 +157,7 @@
                 simplify-guard unique-alt?
                 verbose false}} (apply hash-map kw-opts)]
       (if verbose
-        (keep #(simplify-one % rules simplify-guard)
+        (keep #(simplify-one % rules)
               (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader))))
         (keep #(simplify % rules simplify-guard) (read-file (LineNumberingPushbackReader. reader)))))))
 
