@@ -1,6 +1,6 @@
 (ns kibit.check
-  (:import [clojure.lang LineNumberingPushbackReader])
-  (:require [kibit.core :as core]))
+  (:require [kibit.core :as core])
+  (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; ### Important notes
 ;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
