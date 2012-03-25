@@ -1,5 +1,5 @@
 (ns kibit.test.core
-  (:require [jonase.kibit.core :as kibit])
+  (:require [kibit.core :as kibit])
   (:use [clojure.test]))
 
 (deftest simplify-alts
