@@ -31,7 +31,8 @@
 ;; Simplifies expr according to the rules until no more rules apply.
 (defn simplify [expr rules]
   (->> expr
-       (iterate (partial walk/postwalk #(simplify-one % rules)))
+       (iterate (partial walk/prewalk #(simplify-one % rules)))
        (partition 2 1)
        (drop-while #(apply not= %))
        (ffirst)))
+
