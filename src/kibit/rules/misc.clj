@@ -1,5 +1,5 @@
 (ns kibit.rules.misc
-  (:require [kibit.guards :as guards])
+  (:require [kibit.rule-guards :as guards])
   (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
