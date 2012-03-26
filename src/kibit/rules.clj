@@ -15,9 +15,10 @@
 ;; -------------------------
 ;;
 ;; Rule sets are stored in individual files that have a top level
-;; `(def rules '{...})`.  The collection of rules are in the `rules`
+;; `(defrules rules ...)`.  The collection of rules are in the `rules`
 ;; directory.
 ;;
+;; TODO Paul - Major revisions
 ;; Each rule (also called a rule pair) in a rule set map is comprised of:
 ;;
 ;; * a pattern expression (e.g. `(+ ?x 1)`)

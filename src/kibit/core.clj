@@ -1,8 +1,11 @@
 (ns kibit.core
-  "Kibit's core functionality uses core.logic to suggest idiomatic
-   replacements for patterns of code."
+  "Kibit's core functionality uses core.logic to construct idiomatic
+   replacements/simplifications for patterns of code."
   (:require [clojure.walk :as walk]
             [clojure.core.logic :as logic]))
+
+;; ### Important notes
+;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
 
 ;; Building an alternative form
 ;; ----------------------------
