@@ -165,7 +165,7 @@
 ;; core keyword arguments.  They use the most common arguments by default
 ;; and all return a sequence of `simplify-maps` that pass the check-guard.
 ;;
-;; You can pass in your own `:rule` set, check `:guard`, and toggle
+;; You can pass in your own `:rules` set, check `:guard`, and toggle
 ;; the `:resolution` to achieve your desired output map sequence.
 ;;
 ;; Here are two examples:
