@@ -1,5 +1,5 @@
 (ns kibit.test.control-structures
-  (:require [kibit.core :as kibit])
+  (:require [kibit.check :as kibit])
   (:use [clojure.test]))
 
 ;; ==========
@@ -12,10 +12,9 @@
 
 (deftest control-structures-are
   (are [expected-alt-form test-form] 
-       (= expected-alt-form (:alt (kibit/simplify test-form)))
-    ; These two below require a recursive simplify
-    ;'(println "X") '(if true (println "X") nil)
-    ;'(println "X") '(if true (println "X"))
+       (= expected-alt-form (:alt (kibit/check-expr test-form)))
+    '(println "X") '(if true (println "X") nil)
+    '(println "X") '(if true (println "X"))
     '(when-not test else) '(if test nil else)
     '(when test then) '(if test then nil)))
 
