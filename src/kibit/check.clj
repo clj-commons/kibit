@@ -100,7 +100,7 @@
 ;; Building results / `simplify-maps`
 ;; -----------------------------------
 
-;; See the [core](#kibit-core) namespace for details in simplifying an expression.
+;; See the [core](#kibit-core) namespace for details on simplifying an expression.
 (defn- build-simplify-map
   "Construct the canonical simplify-map
   given an expression and a simplified expression."
@@ -146,7 +146,7 @@
 ;;
 ;; `:subform` will only report on the subforms. This is most common
 ;; for standard reporting, and what gets used when Kibit's Leinigen
-;; plugin is `:verbose false`
+;; plugin is `:verbose false`, the default setting.
 
 ;; Map the levels of resolution to the correct combination of `simplify`
 ;; and `read-seq` functions.
@@ -186,7 +186,7 @@
 ;;             (build-simplify-map expr simplified-expr)]
 ;;       (guard simplify-map))
 ;;
-;; `simply-fn` is built from:
+;; `simplify-fn` is built from:
 ;; `#((res->simplify resolution) % rules)`
 (defn- check-aux
   "Simplify an expression, build a simplify-map, and guard the returning map"
