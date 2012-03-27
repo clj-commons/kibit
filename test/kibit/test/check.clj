@@ -1,15 +1,13 @@
-(ns kibit.test.core
-  (:require [kibit.check :as kibit]
-            [kibit.core :as core]
-            [clojure.core.logic :as logic]
-            [kibit.rules :as core-rules])
+(ns kibit.test.check
+  (:require [kibit.check :as kibit])
   (:use [clojure.test]))
 
-(def all-rules  (map logic/prep core-rules/all-rules))
+;; These tests are identical to the tests in kibit.test.core
+;; The are here to illustrate kibit use via `check`
 
 (deftest simplify-alts
-  (are [expected-alt test-expr]
-       (= expected-alt (core/simplify test-expr all-rules) (:alt (kibit/check-expr test-expr)))
+  (are [expected-alt test-form]
+       (= expected-alt (:alt (kibit/check-expr test-form)))
     [1 2 3]           '(do [1 2 3])
     []                '(do [])
     "Hello"           '(do "Hello")
@@ -17,7 +15,6 @@
     :one              '(do :one)
     {:one 1}          '(do {:one 1})))
 
-;; This test confirms when checking will happen and when it won't
 (deftest simplify-exprs
   (are [expected-expr test-expr]
        (= expected-expr (:expr (kibit/check-expr test-expr)))
@@ -26,11 +23,9 @@
 
 (deftest simplify-deep
   (is (= :one
-         (core/simplify '(if (= 0 0) :one nil) all-rules)
          (:alt (kibit/check-expr '(if (= 0 0) :one nil))))))
 
 (deftest simplify-one
   (is (= '(when (= 0 0) :one)
-         (core/simplify-one '(if (= 0 0) :one nil) all-rules)
          (:alt (kibit/check-expr '(if (= 0 0) :one nil) :resolution :subform)))))
 

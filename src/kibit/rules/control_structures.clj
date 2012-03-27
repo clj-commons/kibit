@@ -1,5 +1,5 @@
-(ns jonase.kibit.rules.control-structures
-  (:use [jonase.kibit.rules.util :only [defrules]]))
+(ns kibit.rules.control-structures
+  (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
   [(if ?x ?y nil) (when ?x ?y)]
