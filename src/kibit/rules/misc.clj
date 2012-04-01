@@ -1,5 +1,5 @@
 (ns kibit.rules.misc
-  (:require [kibit.rule-guards :as guards])
+  (:require [clojure.core.logic :as logic])
   (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
@@ -16,16 +16,32 @@
   [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
 
   ;; Unneeded anonymous functions
-  ;; TODO -- write raw rules for these two rules
-  #_[(fn ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
-  #_[(fn* ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
-
-  ;; do
+  (let [fun (logic/lvar)
+        args (logic/lvar)]
+    [(fn [expr]
+       (logic/all
+        (logic/conde
+         [(logic/== expr (list 'fn args (logic/llist fun args)))]
+         [(logic/== expr (list 'fn* args (logic/llist fun args)))])
+        (logic/pred fun #(or (keyword? %)
+                             (and (symbol? %)
+                                  (not= \. (first (str %))))))))
+     #(logic/== % fun)])
+  
+   ;; do
   [(do ?x) ?x]
 
   ;; Java stuff
   [(.toString ?x) (str ?x)]
+  
+  (let [obj (logic/lvar)
+        method (logic/lvar)
+        args (logic/lvar)]
+    [#(logic/== % (logic/llist '. obj method args))
+     #(logic/project [method args]
+        (logic/== % `(~(symbol (str "." method)) ~obj ~@args)))])
 
+  
   ;; Threading
   [(-> ?x ?y) (?y ?x)]
   [(->> ?x ?y) (?y ?x)]
@@ -45,4 +61,8 @@
   (map #(dec %) [1 2 3])
   (map #(.method %) [1 2 3])
 
-  )
+  (map (fn [m] (:key m)) [some maps])
+  (map (fn [m] (:key m alt)) [a b c])
+
+  (. obj toString)
+  (. obj toString a b c))
