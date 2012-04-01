@@ -2,10 +2,10 @@
 
 *There's a function for that!*
 
-`kibit` is a static code analyzer for Clojure which uses the
-[`core.logic`](https://github.com/clojure/core.logic) unifier to
-search for patterns of code for which there might exist a more
-idiomatic function or macro. For example if kibit finds the code
+`kibit` is a static code analyzer for Clojure which uses
+[`core.logic`](https://github.com/clojure/core.logic) to search for
+patterns of code for which there might exist a more idiomatic function
+or macro. For example if kibit finds the code
 
     (if (some test)
       (some action)
@@ -15,10 +15,10 @@ it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
-Add `[jonase/kibit "0.0.2"]` to your `:plugins` vector in your `:user`
+Add `[jonase/kibit "0.0.3"]` to your `:plugins` vector in your `:user`
 profile (Leiningen 2) or if you are using Leiningen 1:
 
-    $ lein plugin install jonase/kibit 0.0.2
+    $ lein plugin install jonase/kibit 0.0.3
 
 Then you can run
 
