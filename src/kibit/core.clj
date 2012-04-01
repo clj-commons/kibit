@@ -11,24 +11,17 @@
 ;; ----------------------------
 ;;
 ;; ### Applying unification
-
-(logic/defne check-guards [expr guards]
-  ([_ ()])
-  ([_ [guard-fn . rest]]
-     (logic/project [guard-fn]
-       (guard-fn expr))
-     (check-guards expr rest)))
-
+;;
 ;; Performs the first simplification found in the rules. If no rules
 ;; apply the original expression is returned. Does not look at
 ;; subforms.
 (defn simplify-one [expr rules]
   (let [alts (logic/run* [q]
-               (logic/fresh [pat guards alt]
-                 (logic/membero [pat guards alt] rules)
-                 (logic/== pat expr)
-                 (check-guards expr guards)
-                 (logic/== q alt)))]
+               (logic/fresh [pat subst]
+                 (logic/membero [pat subst] rules)
+                 (logic/project [pat subst]
+                   (logic/all (pat expr)
+                              (subst q)))))]
     (if (empty? alts) expr (first alts))))
 
 ;; Simplifies expr according to the rules until no more rules apply.

@@ -15,9 +15,10 @@
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
   [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
 
-  ;; Unneeded anonymous functions -- see bug #16
-  [(fn ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
-  [(fn* ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
+  ;; Unneeded anonymous functions
+  ;; TODO -- write raw rules for these two rules
+  #_[(fn ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
+  #_[(fn* ?args (?fun . ?args)) ?fun :when [guards/fn-call?]]
 
   ;; do
   [(do ?x) ?x]
