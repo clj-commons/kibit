@@ -1,19 +1,24 @@
-(ns jonase.kibit.rules
+(ns kibit.rules
   "`rules.clj` provides the core functionality for extracting
   and merging rules from namespaces.  There are shorthands for
   the individual rule sets, via the `rule-map`"
-  (:require [jonase.kibit.rules.arithmetic :as arith]
-            [jonase.kibit.rules.control-structures :as control]
-            [jonase.kibit.rules.collections :as coll]
-            [jonase.kibit.rules.misc :as misc]))
+  (:require [kibit.rules.arithmetic :as arith]
+            [kibit.rules.control-structures :as control]
+            [kibit.rules.collections :as coll]
+            [kibit.rules.equality :as equality]
+            [kibit.rules.performance :as perf]
+            [kibit.rules.misc :as misc]
+            [clojure.core.logic :as logic]))
+
 
 ;; More information on rules
 ;; -------------------------
 ;;
 ;; Rule sets are stored in individual files that have a top level
-;; `(def rules '{...})`.  The collection of rules are in the `rules`
+;; `(defrules rules ...)`.  The collection of rules are in the `rules`
 ;; directory.
 ;;
+;; TODO Paul - Major revisions
 ;; Each rule (also called a rule pair) in a rule set map is comprised of:
 ;;
 ;; * a pattern expression (e.g. `(+ ?x 1)`)
@@ -28,9 +33,10 @@
 (def rule-map {:control-structures control/rules
                :arithmetic arith/rules
                :collections coll/rules
+               :equality equality/rules
+               :perf perf/rules
                :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`
-(def all-rules (apply merge (vals rule-map)))
-
+(def all-rules (map logic/prep (apply concat (vals rule-map))))
