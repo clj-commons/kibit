@@ -43,7 +43,33 @@
 
   
   ;; Threading
-  [(-> ?x ?y) (?y ?x)]
+  (let [form (logic/lvar)
+        arg (logic/lvar)]
+    [#(logic/all (logic/== % (list '-> arg form)))
+     (fn [sbst]
+       (logic/conde
+        [(logic/all
+          (logic/pred form #(or (symbol? %) (keyword? %)))
+          (logic/== sbst (list form arg)))]
+        [(logic/all
+          (logic/pred form seq?)
+          (logic/project [form]
+            (logic/== sbst (list* (first form) arg (rest form)))))]))])
+
+  (let [form (logic/lvar)
+        arg (logic/lvar)]
+    [#(logic/all (logic/== % (list '->> arg form)))
+     (fn [sbst]
+       (logic/conde
+        [(logic/all
+          (logic/pred form #(or (symbol? %) (keyword? %)))
+          (logic/== sbst (list form arg)))]
+        [(logic/all
+          (logic/pred form seq?)
+          (logic/project [form]
+            (logic/== sbst (concat form (list arg)))))]))])
+
+  
   [(->> ?x ?y) (?y ?x)]
 
   ;; Other
@@ -65,4 +91,14 @@
   (map (fn [m] (:key m alt)) [a b c])
 
   (. obj toString)
-  (. obj toString a b c))
+  (. obj toString a b c)
+
+  (-> x f) ;; (f x)
+  (-> x (f a b)) ;; (f x a b)
+  (-> x (f)) ;; (f x)
+
+  (->> x f) ;; (f x)
+  (->> x (f a b)) ;; (f a b x)
+  (->> x (f)) ;; (f x)
+  
+  )
