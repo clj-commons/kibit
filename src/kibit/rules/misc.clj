@@ -69,9 +69,6 @@
           (logic/project [form]
             (logic/== sbst (concat form (list arg)))))]))])
 
-  
-  [(->> ?x ?y) (?y ?x)]
-
   ;; Other
   [(not (= . ?args)) (not= . ?args)])
 
