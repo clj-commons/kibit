@@ -3028,94 +3028,72 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>jonase/kibit -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">jonase/kibit</h1><h2 class="project-version">0.0.2</h2><br /><p>There's a function for that!</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.3.0</td></tr><tr><td class="dep-name">org.clojure/core.logic</td><td class="dotted"><hr /></td><td class="dep-version">0.6.7</td></tr><tr><td class="dep-name">org.clojure/tools.namespace</td><td class="dotted"><hr /></td><td class="dep-version">0.1.2</td></tr></table></div><div class="dependencies"><h3>dev dependencies</h3><table><tr><td class="dep-name">lein-marginalia</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#jonase.kibit.core">jonase.kibit.core</a></li><li><a href="#jonase.kibit.rules">jonase.kibit.rules</a></li><li><a href="#jonase.kibit.rules.arithmetic">jonase.kibit.rules.arithmetic</a></li><li><a href="#jonase.kibit.rules.collections">jonase.kibit.rules.collections</a></li><li><a href="#jonase.kibit.rules.control-structures">jonase.kibit.rules.control-structures</a></li><li><a href="#jonase.kibit.rules.misc">jonase.kibit.rules.misc</a></li><li><a href="#leiningen.kibit">leiningen.kibit</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.core" name="jonase.kibit.core"><h1 class="project-name">jonase.kibit.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Kibit's core functionality uses core.logic to suggest idiomatic
-   replacements for patterns of code.</p>
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.core
-  (:require [clojure.core.logic :as logic]
-            [clojure.java.io :as io]
-            [clojure.walk :as walk]
-            [jonase.kibit.rules :as core-rules])
-  (:import [clojure.lang LineNumberingPushbackReader]))</pre></td></tr><tr><td class="docs"><h3>Important notes</h3>
+</script><title>jonase/kibit -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">jonase/kibit</h1><h2 class="project-version">0.0.3</h2><br /><p>There's a function for that!</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.3.0</td></tr><tr><td class="dep-name">org.clojure/core.logic</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr><tr><td class="dep-name">org.clojure/tools.namespace</td><td class="dotted"><hr /></td><td class="dep-version">0.1.2</td></tr></table></div><div class="dependencies"><h3>dev dependencies</h3><table><tr><td class="dep-name">lein-marginalia</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#kibit.check">kibit.check</a></li><li><a href="#kibit.core">kibit.core</a></li><li><a href="#kibit.reporters">kibit.reporters</a></li><li><a href="#kibit.rules">kibit.rules</a></li><li><a href="#kibit.rules.arithmetic">kibit.rules.arithmetic</a></li><li><a href="#kibit.rules.collections">kibit.rules.collections</a></li><li><a href="#kibit.rules.control-structures">kibit.rules.control-structures</a></li><li><a href="#kibit.rules.equality">kibit.rules.equality</a></li><li><a href="#kibit.rules.misc">kibit.rules.misc</a></li><li><a href="#kibit.rules.performance">kibit.rules.performance</a></li><li><a href="#kibit.rules.util">kibit.rules.util</a></li><li><a href="#leiningen.kibit">leiningen.kibit</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.check" name="kibit.check"><h1 class="project-name">kibit.check</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Kibit's integration point and public API</p>
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.check
+  (:require [clojure.java.io :as io]
+            [clojure.core.logic :as logic]
+            [kibit.core :as core]
+            [kibit.rules :as core-rules]
+            [kibit.reporters :as reporters])
+  (:import [clojure.lang LineNumberingPushbackReader]))</pre></td></tr><tr><td class="docs"><h3>Overview</h3>
 
-<p>Feel free to contribute rules to <a href="https://github.com/jonase/kibit">kibit's github repo</a></p>
+<p>The public API for Kibit is through the <code>check-*</code> functions below.</p>
+
+<ul>
+<li><code>check-expr</code> - for checking single expressions (great on the REPL)</li>
+<li><code>check-reader</code> - for checking all forms passed in via a <code>PushbackReader</code></li>
+<li><code>check-file</code> - for checking any file, or string/URI/URL for a file</li>
+</ul>
+
+<p>All other functions in this namespace exist to provide support and ease
+of use for integrated Kibit into other technologies.</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><h2>The rule sets</h2>
 
 <p>Rule sets are stored in individual files that have a top level
-<code>(def rules '{...})</code>.  The collection of rules are in the <code>rules</code>
+<code>(defrules rules ...)</code>. The collection of rules are in the <code>rules</code>
 directory.</p>
 
-<p>For more information, see: <a href="#jonase.kibit.rules">rule</a> namespace</p>
-</td><td class="codes"><pre class="brush: clojure">(def all-rules core-rules/all-rules)</pre></td></tr><tr><td class="docs"><h2>Building an alternative form</h2>
+<p>Here, we logically prepare all the rules, by substituting in logic vars
+where necessary.</p>
 
-<h3>Unification</h3>
+<p>For more information, see: <a href="#kibit.rules">rules</a> namespace</p>
+</td><td class="codes"><pre class="brush: clojure">(def all-rules (map logic/prep core-rules/all-rules))</pre></td></tr><tr><td class="docs"><h2>Reading source files</h2>
 
-<p><code>unify</code> takes an expression and a <code>rule</code> pair (pattern and substitution).
-For more information on rule pairs,
-see: <a href="#jonase.kibit.rules">rules</a> namespace</p>
+<p>TODO Paul - give an overview here</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><h3>Handling read errors</h3>
 
-<p>If the expression-under-analysis matches the pattern, the substitution
-expression is used to build an alternative expression. For example,
-given the expression <code>(+ (f x) 1)</code> and the rule <code>[(+ ?x 1) (inc ?x)]</code>,
-the expression <code>(inc (f x))</code> is built. This is all handled by <code>core.logic</code>.</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Unify expr with a rule pair. On success, return a map keyed with
-  <code>:rule, :expr, :line and :alt</code>, otherwise return <code>nil</code></p>
-
-<p>(More docs on use of <code>run*</code> and <code>==</code> to come)</p>
-
-<p>Finally, if unification succeeds, a map containing the original
-expression (<code>:expr</code>), the line where it appeared in the source file
-(<code>:line</code>), the rule which was used (<code>:rule</code>) and the suggested
-alternative built by <code>core.logic</code> (<code>:alt</code>) is returned. If the
-unification failed <code>nil</code> is returned.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn unify
-  [expr rule]
-  (let [[r s] (#'logic/prep rule)
-        alt (first (logic/run* [alt]
-                     (logic/== expr r)
-                     (logic/== s alt)))]
-    (when alt
-      {:expr expr
-       :rule rule
-       :alt (if (seq? alt)
-              (seq alt)
-              alt)
-       :line (-&gt; expr meta :line)})))</pre></td></tr><tr><td class="docs"><h3>Applying unification</h3>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Returns the first successful unification for expr against the
-  rules. Returns nil if no rule unifies with expr</p>
-
-<p>The <code>check-form</code> function does a linear search over the rules and
-returns the map created by the first successful unification with
-expr.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn check-form
-  ([expr]
-     (check-form expr all-rules))
-  ([expr rules]
-     (when (sequential? expr)
-       (some #(unify expr %) rules))))</pre></td></tr><tr><td class="docs"><p>Given a full expression/form-of-forms/form, return a map containing the
-  alternative suggestion info, or <code>nil</code> (see: <code>check-form</code>)</p>
-
-<p>This walks across all the forms within an expr-sequence,
-checking each inner form. We have to restore <code>:expr</code> because it
-gets munged in the tree/expr walk</p>
-</td><td class="codes"><pre class="brush: clojure">(defn check-expr
-  [expr]
-  (when-let [new-expr (walk/walk #(or (-&gt; % check-form :alt) %) check-form expr)]
-    (assoc new-expr :expr expr)))</pre></td></tr><tr><td class="docs"><h2>Reading source files</h2>
+<p>TODO Paul - explain this more</p>
+</td><td class="codes"><pre class="brush: clojure">(def ^:dynamic *check-error-handler*
+  (fn [ex reader]
+    (throw (Exception.
+             (str &quot;Kibit's reader crashed; see kibit.check/read-file:&quot;
+                  (.getMessage ex))
+             ex))))</pre></td></tr><tr><td class="docs"><p>This is an error handler that will silently skip over forms
+  that cause errors - a work in progress</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ignore-error-handler
+  [ex reader] ; TODO We're going to have to (.skip reader n), where n is the number of chars to skip until the next form
+  nil)</pre></td></tr><tr><td class="docs"><h3>Extracting forms</h3>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader</p>
 
-<p><code>read-ns</code> is intended to be used with a  Clojure source file,
-read in by a LineNumberingPushbackReader.  Expressions are
-extracted using the clojure reader (ala <code>read</code>).
-Line numbers are added as <code>:line</code> metadata to the forms.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn read-ns
+<p><code>read-file</code> is intended to be used with a Clojure source file,
+read in by Clojure's LineNumberingPushbackReader <em>(LNPR)</em>. Expressions are
+extracted using the clojure reader (ala <code>read</code>), and line numbers
+are added as <code>:line</code> metadata to the forms (via LNPR).
+Exceptions are handled using a dynamic handler, <code>*check-error-handler*</code></p>
+
+<p>See above for more details on how to control error handling</p>
+</td><td class="codes"><pre class="brush: clojure">(defn read-file
   [^LineNumberingPushbackReader r]
   (lazy-seq
-   (let [form (read r false ::eof)
-         line-num (.getLineNumber r)]
+   (let [form (try
+                (read r false ::eof)
+                (catch Exception e
+                  (*check-error-handler* e r)))]
      (when-not (= form ::eof)
-       (cons (with-meta form {:line line-num}) (read-ns r))))))</pre></td></tr><tr><td class="docs"><p>Given an expression (any piece of Clojure data), return a lazy (depth-first)
+       (cons form (read-file r))))))</pre></td></tr><tr><td class="docs"><h3>Analyzing the pieces</h3>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Given an expression (any piece of Clojure data), return a lazy (depth-first)
   sequence of the expr and all its sub-expressions</p>
 
 <p><code>tree-seq</code> returns a lazy-seq of nodes for a tree.
@@ -3133,32 +3111,199 @@ This is like using <code>clojure.walk</code> with <code>identity</code>:</p>
  x
  x)`
 </code></pre>
+
+<p>This is needed for <code>:subform</code> reporting.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn expr-seq
   [expr]
   (tree-seq sequential?
             seq
-            expr))</pre></td></tr><tr><td class="docs"><p>Checks every expression (including sub-expressions) in a clojure
-  source file against the rules and returns a lazy sequence of the
-  result of unification</p>
+            expr))</pre></td></tr><tr><td class="docs"><h2>Building results / `simplify-maps`</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Construct the canonical simplify-map
+  given an expression and a simplified expression.</p>
+
+<p>See the <a href="#kibit-core">core</a> namespace for details on simplifying an expression.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- build-simplify-map
+  [expr simplified-expr]
+  {:expr expr
+   :line (-&gt; expr meta :line)
+   :alt simplified-expr})</pre></td></tr><tr><td class="docs"><h3>Guarding the check</h3>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Guarding <code>check-*</code> allows for fine-grained control over what
+gets passed to a reporter.  This allows those using kibit
+as a library or building out tool/IDE integration to shape
+the results prior to reporting.</p>
+
+<p>Normally, you'll only want to report an alternative form if it differs
+from the original expression form.  You can use <code>identity</code> to short circuit
+the guard and ALWAYS receive the <code>simlify-map</code>.</p>
+
+<p>Check-guards take a map and return a map or nil</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>A 'check guard' that only returns a result if the
+  alternative is different than the original expresion</p>
+</td><td class="codes"><pre class="brush: clojure">(defn unique-alt?
+  [simplify-map]
+  (let [{:keys [expr alt]} simplify-map]
+    (when-not (= alt expr)
+      simplify-map)))</pre></td></tr><tr><td class="docs"><p>Default args for the keyword options passed to the check-* functions</p>
+</td><td class="codes"><pre class="brush: clojure">(def ^:private default-args
+  {:rules      all-rules
+   :guard      unique-alt?
+   :resolution :subform})</pre></td></tr><tr><td class="docs"><h3>Resolution</h3>
+
+<p>Kibit can report at various levels of resolution.</p>
+
+<p><code>:toplevel</code> will simplify a toplevel form, like <code>(defn ...)</code>
+and all of the subforms it contains. This is exceptionally useful if
+you're looking for paragraph-sized suggestions, or you're using
+Kibit on the REPL (per expression).</p>
+
+<p><code>:subform</code> will only report on the subforms. This is most common
+for standard reporting, and what gets used when Kibit's Leinigen
+plugin is <code>:verbose false</code>, the default setting.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Map the levels of resolution to the correct combination of <code>simplify</code>
+and <code>read-seq</code> functions.</p>
+</td><td class="codes"><pre class="brush: clojure">(def ^:private res-&gt;simplify
+  {:toplevel core/simplify
+   :subform  core/simplify-one})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def ^:private res-&gt;read-seq
+  {:toplevel (fn [reader] (read-file (LineNumberingPushbackReader. reader)))
+   :subform  (fn [reader] (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader))))})</pre></td></tr><tr><td class="docs"><h2>Checking the expressions</h2>
+
+<p>All of the <code>check-*</code> functions take an expression and the same
+core keyword arguments.  They use the most common arguments by default
+and all return a sequence of <code>simplify-maps</code> that pass the check-guard.</p>
+
+<p>You can pass in your own <code>:rules</code> set, check <code>:guard</code>, and toggle
+the <code>:resolution</code> to achieve your desired output map sequence.</p>
+
+<p>Here are two examples:</p>
+
+<pre><code>(check-expr '(if true :a :b))
+(check-expr '(if true :a :b)
+  :rules      other-rules
+  :guard      identity
+  :resolution :subform)
+</code></pre>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Simplify an expression, build a simplify-map, and guard the returning map</p>
+
+<p><code>check-aux</code> is the heart of all the check related functions.
+The threading expression can be visualized like this <code>let</code> block
+(formatted for space)</p>
+
+<pre><code>(let [simplified-expr
+        ((res-&gt;simplify resolution) expr rules)
+      simplify-map
+        (build-simplify-map expr simplified-expr)]
+  (guard simplify-map))
+</code></pre>
+
+<p><code>simplify-fn</code> is built from:
+<code>#((res-&gt;simplify resolution) % rules)</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn- check-aux
+  [expr simplify-fn guard]
+  (-&gt;&gt; expr simplify-fn (build-simplify-map expr) guard))</pre></td></tr><tr><td class="docs"><p>The default resolution is overriden via the <code>merge</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn check-expr
+  [expr &amp; kw-opts]
+  (let [{:keys [rules guard resolution]}
+        (merge default-args
+               {:resolution :toplevel}
+               (apply hash-map kw-opts))
+        simplify-fn #((res-&gt;simplify resolution) % rules)]
+    (check-aux expr simplify-fn guard)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn check-reader
+  [reader &amp; kw-opts]
+  (let [{:keys [rules guard resolution]}
+        (merge default-args
+               (apply hash-map kw-opts))
+        simplify-fn #((res-&gt;simplify resolution) % rules)]
+    (keep #(check-aux % simplify-fn guard)
+          ((res-&gt;read-seq resolution) reader))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn check-file
-  ([reader]
-     (check-file reader all-rules))
-  ([reader rules]
-     (keep check-form
-           (mapcat expr-seq (read-ns (LineNumberingPushbackReader. reader))))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules" name="jonase.kibit.rules"><h1 class="project-name">jonase.kibit.rules</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p><code>rules.clj</code> provides the core functionality for extracting
+  [source-file &amp; kw-opts]
+  (let [{:keys [rules guard resolution reporter]
+         :or {reporter reporters/cli-reporter}}
+        (merge default-args
+               (apply hash-map kw-opts))]
+    (with-open [reader (io/reader source-file)]
+        (doseq [simplify-map (check-reader reader
+                                           :rules rules
+                                           :guard guard
+                                           :resolution resolution)]
+          (reporter simplify-map)))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.core" name="kibit.core"><h1 class="project-name">kibit.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Kibit's core functionality uses core.logic to construct idiomatic
+   replacements/simplifications for patterns of code.</p>
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.core
+  (:require [clojure.walk :as walk]
+            [clojure.core.logic :as logic]))</pre></td></tr><tr><td class="docs"><h3>Important notes</h3>
+
+<p>Feel free to contribute rules to <a href="https://github.com/jonase/kibit">kibit's github repo</a></p>
+</td><td class="codes"></td></tr><tr><td class="docs"><h2>Building an alternative form</h2>
+
+<h3>Applying unification</h3>
+
+<p>Performs the first simplification found in the rules. If no rules
+apply the original expression is returned. Does not look at
+subforms.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn simplify-one [expr rules]
+  (let [alts (logic/run* [q]
+               (logic/fresh [pat subst]
+                 (logic/membero [pat subst] rules)
+                 (logic/project [pat subst]
+                   (logic/all (pat expr)
+                              (subst q)))))]
+    (if (empty? alts) expr (first alts))))</pre></td></tr><tr><td class="docs"><p>Simplifies expr according to the rules until no more rules apply.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn simplify [expr rules]
+  (-&gt;&gt; expr
+       (iterate (partial walk/prewalk #(simplify-one % rules)))
+       (partition 2 1)
+       (drop-while #(apply not= %))
+       (ffirst)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.reporters" name="kibit.reporters"><h1 class="project-name">kibit.reporters</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>Format and display output generated from check-* functions</p>
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.reporters
+  (:require [clojure.string :as string]
+            [clojure.pprint :as pp])
+  (:import [java.io StringWriter]))</pre></td></tr><tr><td class="docs"><p>Reporters are used with <code>check-file</code>, passed in with the <code>:reporter</code>
+keywork argument.  For more information, see the <a href="#kibit.check">check</a>
+namespace.</p>
+
+<p>There is no limit to a reporter - Clojure Data, JSON, HTML...</p>
+
+<p>Here we have supplied a reporter for standard-out.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>A hack to get the code indented. </p>
+</td><td class="codes"><pre class="brush: clojure">(defn pprint-code [form]
+  (let [string-writer (StringWriter.)]
+    (pp/write form
+              :dispatch pp/code-dispatch
+              :stream string-writer
+              :pretty true)
+    (-&gt;&gt; (str string-writer)
+         string/split-lines
+         (map #(str &quot;  &quot; %))
+         (string/join &quot;\n&quot;)
+         println))) </pre></td></tr><tr><td class="docs"><p>Print a check-map to <code>*out*</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn cli-reporter
+  [check-map]
+  (let [{:keys [line expr alt]} check-map]
+    (do 
+      (printf &quot;[%s] Consider:\n&quot; line)
+      (pprint-code alt)
+      (println &quot;instead of:&quot;)
+      (pprint-code expr)
+      (newline))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules" name="kibit.rules"><h1 class="project-name">kibit.rules</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p><code>rules.clj</code> provides the core functionality for extracting
   and merging rules from namespaces.  There are shorthands for
   the individual rule sets, via the <code>rule-map</code></p>
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules
-  (:require [jonase.kibit.rules.arithmetic :as arith]
-            [jonase.kibit.rules.control-structures :as control]
-            [jonase.kibit.rules.collections :as coll]
-            [jonase.kibit.rules.misc :as misc]))</pre></td></tr><tr><td class="docs"><h2>More information on rules</h2>
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules
+  (:require [kibit.rules.arithmetic :as arith]
+            [kibit.rules.control-structures :as control]
+            [kibit.rules.collections :as coll]
+            [kibit.rules.equality :as equality]
+            [kibit.rules.performance :as perf]
+            [kibit.rules.misc :as misc]
+            [clojure.core.logic :as logic]))</pre></td></tr><tr><td class="docs"><h2>More information on rules</h2>
 
 <p>Rule sets are stored in individual files that have a top level
-<code>(def rules '{...})</code>.  The collection of rules are in the <code>rules</code>
+<code>(defrules rules ...)</code>.  The collection of rules are in the <code>rules</code>
 directory.</p>
 
-<p>Each rule (also called a rule pair) in a rule set map is comprised of:</p>
+<p>TODO Paul - Major revisions
+Each rule (also called a rule pair) in a rule set map is comprised of:</p>
 
 <ul>
 <li>a pattern expression (e.g. <code>(+ ?x 1)</code>)</li>
@@ -3172,90 +3317,200 @@ code alternatives.  For more information see:
 </td><td class="codes"><pre class="brush: clojure">(def rule-map {:control-structures control/rules
                :arithmetic arith/rules
                :collections coll/rules
+               :equality equality/rules
+               :perf perf/rules
                :misc misc/rules})</pre></td></tr><tr><td class="docs"><p>TODO: Consider a refactor for this into a function
 <code>(defn rules-for-ns [&amp; namespaces])</code></p>
-</td><td class="codes"><pre class="brush: clojure">(def all-rules (apply merge (vals rule-map)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.arithmetic" name="jonase.kibit.rules.arithmetic"><h1 class="project-name">jonase.kibit.rules.arithmetic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.arithmetic)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def rules
-  '{(+ ?x 1) (inc ?x)
-    (+ 1 ?x) (inc ?x)
-    (- ?x 1) (dec ?x)
-    (= 0 ?x)  (zero? ?x)
-    (= ?x 0)  (zero? ?x)
-    (== 0 ?x) (zero? ?x)
-    (== ?x 0) (zero? ?x)
-    (&lt; 0 ?x)  (pos? ?x)
-    (&gt; ?x 0)  (pos? ?x)
-    (&lt;= 1 ?x) (pos? ?x)
-    (&lt; ?x 0) (neg? ?x)
-    (= ?x ?x)  true
-    (== ?x ?x) true
-    (zero? 0)  true})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.collections" name="jonase.kibit.rules.collections"><h1 class="project-name">jonase.kibit.rules.collections</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.collections)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def rules
-  '{;;vector
-    (conj [] . ?x) (vector . ?x)})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.control-structures" name="jonase.kibit.rules.control-structures"><h1 class="project-name">jonase.kibit.rules.control-structures</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.control-structures)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def rules
-  '{(if ?x ?y nil) (when ?x ?y)
-    (if ?x nil ?y) (when-not ?x ?y)
-    (if ?x (do . ?y)) (when ?x ?y)
-    (if (not ?x) ?y ?z) (if-not ?x ?y ?z)
-    (when (not ?x) . ?y) (when-not ?x . ?y)
-    (if true ?x ?y) ?x
-    (when true . ?x) (do . ?x)
-    (do ?x) ?x
-    (when-not true ?x) &quot;removing this dead code&quot;
-    (when false ?x) &quot;removing this dead code&quot;
-    (if-let ?binding ?expr nil) (when-let ?binding ?expr)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def all-rules (map logic/prep (apply concat (vals rule-map))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.arithmetic" name="kibit.rules.arithmetic"><h1 class="project-name">kibit.rules.arithmetic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.arithmetic
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  [(+ ?x 1) (inc ?x)]
+  [(+ 1 ?x) (inc ?x)]
+  [(- ?x 1) (dec ?x)]
+  [(* ?x (* . ?xs)) (* ?x . ?xs)]
+  [(+ ?x (+ . ?xs)) (+ ?x . ?xs)])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.collections" name="kibit.rules.collections"><h1 class="project-name">kibit.rules.collections</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.collections
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  ;;vector
+  [(conj [] . ?x) (vector . ?x)]
+  [(into [] ?coll) (vec ?coll)]
+  ;; set
+  [(into #{} ?coll) (set ?coll)])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.control-structures" name="kibit.rules.control-structures"><h1 class="project-name">kibit.rules.control-structures</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.control-structures
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  [(if ?x ?y nil) (when ?x ?y)]
+  [(if ?x nil ?y) (when-not ?x ?y)]
+  [(if ?x (do . ?y)) (when ?x ?y)]
+  [(if (not ?x) ?y ?z) (if-not ?x ?y ?z)]
+  [(when (not ?x) . ?y) (when-not ?x . ?y)]
+  [(if true ?x ?y) ?x]
+  [(if true ?x) ?x]
+  [(when true . ?x) (do . ?x)]
+  [(do ?x) ?x]
+  [(when-not true ?x) _]
+  [(when false ?x) _]
+  [(if-let ?binding ?expr nil) (when-let ?binding ?expr)])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
   (when (not (pred? x y)) (f x y))
   
-  (when true
-    (if (pred? x)
-      (do
-        (action a)
-        (action b)))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#jonase.kibit.rules.misc" name="jonase.kibit.rules.misc"><h1 class="project-name">jonase.kibit.rules.misc</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns jonase.kibit.rules.misc)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def rules
-  '{;; clojure.string
-    (apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)
-    (apply str (reverse ?x)) (clojure.string/reverse ?x)
-    ;; mapcat
-    (apply concat (apply map ?x ?y)) (mapcat ?x ?y)
-    (apply concat (map ?x . ?y)) (mapcat ?x . ?y)
-    ;; filter
-    (filter (complement ?pred) ?coll) (remove ?pred ?coll) 
-    (filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)
-    ;; Unneeded anonymous functions
-    (fn ?args (?fun . ?args)) ?fun
-    (fn* ?args (?fun . ?args)) ?fun
-    ;;do
-    (do ?x) ?x
-    ;; Java stuff
-    (.toString ?x) (str ?x)})</pre></td></tr><tr><td class="docs">
+  (if (pred? x)
+    (do (action a)
+        (action b)
+        (if-let [x (f a b c)
+                 y (g a b c)
+                 z (h a b c)]
+          (do (+ 1 0)
+              (= 1 1)
+              (&lt; 1 0)))
+        (action d)
+        (action f))
+    nil))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.equality" name="kibit.rules.equality"><h1 class="project-name">kibit.rules.equality</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.equality
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  ;; not=
+  [(not (= . ?args)) (not= . ?args)]
+  ;; zero?
+  [(= 0 ?x)  (zero? ?x)]
+  [(= ?x 0)  (zero? ?x)]
+  [(== 0 ?x) (zero? ?x)]
+  [(== ?x 0) (zero? ?x)]
+  [(&lt; 0 ?x)  (pos? ?x)]
+  [(&gt; ?x 0)  (pos? ?x)]
+  [(&lt;= 1 ?x) (pos? ?x)]
+  [(&lt; ?x 0) (neg? ?x)]
+  [(= ?x ?x)  true]
+  [(== ?x ?x) true]
+  [(zero? 0)  true])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.misc" name="kibit.rules.misc"><h1 class="project-name">kibit.rules.misc</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.misc
+  (:require [clojure.core.logic :as logic])
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  ;; clojure.string
+  [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]
+  [(apply str (reverse ?x)) (clojure.string/reverse ?x)]
+  ;; mapcat
+  [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]
+  [(apply concat (map ?x . ?y)) (mapcat ?x . ?y)]
+  ;; filter
+  [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
+  [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
+  ;; Unneeded anonymous functions
+  (let [fun (logic/lvar)
+        args (logic/lvar)]
+    [(fn [expr]
+       (logic/all
+        (logic/conde
+         [(logic/== expr (list 'fn args (logic/llist fun args)))]
+         [(logic/== expr (list 'fn* args (logic/llist fun args)))])
+        (logic/pred fun #(or (keyword? %)
+                             (and (symbol? %)
+                                  (not= \. (first (str %))))))))
+     #(logic/== % fun)])
+   ;; do
+  [(do ?x) ?x]
+  ;; Java stuff
+  [(.toString ?x) (str ?x)]
+  (let [obj (logic/lvar)
+        method (logic/lvar)
+        args (logic/lvar)]
+    [#(logic/== % (logic/llist '. obj method args))
+     #(logic/project [method args]
+        (logic/== % `(~(symbol (str &quot;.&quot; method)) ~obj ~@args)))])
+  ;; Threading
+  (let [form (logic/lvar)
+        arg (logic/lvar)]
+    [#(logic/all (logic/== % (list '-&gt; arg form)))
+     (fn [sbst]
+       (logic/conde
+        [(logic/all
+          (logic/pred form #(or (symbol? %) (keyword? %)))
+          (logic/== sbst (list form arg)))]
+        [(logic/all
+          (logic/pred form seq?)
+          (logic/project [form]
+            (logic/== sbst (list* (first form) arg (rest form)))))]))])
+  (let [form (logic/lvar)
+        arg (logic/lvar)]
+    [#(logic/all (logic/== % (list '-&gt;&gt; arg form)))
+     (fn [sbst]
+       (logic/conde
+        [(logic/all
+          (logic/pred form #(or (symbol? %) (keyword? %)))
+          (logic/== sbst (list form arg)))]
+        [(logic/all
+          (logic/pred form seq?)
+          (logic/project [form]
+            (logic/== sbst (concat form (list arg)))))]))])
+  ;; Other
+  [(not (= . ?args)) (not= . ?args)])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
   (apply concat (apply map f (apply str (interpose \, &quot;Hello&quot;))))
   (filter (complement nil?) [1 2 3])
 
   (.toString (apply str (reverse &quot;Hello&quot;)))
-  
+
   (map (fn [x] (inc x)) [1 2 3])
-  (map #(dec %) [1 2 3]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#leiningen.kibit" name="leiningen.kibit"><h1 class="project-name">leiningen.kibit</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (map (fn [x] (.method x)) [1 2 3])
+  (map #(dec %) [1 2 3])
+  (map #(.method %) [1 2 3])
+
+  (map (fn [m] (:key m)) [some maps])
+  (map (fn [m] (:key m alt)) [a b c])
+
+  (. obj toString)
+  (. obj toString a b c)
+
+  (-&gt; x f) ;; (f x)
+  (-&gt; x (f a b)) ;; (f x a b)
+  (-&gt; x (f)) ;; (f x)
+
+  (-&gt;&gt; x f) ;; (f x)
+  (-&gt;&gt; x (f a b)) ;; (f a b x)
+  (-&gt;&gt; x (f)) ;; (f x)
+  
+  )</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.performance" name="kibit.rules.performance"><h1 class="project-name">kibit.rules.performance</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.performance
+  (:use [kibit.rules.util :only [defrules]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrules rules
+  ;; reduce on var-arg functions
+  [(reduce + ?coll) (apply + ?coll)])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#kibit.rules.util" name="kibit.rules.util"><h1 class="project-name">kibit.rules.util</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns kibit.rules.util
+  (require [clojure.core.logic :as logic]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compile-rule [rule]
+  (let [[pat alt] (logic/prep rule)]
+     [(fn [expr] (logic/== expr pat))
+      (fn [sbst] (logic/== sbst alt))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn raw-rule? [rule]
+  (not (vector? rule)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmacro defrules [name &amp; rules]
+  (let [rules (for [rule rules]
+                (if (raw-rule? rule)
+                  rule ;; raw rule, no need to compile
+                  (compile-rule rule)))]
+    (list 'def name (vec rules))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#leiningen.kibit" name="leiningen.kibit"><h1 class="project-name">leiningen.kibit</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns leiningen.kibit
   (:require [clojure.tools.namespace :as clj-ns]
             [clojure.java.io :as io]
-            [jonase.kibit.core :as kibit]))</pre></td></tr><tr><td class="docs"><p>Suggest idiomatic replacements for patterns of code.</p>
+            [kibit.check :as kibit]
+            [kibit.rules :as rules]
+            [kibit.reporters :as reporters]))</pre></td></tr><tr><td class="docs"><p>Suggest idiomatic replacements for patterns of code.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn kibit
-  [project]
+  [project &amp; opts]
   (let [paths (or (:source-paths project) [(:source-path project)])
-        source-files (mapcat #(-&gt; % io/file clj-ns/find-clojure-sources-in-dir)
-                             paths)]
+        source-files (mapcat #(-&gt; % io/file clj-ns/find-clojure-sources-in-dir) paths)]
     (doseq [source-file source-files]
-      (printf &quot;== %s ==\n&quot;
-              (or (second (clj-ns/read-file-ns-decl source-file)) source-file))
       (with-open [reader (io/reader source-file)]
-        (doseq [{:keys [line expr alt]} (kibit/check-file reader)]
-          (printf &quot;[%s] Consider %s instead of %s\n&quot; line alt expr)))
-      (flush))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+        (printf &quot;== %s ==\n&quot; (or (second (clj-ns/read-file-ns-decl source-file)) source-file))
+        (try
+          (-&gt;&gt; (kibit/check-reader reader)
+               #_(filter #(contains? % :alt))
+               (map reporters/cli-reporter)
+               doall)
+          (catch Exception e
+            (println &quot;Check failed -- skipping rest of file&quot;)
+            (println (.getMessage e))))))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>
