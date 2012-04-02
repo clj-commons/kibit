@@ -25,7 +25,8 @@
          [(logic/== expr (list 'fn* args (logic/llist fun args)))])
         (logic/pred fun #(or (keyword? %)
                              (and (symbol? %)
-                                  (not= \. (first (str %))))))))
+                                  (not= \. (first (str %)))
+                                  (not (some #{\/} (str %))))))))
      #(logic/== % fun)])
   
    ;; do
@@ -83,7 +84,11 @@
   (map (fn [x] (.method x)) [1 2 3])
   (map #(dec %) [1 2 3])
   (map #(.method %) [1 2 3])
+  (map #(Double/parseDouble %) [1 2 3])
+  (map (fn [x] (Integer/parseInteger x))
+       [1 2 3])
 
+  
   (map (fn [m] (:key m)) [some maps])
   (map (fn [m] (:key m alt)) [a b c])
 
