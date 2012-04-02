@@ -26,7 +26,7 @@
         (logic/pred fun #(or (keyword? %)
                              (and (symbol? %)
                                   (not= \. (first (str %)))
-                                  (not (some #{\/} (str %))))))))
+                                  (not-any? #{\/} (str %)))))))
      #(logic/== % fun)])
   
    ;; do
@@ -70,7 +70,10 @@
           (logic/project [form]
             (logic/== sbst (concat form (list arg)))))]))])
 
+  
+
   ;; Other
+  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
   [(not (= . ?args)) (not= . ?args)])
 
 
