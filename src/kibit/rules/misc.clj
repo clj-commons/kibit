@@ -98,6 +98,9 @@
   (. obj toString)
   (. obj toString a b c)
 
+  (. Thread (sleep (read-string "2000")))
+  (. Thread sleep (read-string "2000"))
+
   (-> x f) ;; (f x)
   (-> x (f a b)) ;; (f x a b)
   (-> x (f)) ;; (f x)
