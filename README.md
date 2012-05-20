@@ -15,10 +15,10 @@ it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
-Add `[jonase/kibit "0.0.3"]` to your `:plugins` vector in your `:user`
+Add `[jonase/kibit "0.0.4"]` to your `:plugins` vector in your `:user`
 profile (Leiningen 2) or if you are using Leiningen 1:
 
-    $ lein plugin install jonase/kibit 0.0.3
+    $ lein plugin install jonase/kibit 0.0.4
 
 Then you can run
 
