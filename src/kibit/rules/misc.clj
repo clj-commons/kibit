@@ -2,6 +2,16 @@
   (:require [clojure.core.logic :as logic])
   (:use [kibit.rules.util :only [defrules]]))
 
+;; Returns true if symbol is of
+;; form Foo or foo.bar.Baz
+(defn class-symbol? [sym]
+  (let [sym (pr-str sym)
+        idx (.lastIndexOf sym ".")]
+    (if (neg? idx)
+      (Character/isUpperCase (first sym))
+      (Character/isUpperCase (nth sym (inc idx))))))
+  
+
 (defrules rules
   ;; clojure.string
   [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]
@@ -38,10 +48,23 @@
   (let [obj (logic/lvar)
         method (logic/lvar)
         args (logic/lvar)]
-    [#(logic/== % (logic/llist '. obj method args))
+    [#(logic/all
+       (logic/== % (logic/llist '. obj method args))
+       (logic/pred obj (complement class-symbol?)))
      #(logic/project [method args]
         (logic/== % `(~(symbol (str "." method)) ~obj ~@args)))])
 
+  (let [klass (logic/lvar)
+        static-method (logic/lvar)
+        args (logic/lvar)]
+    [#(logic/all
+       (logic/== % (logic/llist '. klass static-method args))
+       (logic/pred klass class-symbol?))
+     #(logic/project [klass static-method args]
+        (let [s? (seq? static-method)
+              args (if s? (rest static-method) args)
+              static-method (if s? (first static-method) static-method)]
+          (logic/== % `(~(symbol (str klass "/" static-method)) ~@args))))])
   
   ;; Threading
   (let [form (logic/lvar)
