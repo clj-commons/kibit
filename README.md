@@ -40,6 +40,7 @@ Bugs can be reported using the github bug tracker.
 
 * Jonas Enlund
 * Phil Hagelberg
+* Tassilo Horn
 * Alan Malloy
 * Paul deGrandis
 * Kevin Lynagh
