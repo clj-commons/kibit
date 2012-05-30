@@ -25,6 +25,12 @@
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
   [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
 
+  ;; first/next shorthands
+  [(first (first ?coll)) (ffirst ?coll)]
+  [(first (next ?coll))  (fnext ?coll)]
+  [(next (next ?coll))   (nnext ?coll)]
+  [(next (first ?coll))  (nfirst ?coll)]
+
   ;; Unneeded anonymous functions
   (let [fun (logic/lvar)
         args (logic/lvar)]
