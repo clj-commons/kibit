@@ -13,7 +13,12 @@
   [(do ?x) ?x]
   [(when-not true ?x) _]
   [(when false ?x) _]
-  [(if-let ?binding ?expr nil) (when-let ?binding ?expr)])
+  [(if-let ?binding ?expr nil) (when-let ?binding ?expr)]
+
+  ;; suggest `while` for bindingless loop-recur
+  [(loop [] (when ?test . ?exprs (recur)))
+   (while ?test . ?exprs)]
+  )
 
 (comment
   (when (not (pred? x y)) (f x y))
