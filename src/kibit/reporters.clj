@@ -28,9 +28,9 @@
 (defn cli-reporter
   "Print a check-map to `*out*`"
   [check-map]
-  (let [{:keys [line expr alt]} check-map]
-    (do 
-      (printf "[%s] Consider:\n" line)
+  (let [{:keys [file line expr alt]} check-map]
+    (do
+      (printf "At %s:%s:\nConsider using:\n" file line)
       (pprint-code alt)
       (println "instead of:")
       (pprint-code expr)
