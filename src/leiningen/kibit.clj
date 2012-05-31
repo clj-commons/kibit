@@ -11,15 +11,14 @@
   (let [paths (or (:source-paths project) [(:source-path project)])
         source-files (mapcat #(-> % io/file clj-ns/find-clojure-sources-in-dir) paths)]
     (doseq [source-file source-files]
-      (with-open [reader (io/reader source-file)]
-        (printf "== %s ==\n" (or (second (clj-ns/read-file-ns-decl source-file)) source-file))
-        (try
-          (->> (kibit/check-reader reader)
-               #_(filter #(contains? % :alt))
-               (map reporters/cli-reporter)
-               doall)
-          (catch Exception e
-            (println "Check failed -- skipping rest of file")
-            (println (.getMessage e))))))))
+      (printf "== %s ==\n" (or (second (clj-ns/read-file-ns-decl source-file)) source-file))
+      (try
+        (->> (kibit/check-file source-file)
+             #_(filter #(contains? % :alt))
+             (map reporters/cli-reporter)
+             doall)
+        (catch Exception e
+          (println "Check failed -- skipping rest of file")
+          (println (.getMessage e)))))))
 
 
