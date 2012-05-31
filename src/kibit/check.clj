@@ -226,5 +226,5 @@
                                            :rules rules
                                            :guard guard
                                            :resolution resolution)]
-          (reporter simplify-map)))))
+          (reporter (assoc simplify-map :file source-file))))))
 
