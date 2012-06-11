@@ -44,9 +44,6 @@
                                   (not= \. (first (str %)))
                                   (not-any? #{\/} (str %)))))))
      #(logic/== % fun)])
-  
-   ;; do
-  [(do ?x) ?x]
 
   ;; Java stuff
   [(.toString ?x) (str ?x)]
