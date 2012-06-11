@@ -23,7 +23,8 @@
 
   ;; filter
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
-  [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
+  [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
+  [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
 
   ;; first/next shorthands
   [(first (first ?coll)) (ffirst ?coll)]
