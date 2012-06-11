@@ -58,7 +58,10 @@
        (logic/== % (logic/llist '. obj method args))
        (logic/pred obj (complement class-symbol?)))
      #(logic/project [method args]
-        (logic/== % `(~(symbol (str "." method)) ~obj ~@args)))])
+        (let [s? (seq? method)
+              args (if s? (rest method) args)
+              method (if s? (first method) method)]
+          (logic/== % `(~(symbol (str "." method)) ~obj ~@args))))])
 
   (let [klass (logic/lvar)
         static-method (logic/lvar)
