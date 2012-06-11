@@ -99,8 +99,7 @@
   
 
   ;; Other
-  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
-  [(not (= . ?args)) (not= . ?args)])
+  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
 
 
 (comment
