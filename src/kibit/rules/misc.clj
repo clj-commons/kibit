@@ -96,7 +96,6 @@
           (logic/project [form]
             (logic/== sbst (concat form (list arg)))))]))])
 
-  
 
   ;; Other
   [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
