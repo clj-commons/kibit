@@ -47,7 +47,9 @@ Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit"))
 
-``` This will give you a new command `M-x kibit RET`, and the properly
+``` 
+
+This will give you a new command `M-x kibit RET`, and the properly
 highlighted and hyperlinked kibit output is presented in a
 `*compilation*` buffer.
 
