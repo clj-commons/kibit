@@ -28,9 +28,9 @@ to analyze your namespaces.
 
 ### Usage from inside Emacs
 
-If you use Emacs for hacking Clojure, here's a way to use kibit from inside
-Emacs with all the fancyness you are used from `M-x compile`.  Put the
-following into your `~/.emacs`:
+If you use Emacs for hacking Clojure, here's a way to use kibit from
+inside Emacs with all the fancyness you are used from `M-x compile`.
+Put the following into your `~/.emacs`:
 
 ```
 ;; Teach compile the syntax of the kibit output
@@ -39,17 +39,27 @@ following into your `~/.emacs`:
 	     '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
 (add-to-list 'compilation-error-regexp-alist 'kibit)
 
-;; A convenient command to run "lein kibit" in the project to which the current
-;; emacs buffer belongs to.
+;; A convenient command to run "lein kibit" in the project to which
+;; the current emacs buffer belongs to.
 (defun kibit ()
   "Run kibit on the current project.
 Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit"))
 
-```
-This will give you a new command `M-x kibit RET`, and the properly highlighted
-and hyperlinked kibit output is presented in a `*compilation*` buffer.
+``` This will give you a new command `M-x kibit RET`, and the properly
+highlighted and hyperlinked kibit output is presented in a
+`*compilation*` buffer.
+
+## Known limitations
+
+Kibit
+[reads](http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/read)
+source code without any macro expansion or evaluation. A macro can
+therefor easily invalidate a rule. Also, kibit will not know if the
+symbol `+` in the form `(+ x 1)` actually refers to a local or to a
+function in a namespace other than `clojure.core`. Expect
+some false positives.
 
 ## Contributing
 
