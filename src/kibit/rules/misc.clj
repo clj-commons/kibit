@@ -23,7 +23,8 @@
 
   ;; filter
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
-  [(filter #(not (?pred ?x)) ?coll) (remove ?pred ?coll)]
+  [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
+  [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
 
   ;; first/next shorthands
   [(first (first ?coll)) (ffirst ?coll)]
@@ -44,9 +45,6 @@
                                   (not= \. (first (str %)))
                                   (not-any? #{\/} (str %)))))))
      #(logic/== % fun)])
-  
-   ;; do
-  [(do ?x) ?x]
 
   ;; Java stuff
   [(.toString ?x) (str ?x)]
@@ -99,11 +97,9 @@
           (logic/project [form]
             (logic/== sbst (concat form (list arg)))))]))])
 
-  
 
   ;; Other
-  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
-  [(not (= . ?args)) (not= . ?args)])
+  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
 
 
 (comment

@@ -4,4 +4,3 @@
 (defrules rules
   ;; reduce on var-arg functions
   [(reduce + ?coll) (apply + ?coll)])
-
