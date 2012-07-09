@@ -8,6 +8,7 @@
 
   ;; empty?
   [(not (empty? ?x)) (seq ?x)]
+  [(when-not (empty? ?x) . ?y) (when (seq ?x) . ?y)]
 
   ;; set
   [(into #{} ?coll) (set ?coll)])
