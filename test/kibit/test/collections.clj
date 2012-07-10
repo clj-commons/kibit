@@ -6,6 +6,8 @@
   (are [expected-alt-form test-form]
        (= expected-alt-form (:alt (kibit/check-expr test-form)))
     '(seq a) '(not (empty? a))
+    '(when (seq a) b) '(when-not (empty? a) b)
+    '(when (seq a) b) '(when (not (empty? a)) b)
     '(vector a) '(conj [] a)
     '(vector a b) '(conj [] a b)
     '(vec coll) '(into [] coll)
