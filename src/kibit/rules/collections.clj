@@ -5,6 +5,9 @@
   ;;vector
   [(conj [] . ?x) (vector . ?x)]
   [(into [] ?coll) (vec ?coll)]
+  [(assoc ?coll ?key (?fn (?key ?coll) . ?args)) (update-in ?coll [?key] ?fn . ?args)]
+  [(assoc ?coll ?key (?fn (?coll ?key) . ?args)) (update-in ?coll [?key] ?fn . ?args)]
+  [(assoc ?coll ?key (?fn (get ?coll ?key) . ?args)) (update-in ?coll [?key] ?fn . ?args)]
 
   ;; empty?
   [(not (empty? ?x)) (seq ?x)]
