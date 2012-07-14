@@ -17,4 +17,5 @@
     '(update-in coll [k] f) '(assoc coll k (f (get coll k)))
     '(update-in coll [k] f a b c) '(assoc coll k (f (k coll) a b c))
     '(update-in coll [k] f a b c) '(assoc coll k (f (coll k) a b c))
-    '(update-in coll [k] f a b c) '(assoc coll k (f (get coll k) a b c))))
+    '(update-in coll [k] f a b c) '(assoc coll k (f (get coll k) a b c))
+    '(assoc-in coll [k1 k2] v) '(update-in coll [k1 k2] assoc v)))
