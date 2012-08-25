@@ -15,5 +15,7 @@
   [(when-not (empty? ?x) . ?y) (when (seq ?x) . ?y)]
 
   ;; set
-  [(into #{} ?coll) (set ?coll)])
+  [(into #{} ?coll) (set ?coll)]
+
+  [(take ?n (repeatedly ?coll)) (repeatedly ?n ?coll)])
 
