@@ -16,4 +16,5 @@
     'single-expression '(do single-expression)
     '_ '(when-not true anything)
     '_ '(when false anything)
-    '(when-let [a test] expr) '(if-let [a test] expr nil)))
+    '(when-let [a test] expr) '(if-let [a test] expr nil)
+    '(let [a 1] (println a) a) '(let [a 1] (do (println a) a))))
