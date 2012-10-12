@@ -14,6 +14,8 @@
   [(when-not true ?x) _]
   [(when false ?x) _]
   [(if-let ?binding ?expr nil) (when-let ?binding ?expr)]
+  [(let [?x ?y] (if ?x ?then ?else)) (if-let [?x ?y] ?then ?else)]
+  [(let [?x ?y] (if ?x ?expr nil)) (when-let [?x ?y] ?expr)]
 
   ;; suggest `while` for bindingless loop-recur
   [(loop [] (when ?test . ?exprs (recur)))
