@@ -9,6 +9,7 @@
     '(when-not test else) '(if test nil else)
     '(when test body) '(if test (do body))
     '(if-not test then else) '(if (not test) then else)
+    '(or test else) '(if test true else)
     '(when-not test then) '(when (not test) then)
     '(println "X") '(if true (println "X") nil)
     '(println "X") '(if true (println "X"))
