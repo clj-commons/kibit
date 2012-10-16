@@ -9,7 +9,6 @@
   [(when (not ?x) . ?y) (when-not ?x . ?y)]
   [(if true ?x ?y) ?x]
   [(if true ?x) ?x]
-  [(if ?x true ?y) (or ?x ?y)]
   [(when true . ?x) (do . ?x)]
   [(do ?x) ?x]
   [(when-not true ?x) _]
