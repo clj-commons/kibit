@@ -18,7 +18,8 @@
   ;; suggest `while` for bindingless loop-recur
   [(loop [] (when ?test . ?exprs (recur)))
    (while ?test . ?exprs)]
-  [(let ?binding (do . ?exprs)) (let ?binding . ?exprs)])
+  [(let ?binding (do . ?exprs)) (let ?binding . ?exprs)]
+  [(loop ?binding (do . ?exprs)) (loop ?binding . ?exprs)])
 
 (comment
   (when (not (pred? x y)) (f x y))
