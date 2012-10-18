@@ -17,4 +17,7 @@
     '_ '(when-not true anything)
     '_ '(when false anything)
     '(when-let [a test] expr) '(if-let [a test] expr nil)
-    '(let [a 1] (println a) a) '(let [a 1] (do (println a) a))))
+    '(let [a 1] (println a) a) '(let [a 1] (do (println a) a))
+
+    '(loop [a 4] (println a) (if (zero? a) a (recur (dec a))))
+    '(loop [a 4] (do (println a) (if (zero? a) a (recur (dec a)))))))
