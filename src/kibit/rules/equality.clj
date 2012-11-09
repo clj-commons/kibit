@@ -19,5 +19,9 @@
 
   [(= ?x ?x)  true]
   [(== ?x ?x) true]
-  [(zero? 0)  true])
+  [(zero? 0)  true]
+    
+  ; nil?
+  [(= ?x nil) (nil? ?x)]
+  [(= nil ?x) (nil? ?x)])
 
