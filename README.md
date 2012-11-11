@@ -15,16 +15,19 @@ it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
-Add `[jonase/kibit "0.0.4"]` to your `:plugins` vector in your `:user`
+Add `[lein-kibit "0.0.5"]` to your `:plugins` vector in your `:user`
 profile (Leiningen 2) or if you are using Leiningen 1:
 
-    $ lein plugin install jonase/kibit 0.0.4
+    $ lein plugin install lein-kibit 0.0.5
 
 Then you can run
 
     $ lein kibit
 
-to analyze your namespaces.
+to analyze your namespaces. You can analyze individual files by
+running
+
+    $ lein kibit path/to/some/file.clj
 
 ### Usage from inside Emacs
 

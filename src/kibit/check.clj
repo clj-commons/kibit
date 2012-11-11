@@ -32,43 +32,22 @@
 
 ;; Reading source files
 ;; --------------------
-;;
-;; TODO Paul - give an overview here
-
-;; ### Handling read errors
-;; TODO Paul - explain this more
-(def ^:dynamic *check-error-handler*
-  (fn [ex reader]
-    (throw (Exception.
-             (str "Kibit's reader crashed; see kibit.check/read-file:"
-                  (.getMessage ex))
-             ex))))
-
-(defn ignore-error-handler
-  "This is an error handler that will silently skip over forms
-  that cause errors - a work in progress"
-  [ex reader] ; TODO We're going to have to (.skip reader n), where n is the number of chars to skip until the next form
-  nil)
-
 ;; ### Extracting forms
 
 ;; `read-file` is intended to be used with a Clojure source file,
 ;; read in by Clojure's LineNumberingPushbackReader *(LNPR)*. Expressions are
 ;; extracted using the clojure reader (ala `read`), and line numbers
 ;; are added as `:line` metadata to the forms (via LNPR).
-;; Exceptions are handled using a dynamic handler, `*check-error-handler*`
-;;
-;; See above for more details on how to control error handling
+
+(def eof (Object.))
+
 (defn read-file
   "Generate a lazy sequence of top level forms from a
   LineNumberingPushbackReader"
   [^LineNumberingPushbackReader r]
   (lazy-seq
-   (let [form (try
-                (read r false ::eof)
-                (catch Exception e
-                  (*check-error-handler* e r)))]
-     (when-not (= form ::eof)
+   (let [form (read r false eof)]
+     (when-not (= form eof)
        (cons form (read-file r))))))
 
 ;; ### Analyzing the pieces
@@ -222,9 +201,10 @@
         (merge default-args
                (apply hash-map kw-opts))]
     (with-open [reader (io/reader source-file)]
+      (binding [*default-data-reader-fn* (fn [tag val] val)]
         (doseq [simplify-map (check-reader reader
                                            :rules rules
                                            :guard guard
                                            :resolution resolution)]
-          (reporter (assoc simplify-map :file source-file))))))
+          (reporter (assoc simplify-map :file source-file)))))))
 
