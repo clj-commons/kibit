@@ -42,8 +42,7 @@
          [(logic/== expr (list 'fn* args (logic/llist fun args)))])
         (logic/pred fun #(or (keyword? %)
                              (and (symbol? %)
-                                  (not= \. (first (str %)))
-                                  (not-any? #{\/} (str %)))))))
+                                  (not-any? #{\/ \.} (str %)))))))
      #(logic/== % fun)])
 
   ;; Java stuff
