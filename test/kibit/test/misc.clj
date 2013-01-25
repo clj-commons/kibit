@@ -6,6 +6,7 @@
   (are [expected-alt-form test-form]
        (= expected-alt-form (:alt (kibit/check-expr test-form)))
     '(clojure.string/join x y) '(apply str (interpose x y))
+    '(clojure.string/join x) '(apply str x)
     '(clojure.string/reverse x) '(apply str (reverse x))
     '(mapcat x y) '(apply concat (apply map x y))
     '(mapcat x y) '(apply concat (map x y))
