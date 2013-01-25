@@ -10,6 +10,7 @@
     '(mapcat x y) '(apply concat (apply map x y))
     '(mapcat x y) '(apply concat (map x y))
     '(remove pred coll) '(filter (complement pred) coll)
+    '(remove empty? coll) '(filter seq coll)
     '(remove pred coll) '(filter #(not (pred %)) coll)
     '(remove pred coll) '(filter (fn [x] (not (pred x))) coll)
     '(ffirst coll) '(first (first coll))
