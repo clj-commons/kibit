@@ -23,6 +23,7 @@
 
   ;; filter
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
+  [(filter seq ?coll) (remove empty? ?coll)]
   [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
   [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
 
