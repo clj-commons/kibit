@@ -18,6 +18,8 @@
     '_ '(when false anything)
     '(when-let [a test] expr) '(if-let [a test] expr nil)
     '(let [a 1] (println a) a) '(let [a 1] (do (println a) a))
+    '(when test (println a) then) '(when test (do (println a) then))
+    '(when-not test (println a) then) '(when-not test (do (println a) then))
 
     '(loop [a 4] (println a) (if (zero? a) a (recur (dec a))))
     '(loop [a 4] (do (println a) (if (zero? a) a (recur (dec a)))))))
