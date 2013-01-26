@@ -78,18 +78,10 @@ Bugs can be reported using the github bug tracker.
 
 ## Contributors
 
-* Jonas Enlund
-* Phil Hagelberg
-* Tassilo Horn
-* Alan Malloy
-* Paul deGrandis
-* Kevin Lynagh
+Thanks to all who have [contributed](https://github.com/jonase/kibit/graphs/contributors) to kibit!
 
 ## TODO
 
-* Rules for function definitions (make this more of a lint tool)
-* Rules for collection lookup; "2 is a bad smell" [see this blog post](http://tech.puredanger.com/2011/10/12/2-is-a-smell/)
-* Extract the "when to use" rules from [Joy of Clojure](http://joyofclojure.com/)
 * Leiningen project.clj setting for rule exclusion
 * Leiningen project.clj setting for a directory of rules to include
 * Analyse ClojureScript files
