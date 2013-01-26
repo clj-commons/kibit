@@ -16,6 +16,7 @@
   ;; clojure.string
   [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]
   [(apply str (reverse ?x)) (clojure.string/reverse ?x)]
+  [(apply str ?x) (clojure.string/join ?x)] 
 
   ;; mapcat
   [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]
