@@ -21,11 +21,5 @@
     '(do [1 2 3])   '(do [1 2 3])
     nil             '(if (> 2 3) :one :two)))
 
-(deftest simplify-deep
-  (is (= :one
-         (:alt (kibit/check-expr '(if (= 0 0) :one nil))))))
 
-(deftest simplify-one
-  (is (= '(when (= 0 0) :one)
-         (:alt (kibit/check-expr '(if (= 0 0) :one nil) :resolution :subform)))))
 

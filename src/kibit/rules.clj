@@ -6,7 +6,6 @@
             [kibit.rules.control-structures :as control]
             [kibit.rules.collections :as coll]
             [kibit.rules.equality :as equality]
-            [kibit.rules.performance :as perf]
             [kibit.rules.misc :as misc]
             [clojure.core.logic :as logic]))
 
@@ -34,7 +33,6 @@
                :arithmetic arith/rules
                :collections coll/rules
                :equality equality/rules
-               :perf perf/rules
                :misc misc/rules})
 
 ;; TODO: Consider a refactor for this into a function
