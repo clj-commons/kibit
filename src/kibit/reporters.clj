@@ -26,7 +26,7 @@
          println))) 
 
 (defn cli-reporter
-  "Print a check-map to `*out*`"
+  "Print a check-map to `*out*` in plain text."
   [check-map]
   (let [{:keys [file line expr alt]} check-map]
     (do
@@ -36,3 +36,19 @@
       (pprint-code expr)
       (newline))))
 
+(defn gfm-reporter
+  "Print a check-map to `*out*` in github flavored markdown."
+  [check-map]
+  (let [{:keys [file line expr alt]} check-map]
+    (printf "----\n##### `%s:%s`\nConsider using:\n" file line)
+    (println "```clojure")
+    (pprint-code alt)
+    (println "```")
+    (println "instead of:")
+    (println "```clojure")
+    (pprint-code expr)
+    (println "```")
+    (newline)))
+
+(def name-to-reporter {"markdown" gfm-reporter
+                       "text" cli-reporter})
