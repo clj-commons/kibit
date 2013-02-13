@@ -193,6 +193,10 @@
     (keep #(check-aux % simplify-fn guard)
           ((res->read-seq resolution) reader))))
 
+(def ^:private default-data-reader-binding
+  (when (resolve '*default-data-reader-fn*)
+    {(resolve '*default-data-reader-fn*) (fn [tag val] val)}))
+
 (defn check-file
   ""
   [source-file & kw-opts]
@@ -201,7 +205,7 @@
         (merge default-args
                (apply hash-map kw-opts))]
     (with-open [reader (io/reader source-file)]
-      (binding [*default-data-reader-fn* (fn [tag val] val)]
+      (with-bindings default-data-reader-binding
         (doseq [simplify-map (check-reader reader
                                            :rules rules
                                            :guard guard
