@@ -39,16 +39,37 @@
 ;; extracted using the clojure reader (ala `read`), and line numbers
 ;; are added as `:line` metadata to the forms (via LNPR).
 
+(defn- careful-refer
+  "Refers into the provided namespace all public vars from clojure.core
+except for those that would clobber any existing interned vars in that
+namespace.  This is needed to ensure that symbols read within syntax-quote
+end up being fully-qualified to clojure.core as appropriate, and only
+to *ns* if they're not available there.  AFAICT, this will work for all
+symbols in syntax-quote except for those referring to vars that are referred
+into the namespace."
+  [ns]
+  (binding [*ns* ns]
+    (refer 'clojure.core :exclude (or (keys (ns-interns ns)) ())))
+  ns)
+
 (def eof (Object.))
 
 (defn read-file
   "Generate a lazy sequence of top level forms from a
-  LineNumberingPushbackReader"
-  [^LineNumberingPushbackReader r]
-  (lazy-seq
-   (let [form (read r false eof)]
-     (when-not (= form eof)
-       (cons form (read-file r))))))
+   LineNumberingPushbackReader"
+  [^LineNumberingPushbackReader r init-ns]
+  (let [do-read (fn do-read [ns]
+                  (lazy-seq
+                    (let [form (binding [*ns* ns]
+                                 (read r false eof))
+                          [ns? new-ns k] (when (sequential? form) form)
+                          ns (if (and (symbol? new-ns)
+                                   (or (= ns? 'ns) (= ns? 'in-ns)))
+                               (careful-refer (create-ns new-ns))
+                               ns)]
+                      (when-not (= form eof)
+                        (cons form (do-read ns))))))]
+    (do-read (careful-refer (create-ns init-ns)))))
 
 ;; ### Analyzing the pieces
 
@@ -113,7 +134,8 @@
 (def ^:private default-args
   {:rules      all-rules
    :guard      unique-alt?
-   :resolution :subform})
+   :resolution :subform
+   :init-ns    'user})
 
 ;; ### Resolution
 ;; Kibit can report at various levels of resolution.
@@ -134,8 +156,10 @@
    :subform  core/simplify-one})
 
 (def ^:private res->read-seq
-  {:toplevel (fn [reader] (read-file (LineNumberingPushbackReader. reader)))
-   :subform  (fn [reader] (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader))))})
+  {:toplevel (fn [reader init-ns]
+               (read-file (LineNumberingPushbackReader. reader) init-ns))
+   :subform  (fn [reader init-ns]
+               (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader) init-ns)))})
 
 ;; Checking the expressions
 ;; ------------------------
@@ -186,25 +210,30 @@
 (defn check-reader
   ""
   [reader & kw-opts]
-  (let [{:keys [rules guard resolution]}
+  (let [{:keys [rules guard resolution init-ns]}
         (merge default-args
                (apply hash-map kw-opts))
         simplify-fn #((res->simplify resolution) % rules)]
     (keep #(check-aux % simplify-fn guard)
-          ((res->read-seq resolution) reader))))
+          ((res->read-seq resolution) reader init-ns))))
+
+(def ^:private default-data-reader-binding
+  (when (resolve '*default-data-reader-fn*)
+    {(resolve '*default-data-reader-fn*) (fn [tag val] val)}))
 
 (defn check-file
   ""
   [source-file & kw-opts]
-  (let [{:keys [rules guard resolution reporter]
+  (let [{:keys [rules guard resolution reporter init-ns]
          :or {reporter reporters/cli-reporter}}
         (merge default-args
                (apply hash-map kw-opts))]
     (with-open [reader (io/reader source-file)]
-      (binding [*default-data-reader-fn* (fn [tag val] val)]
+      (with-bindings default-data-reader-binding
         (doseq [simplify-map (check-reader reader
                                            :rules rules
                                            :guard guard
-                                           :resolution resolution)]
+                                           :resolution resolution
+                                           :init-ns init-ns)]
           (reporter (assoc simplify-map :file source-file)))))))
 
