@@ -50,6 +50,11 @@ Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit"))
 
+(defun kibit-current-file ()
+  "Run kibit on the current file.
+Display the results in a hyperlinked *compilation* buffer."
+  (interactive)
+  (compile (concat "lein kibit " buffer-file-name)))
 ``` 
 
 This will give you a new command `M-x kibit RET`, and the properly
