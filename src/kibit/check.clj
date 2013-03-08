@@ -107,6 +107,7 @@ into the namespace."
   [expr simplified-expr]
   {:expr expr
    :line (-> expr meta :line)
+   :column (-> expr meta :column)
    :alt simplified-expr})
 
 ;; ### Guarding the check
