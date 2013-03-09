@@ -15,12 +15,8 @@ it will make the suggestion to use the `when` macro instead of `if`.
 
 ## Usage
 
-Add `[lein-kibit "0.0.7"]` to your `:plugins` vector in your `:user`
-profile (Leiningen 2) or if you are using Leiningen 1:
-
-    $ lein plugin install lein-kibit 0.0.7
-
-Then you can run
+Add `[lein-kibit "0.0.8"]` to your `:plugins` vector in your `:user`
+profile. Then you can run
 
     $ lein kibit
 
