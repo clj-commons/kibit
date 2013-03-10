@@ -37,4 +37,4 @@
 
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`
-(def all-rules (map logic/prep (apply concat (vals rule-map))))
+(def all-rules (apply concat (vals rule-map)))
