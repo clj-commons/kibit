@@ -11,6 +11,8 @@ pom.xml
 /target
 .lein-deps-sum
 .lein-failures
+.lein-env
+.lein-repl-history
 
 # Temp Files
 *.orig
