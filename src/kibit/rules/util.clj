@@ -10,8 +10,8 @@
   (not (vector? rule)))
 
 (defmacro defrules [name & rules]
-  (let [rules (for [rule rules]
-                (if (raw-rule? rule)
-                  rule ;; raw rule, no need to compile
-                  (compile-rule rule)))]
-    (list 'def name (vec rules))))
+  `(let [rules# (for [rule# '~rules]
+                  (if (raw-rule? rule#)
+                    rule# ;; raw rule, no need to compile
+                    (compile-rule rule#)))]
+     (def ~name (vec rules#))))
