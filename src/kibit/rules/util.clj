@@ -1,5 +1,5 @@
 (ns kibit.rules.util
-  (require [clojure.core.logic :as logic]))
+  (:require [clojure.core.logic :as logic]))
 
 (defn compile-rule [rule]
   (let [[pat alt] (logic/prep rule)]
