@@ -25,6 +25,8 @@ running
 
     $ lein kibit path/to/some/file.clj
 
+If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
+
 ### Usage from inside Emacs
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
