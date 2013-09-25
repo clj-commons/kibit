@@ -9,11 +9,11 @@
                  "The reporter used when rendering suggestions"
                  :default "text"]])
 
-(defn run [project & args]
+(defn run [source-paths & args]
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
         source-files (if (empty? file-args)
                        (mapcat #(-> % io/file find-clojure-sources-in-dir)
-                               (or (:source-paths project) [(:source-path project)]))
+                               source-paths)
                        file-args)]
     (doseq [file source-files]
       (try (check-file file :reporter (name-to-reporter (:reporter options)
