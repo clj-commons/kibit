@@ -7,9 +7,11 @@
 patterns of code for which there might exist a more idiomatic function
 or macro. For example if kibit finds the code
 
-    (if (some test)
-      (some action)
-      nil)
+```clojure
+(if (some test)
+  (some action)
+  nil)
+```      
 
 it will make the suggestion to use the `when` macro instead of `if`.
 
@@ -33,7 +35,7 @@ If you use Emacs for hacking Clojure, here's a way to use kibit from
 inside Emacs with all the fancyness you are used from `M-x compile`.
 Put the following into your `~/.emacs`:
 
-```
+```clojure
 ;; Teach compile the syntax of the kibit output
 (require 'compile)
 (add-to-list 'compilation-error-regexp-alist-alist
