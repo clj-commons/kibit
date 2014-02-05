@@ -103,7 +103,8 @@
 
 
   ;; Other
-  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
+  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
+  [(def ?name (create-struct ?keys)) (defstruct ?name ?keys)])
 
 
 (comment
