@@ -12,7 +12,7 @@
 ;;
 ;; Here we have supplied a reporter for standard-out.
 
-;; A hack to get the code indented. 
+;; A hack to get the code indented.
 (defn pprint-code [form]
   (let [string-writer (StringWriter.)]
     (pp/write form
@@ -23,18 +23,17 @@
          string/split-lines
          (map #(str "  " %))
          (string/join "\n")
-         println))) 
+         println)))
 
 (defn cli-reporter
   "Print a check-map to `*out*` in plain text."
   [check-map]
   (let [{:keys [file line expr alt]} check-map]
-    (do
-      (printf "At %s:%s:\nConsider using:\n" file line)
-      (pprint-code alt)
-      (println "instead of:")
-      (pprint-code expr)
-      (newline))))
+    (printf "At %s:%s:\nConsider using:\n" file line)
+    (pprint-code alt)
+    (println "instead of:")
+    (pprint-code expr)
+    (newline)))
 
 (defn gfm-reporter
   "Print a check-map to `*out*` in github flavored markdown."
