@@ -12,7 +12,6 @@
     '(zero? x) '(== x 0)
     '(pos? x) '(< 0 x)
     '(pos? x) '(> x 0)
-    '(pos? x) '(<= 1 x)
     '(neg? x) '(< x 0)
     '(nil? x) '(= nil x)
     '(nil? x) '(= x nil)))
