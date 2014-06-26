@@ -1,8 +1,29 @@
 (ns kibit.rules.util
-  (:require [clojure.core.logic :as logic]))
+  (:require [clojure.core.logic :as logic]
+            [clojure.walk :as walk]))
 
-(defn compile-rule [rule]
-  (let [[pat alt] (logic/prep rule)]
+;; wrap vectors in an s-expression of form (:kibit.rules/vector ...)
+(def wrap-vector-walker 
+  (partial walk/prewalk
+           #(if (vector? %)
+              (concat `(:kibit.rules/vector) %)
+              %)))
+
+(defn kibit-vector? [exp]
+  (and (sequential? exp) (= :kibit.rules/vector (first exp))))
+
+;; If we catch an exp in the form (:kibit.rules/vector foo bar & baz) we return 
+;; the converted back into a normal vector 
+(def unwrap-vector-walker
+  (partial walk/prewalk
+           (fn [exp]
+             (if (kibit-vector? exp)
+               (apply vector (rest exp))
+               exp))))
+
+(defn compile-rule [[pattern simplification]]
+  (let [rule [pattern (wrap-vector-walker simplification)]
+        [pat alt] (logic/prep rule)]
      [(fn [expr] (logic/== expr pat))
       (fn [sbst] (logic/== sbst alt))]))
 
