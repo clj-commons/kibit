@@ -18,5 +18,6 @@
 
   ; nil?
   [(= ?x nil) (nil? ?x)]
-  [(= nil ?x) (nil? ?x)])
+  [(= nil ?x) (nil? ?x)]
+  [(not (nil? ?x)) (some? ?x)])
 
