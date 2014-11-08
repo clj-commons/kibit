@@ -13,6 +13,7 @@
     '(pos? x) '(< 0 x)
     '(pos? x) '(> x 0)
     '(neg? x) '(< x 0)
+    '(neg? x) '(> 0 x)
     '(nil? x) '(= nil x)
     '(nil? x) '(= x nil)))
 
