@@ -1,8 +1,9 @@
 (ns kibit.rules.util
-  (:require [clojure.core.logic :as logic]))
+  (:require [clojure.core.logic :as logic]
+            [clojure.core.logic.unifier :as unifier]))
 
 (defn compile-rule [rule]
-  (let [[pat alt] (logic/prep rule)]
+  (let [[pat alt] (unifier/prep rule)]
      [(fn [expr] (logic/== expr pat))
       (fn [sbst] (logic/== sbst alt))]))
 
