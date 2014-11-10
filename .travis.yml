@@ -1,5 +1,5 @@
 language: clojure
-script: "lein test"
+script: "lein do clean, test, clean, compile :all"
 jdk:
 - openjdk7
 - oraclejdk7
