@@ -1,5 +1,6 @@
 (ns kibit.rules.util
   (:require [clojure.core.logic :as logic]
+            [clojure.core.logic.unifier :as unifier]
             [clojure.walk :as walk]))
 
 ;; wrap vectors in an s-expression of form (:kibit.rules/vector ...)
@@ -23,10 +24,10 @@
 
 (defn compile-rule [[pattern simplification]]
   (let [rule [pattern (wrap-vector-walker simplification)]
-        [pat alt] (logic/prep rule)]
-     [(fn [expr] (logic/== expr pat))
+        [pat alt] (unifier/prep rule)]
+    [(fn [expr] (logic/== expr pat))
       (fn [sbst] (logic/== sbst alt))]))
-
+            
 (defn raw-rule? [rule]
   (not (vector? rule)))
 
