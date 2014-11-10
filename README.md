@@ -1,10 +1,12 @@
+[![Build Status](https://travis-ci.org/jonase/kibit.svg?branch=master)](https://travis-ci.org/jonase/kibit)
+
 # kibit
 
 *There's a function for that!*
 
-`kibit` is a static code analyzer for Clojure which uses
+`kibit` is a static code analyzer for Clojure. It uses
 [`core.logic`](https://github.com/clojure/core.logic) to search for
-patterns of code for which there might exist a more idiomatic function
+patterns of code that could be rewritten with a more idiomatic function
 or macro. For example if kibit finds the code
 
 ```clojure
@@ -13,7 +15,12 @@ or macro. For example if kibit finds the code
   nil)
 ```      
 
-it will make the suggestion to use the `when` macro instead of `if`.
+it will suggest using `when` instead:
+
+```clojure
+(when (some test)
+  (some action))
+```
 
 ## Usage
 
@@ -32,7 +39,7 @@ If you want to know how the Kibit rule system works there are some slides availa
 ### Usage from inside Emacs
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
-inside Emacs with all the fancyness you are used from `M-x compile`.
+inside Emacs with all the fanciness you are used to from `M-x compile`.
 Put the following into your `~/.emacs`:
 
 ```clojure
@@ -66,7 +73,7 @@ highlighted and hyperlinked kibit output is presented in a
 Kibit
 [reads](http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/read)
 source code without any macro expansion or evaluation. A macro can
-therefor easily invalidate a rule. Also, kibit will not know if the
+therefore easily invalidate a rule. Also, kibit will not know if the
 symbol `+` in the form `(+ x 1)` actually refers to a local or to a
 function in a namespace other than `clojure.core`. Expect
 some false positives.
@@ -79,7 +86,7 @@ to see how new patterns are created. If you know of a recurring
 pattern of code that can be simplified, please consider sending me a
 pull request.
 
-Bugs can be reported using the github bug tracker.
+Bugs can be reported using the Github [issue tracker](https://github.com/jonase/kibit/issues/).
 
 ## Contributors
 
@@ -89,11 +96,9 @@ Thanks to all who have [contributed](https://github.com/jonase/kibit/graphs/cont
 
 * Leiningen project.clj setting for rule exclusion
 * Leiningen project.clj setting for a directory of rules to include
-* Analyse ClojureScript files
 
 ## License
 
 Copyright © 2012 Jonas Enlund
 
 Distributed under the Eclipse Public License, the same as Clojure.
-
