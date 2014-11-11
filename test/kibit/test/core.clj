@@ -23,6 +23,3 @@
        (= expected-expr (:expr (kibit/check-expr test-expr)))
     '(do [1 2 3])   '(do [1 2 3])
     nil             '(if (> 2 3) :one :two)))
-
-
-
