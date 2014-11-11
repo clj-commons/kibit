@@ -3,7 +3,7 @@
   (:use [clojure.test]))
 
 ;; These tests are identical to the tests in kibit.test.core
-;; The are here to illustrate kibit use via `check`
+;; They are here to illustrate kibit use via `check`
 
 (deftest simplify-alts
   (are [expected-alt test-form]

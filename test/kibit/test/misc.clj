@@ -1,6 +1,16 @@
 (ns kibit.test.misc
-  (:require [kibit.check :as kibit])
+  (:require [kibit.check :as kibit]
+            [kibit.rules.misc :as misc])
   (:use [clojure.test]))
+
+(deftest class-symbol-are
+  (are [valid? class-symbol]
+    (= valid? (misc/class-symbol? class-symbol))
+    true 'Boolean
+    true 'foo.bar.Baz
+    false 'boolean
+    false 'foo.bar.baz
+    false 'foo.bar))
 
 (deftest misc-are
   (are [expected-alt-form test-form]
