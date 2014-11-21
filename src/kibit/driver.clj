@@ -36,9 +36,16 @@
                        (mapcat #(-> % io/file find-clojure-sources-in-dir)
                                source-paths)
                        file-args)]
-    (doseq [file source-files]
-      (try (check-file file :reporter (name-to-reporter (:reporter options)
-                                                        cli-reporter))
-           (catch Exception e
-             (println "Check failed -- skipping rest of file")
-             (println (.getMessage e)))))))
+    (mapcat (fn [file] (try (check-file file :reporter (name-to-reporter (:reporter options)
+                                                                         cli-reporter))
+                            (catch Exception e
+                              (println "Check failed -- skipping rest of file")
+                              (println (.getMessage e)))))
+            source-files)))
+
+(defn external-run
+  "Used by lein-kibit to count the results and exit with exit-code 1 if results are found"
+  [source-paths & args]
+  (if (zero? (count (apply run source-paths args)))
+    (System/exit 0)
+    (System/exit 1)))
