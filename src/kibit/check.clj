@@ -147,7 +147,7 @@ into the namespace."
 ;; Kibit on the REPL (per expression).
 ;;
 ;; `:subform` will only report on the subforms. This is most common
-;; for standard reporting, and what gets used when Kibit's Leinigen
+;; for standard reporting, and what gets used when Kibit's Leiningen
 ;; plugin is `:verbose false`, the default setting.
 
 ;; Map the levels of resolution to the correct combination of `simplify`

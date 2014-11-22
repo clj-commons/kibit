@@ -6,8 +6,7 @@
             [kibit.rules.control-structures :as control]
             [kibit.rules.collections :as coll]
             [kibit.rules.equality :as equality]
-            [kibit.rules.misc :as misc]
-            [clojure.core.logic :as logic]))
+            [kibit.rules.misc :as misc]))
 
 
 ;; More information on rules
