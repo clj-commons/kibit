@@ -1,11 +1,11 @@
 (ns kibit.test.core
   (:require [kibit.check :as kibit]
             [kibit.core :as core]
-            [clojure.core.logic :as logic]
+            [clojure.core.logic.unifier :as unifier]
             [kibit.rules :as core-rules])
   (:use [clojure.test]))
 
-(def all-rules  (map logic/prep core-rules/all-rules))
+(def all-rules  (map unifier/prep core-rules/all-rules))
 
 (deftest simplify-alts
   (are [expected-alt test-expr]
