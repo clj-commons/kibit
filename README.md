@@ -13,7 +13,7 @@ or macro. For example if kibit finds the code
 (if (some test)
   (some action)
   nil)
-```      
+```
 
 it will suggest using `when` instead:
 
@@ -62,7 +62,7 @@ Display the results in a hyperlinked *compilation* buffer."
 Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile (concat "lein kibit " buffer-file-name)))
-``` 
+```
 
 This will give you a new command `M-x kibit RET`, and the properly
 highlighted and hyperlinked kibit output is presented in a
@@ -86,7 +86,7 @@ to see how new patterns are created. If you know of a recurring
 pattern of code that can be simplified, please consider sending me a
 pull request.
 
-Bugs can be reported using the Github [issue tracker](https://github.com/jonase/kibit/issues/).
+Bugs can be reported using the GitHub [issue tracker](https://github.com/jonase/kibit/issues/).
 
 ## Contributors
 
