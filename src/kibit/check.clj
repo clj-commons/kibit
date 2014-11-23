@@ -2,6 +2,7 @@
   "Kibit's integration point and public API"
   (:require [clojure.java.io :as io]
             [clojure.core.logic :as logic]
+            [clojure.core.logic.unifier :as unifier]
             [kibit.core :as core]
             [kibit.rules :as core-rules]
             [kibit.reporters :as reporters])
@@ -28,7 +29,7 @@
 ;; where necessary.
 ;;
 ;; For more information, see: [rules](#kibit.rules) namespace
-(def all-rules (map logic/prep core-rules/all-rules))
+(def all-rules (map unifier/prep core-rules/all-rules))
 
 ;; Reading source files
 ;; --------------------
