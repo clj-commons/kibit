@@ -36,6 +36,48 @@ running
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
 
+## Reporters
+
+Kibit comes with two reporters, the default plaintext reporter, and a GitHub Flavoured Markdown reporter. To specify a reporter, use the `-r` or `--reporter` commandline argument. For example:
+
+    lein kibit --reporter markdown
+    ----
+    ##### `test/project/core.clj:31`
+    Consider using:
+    ```clojure
+      (when true (println "hi"))
+    ```
+    instead of:
+    ```clojure
+      (if true (do (println "hi")))
+    ```
+    
+    ----
+    ##### `test/project/core.clj:32`
+    Consider using:
+    ```clojure
+      (println "hi")
+    ```
+    instead of:
+    ```clojure
+      (do (println "hi"))
+    ```
+
+which renders to:
+
+----
+##### `test/project/core.clj:31`
+Consider using:
+```clojure
+  (when true (println "hi"))
+```
+instead of:
+```clojure
+  (if true (do (println "hi")))
+```
+...
+----
+
 ### Usage from inside Emacs
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
