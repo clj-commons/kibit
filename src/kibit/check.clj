@@ -64,7 +64,7 @@ into the namespace."
                                  (read r false eof))
                           [ns? new-ns k] (when (sequential? form) form)
                           ns (if (and (symbol? new-ns)
-                                   (or (= ns? 'ns) (= ns? 'in-ns)))
+                                      (or (= ns? 'ns) (= ns? 'in-ns)))
                                (careful-refer (create-ns new-ns))
                                ns)]
                       (when-not (= form eof)
@@ -105,10 +105,10 @@ into the namespace."
   "Construct the canonical simplify-map
   given an expression and a simplified expression."
   [expr simplified-expr]
-  {:expr expr
-   :line (-> expr meta :line)
+  {:expr   expr
+   :line   (-> expr meta :line)
    :column (-> expr meta :column)
-   :alt simplified-expr})
+   :alt    simplified-expr})
 
 ;; ### Guarding the check
 
@@ -226,15 +226,16 @@ into the namespace."
   ""
   [source-file & kw-opts]
   (let [{:keys [rules guard resolution reporter init-ns]
-         :or {reporter reporters/cli-reporter}}
+         :or   {reporter reporters/cli-reporter}}
         (merge default-args
                (apply hash-map kw-opts))]
     (with-open [reader (io/reader source-file)]
       (with-bindings default-data-reader-binding
-        (doseq [simplify-map (check-reader reader
-                                           :rules rules
-                                           :guard guard
-                                           :resolution resolution
-                                           :init-ns init-ns)]
-          (reporter (assoc simplify-map :file source-file)))))))
-
+        (doall (map (fn [simplify-map]
+                      (do (reporter (assoc simplify-map :file source-file))
+                          simplify-map))
+                    (check-reader reader
+                                  :rules rules
+                                  :guard guard
+                                  :resolution resolution
+                                  :init-ns init-ns)))))))
