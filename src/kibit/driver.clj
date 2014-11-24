@@ -32,10 +32,8 @@
 
 (defn run [source-paths & args]
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
-        source-files (if (empty? file-args)
-                       (mapcat #(-> % io/file find-clojure-sources-in-dir)
-                               source-paths)
-                       file-args)]
+        source-files (mapcat #(-> % io/file find-clojure-sources-in-dir)
+                             (if (empty? file-args) source-paths file-args))]
     (mapcat (fn [file] (try (check-file file :reporter (name-to-reporter (:reporter options)
                                                                          cli-reporter))
                             (catch Exception e
