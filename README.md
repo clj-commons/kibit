@@ -33,7 +33,8 @@ to analyze a Leiningen project's namespaces. Kibit can analyze individual files 
  by running:
 
     $ lein kibit path/to/some/file.clj #or
-    $ lein kibit path/to/src/
+    $ lein kibit path/to/src/ #or
+    $ lein kibit path/to/src/clj path/to/src/cljs/util.cljs some/combo/of/files/and/folders.cljx
 
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
