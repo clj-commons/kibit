@@ -29,12 +29,11 @@ profile. Then you can run
 
     $ lein kibit
 
-to analyze a Leiningen project's namespaces. Kibit can analyze individual files or folders (even if there is no Leiningen `project.clj`)
- by running:
+to analyze a Leiningen project's namespaces. Kibit will automatically pick up source paths from your project.clj from the following keyseqs: [:source-paths], [:cljsbuild :builds], and [:cljx :builds]. You can also run Kibit manually on individual files or folders (even if there is no Leiningen `project.clj`) by running:
 
     $ lein kibit path/to/some/file.clj #or
     $ lein kibit path/to/src/ #or
-    $ lein kibit path/to/src/clj path/to/src/cljs/util.cljs some/combo/of/files/and/folders.cljx
+    $ lein kibit path/to/src/clj/ path/to/src/cljs/util.cljs some/combo/of/files/and/folders.cljx
 
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
