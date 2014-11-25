@@ -4,9 +4,9 @@
 
 *There's a function for that!*
 
-`kibit` is a static code analyzer for Clojure. It uses
-[`core.logic`](https://github.com/clojure/core.logic) to search for
-patterns of code that could be rewritten with a more idiomatic function
+`kibit` is a static code analyzer for Clojure, ClojureScript, [cljx](https://github.com/lynaghk/cljx)
+ and other Clojure variants. It uses [`core.logic`](https://github.com/clojure/core.logic)
+  to search for patterns of code that could be rewritten with a more idiomatic function
 or macro. For example if kibit finds the code
 
 ```clojure
@@ -29,12 +29,25 @@ profile. Then you can run
 
     $ lein kibit
 
-to analyze your namespaces. You can analyze individual files by
-running
+to analyze a Leiningen project's namespaces. Kibit can analyze individual files or folders (even if there is no Leiningen `project.clj`)
+ by running:
 
-    $ lein kibit path/to/some/file.clj
+    $ lein kibit path/to/some/file.clj #or
+    $ lein kibit path/to/src/
+
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
+
+## Exit codes
+
+If `lein kibit` returns any suggestions to forms then it's exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
+
+
+    $lein kibit
+    ... suggestions follow
+
+    $echo $?
+    1
 
 ## Reporters
 
@@ -51,7 +64,7 @@ Kibit comes with two reporters, the default plaintext reporter, and a GitHub Fla
     ```clojure
       (if true (do (println "hi")))
     ```
-    
+
     ----
     ##### `test/project/core.clj:32`
     Consider using:
