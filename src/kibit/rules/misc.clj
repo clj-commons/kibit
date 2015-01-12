@@ -22,6 +22,10 @@
   [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]
   [(apply concat (map ?x . ?y)) (mapcat ?x . ?y)]
 
+  ;; mapv
+  [(into [] (map ?x . ?y)) (mapv ?x . ?y)]
+  [(vec (map ?x . ?y)) (mapv ?x . ?y)]
+
   ;; filter
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
   [(filter seq ?coll) (remove empty? ?coll)]
