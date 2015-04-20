@@ -50,6 +50,22 @@ If `lein kibit` returns any suggestions to forms then it's exit code will be 1. 
     $echo $?
     1
 
+## Automatically rerunning when files change
+
+You can use [lein-auto](https://github.com/weavejester/lein-auto) to run kibit automatically when files change. Visit
+lein-auto's README for installation instructions. Note that this will run kibit over all of your files, not just the
+ones that have changed.
+
+    $lein auto kibit
+    auto> Files changed: project.clj, [...]
+    auto> Running: lein kibit
+    ... suggestions follow
+    auto> Failed.
+    auto> Files changed: test/my/test/misc.clj
+    auto> Running: lein kibit
+    ... suggestions follow
+    auto> Failed.
+
 ## Reporters
 
 Kibit comes with two reporters, the default plaintext reporter, and a GitHub Flavoured Markdown reporter. To specify a reporter, use the `-r` or `--reporter` commandline argument. For example:
