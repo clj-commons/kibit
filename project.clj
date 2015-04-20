@@ -1,4 +1,4 @@
-(defproject jonase/kibit "0.0.9-SNAPSHOT"
+(defproject jonase/kibit "0.1.0-SNAPSHOT"
   :description "There's a function for that!"
   :url "https://github.com/jonase/kibit"
   :license {:name "Eclipse Public License - v 1.0"
@@ -10,4 +10,5 @@
                  [org.clojure/tools.cli "0.3.1"]]
   :profiles {:dev {:dependencies [[lein-marginalia "0.8.0"]]
                    :resource-paths ["test/resources"]}}
+  :deploy-repositories [["releases" :clojars]]
   :warn-on-reflection false)
