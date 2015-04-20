@@ -25,7 +25,7 @@ it will suggest using `when` instead:
 
 ## Usage
 
-Add `[lein-kibit "0.0.8"]` to your `:plugins` vector in your `:user`
+Add `[lein-kibit "0.1.0"]` to your `:plugins` vector in your `:user`
 profile. Then you can run
 
     $ lein kibit
