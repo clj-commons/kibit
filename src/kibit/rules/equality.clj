@@ -17,6 +17,10 @@
   [(< ?x 0) (neg? ?x)]
   [(> 0 ?x) (neg? ?x)]
 
+  ;; true? false?
+  [(= true ?x) (true? ?x)]
+  [(= false ?x) (false? ?x)]
+
   ; nil?
   [(= ?x nil) (nil? ?x)]
   [(= nil ?x) (nil? ?x)])

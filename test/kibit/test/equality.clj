@@ -14,6 +14,8 @@
     '(pos? x) '(> x 0)
     '(neg? x) '(< x 0)
     '(neg? x) '(> 0 x)
+    '(true? x) '(= true x)
+    '(false? x) '(= false x)
     '(nil? x) '(= nil x)
     '(nil? x) '(= x nil)))
 
