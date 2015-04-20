@@ -5,9 +5,9 @@
 
 *There's a function for that!*
 
-`kibit` is a static code analyzer for Clojure. It uses
-[`core.logic`](https://github.com/clojure/core.logic) to search for
-patterns of code that could be rewritten with a more idiomatic function
+`kibit` is a static code analyzer for Clojure, ClojureScript, [cljx](https://github.com/lynaghk/cljx)
+ and other Clojure variants. It uses [`core.logic`](https://github.com/clojure/core.logic)
+  to search for patterns of code that could be rewritten with a more idiomatic function
 or macro. For example if kibit finds the code
 
 ```clojure
@@ -25,17 +25,46 @@ it will suggest using `when` instead:
 
 ## Usage
 
-Add `[lein-kibit "0.0.8"]` to your `:plugins` vector in your `:user`
+Add `[lein-kibit "0.1.0"]` to your `:plugins` vector in your `:user`
 profile. Then you can run
 
     $ lein kibit
 
-to analyze your namespaces. You can analyze individual files by
-running
+to analyze a Leiningen project's namespaces. Kibit will automatically pick up source paths from your project.clj from the following keyseqs: [:source-paths], [:cljsbuild :builds], and [:cljx :builds]. You can also run Kibit manually on individual files or folders (even if there is no Leiningen `project.clj`) by running:
 
-    $ lein kibit path/to/some/file.clj
+    $ lein kibit path/to/some/file.clj #or
+    $ lein kibit path/to/src/ #or
+    $ lein kibit path/to/src/clj/ path/to/src/cljs/util.cljs some/combo/of/files/and/folders.cljx
+
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
+
+## Exit codes
+
+If `lein kibit` returns any suggestions to forms then it's exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
+
+
+    $lein kibit
+    ... suggestions follow
+
+    $echo $?
+    1
+
+## Automatically rerunning when files change
+
+You can use [lein-auto](https://github.com/weavejester/lein-auto) to run kibit automatically when files change. Visit
+lein-auto's README for installation instructions. Note that this will run kibit over all of your files, not just the
+ones that have changed.
+
+    $lein auto kibit
+    auto> Files changed: project.clj, [...]
+    auto> Running: lein kibit
+    ... suggestions follow
+    auto> Failed.
+    auto> Files changed: test/my/test/misc.clj
+    auto> Running: lein kibit
+    ... suggestions follow
+    auto> Failed.
 
 ## Reporters
 
@@ -52,7 +81,7 @@ Kibit comes with two reporters, the default plaintext reporter, and a GitHub Fla
     ```clojure
       (if true (do (println "hi")))
     ```
-    
+
     ----
     ##### `test/project/core.clj:32`
     Consider using:
