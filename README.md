@@ -118,7 +118,7 @@ Put the following into your `~/.emacs`:
 ;; Teach compile the syntax of the kibit output
 (require 'compile)
 (add-to-list 'compilation-error-regexp-alist-alist
-	     '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
+	     '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 2))
 (add-to-list 'compilation-error-regexp-alist 'kibit)
 
 ;; A convenient command to run "lein kibit" in the project to which
