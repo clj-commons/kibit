@@ -112,33 +112,43 @@ instead of:
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
 inside Emacs with all the fanciness you are used to from `M-x compile`.
-Put the following into your `~/.emacs`:
+The [kibit-helper](https://github.com/brunchboy/kibit-helper) package
+available from [MELPA](http://melpa.org/) provides several handy
+commands. First, make sure you have MELPA available as a source of
+packages (which you may well already have done). As described in their
+[Getting started](http://melpa.org/#/getting-started) section, put the
+following into your `~/.emacs`:
 
-```clojure
-;; Teach compile the syntax of the kibit output
-(require 'compile)
-(add-to-list 'compilation-error-regexp-alist-alist
-	     '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 2))
-(add-to-list 'compilation-error-regexp-alist 'kibit)
-
-;; A convenient command to run "lein kibit" in the project to which
-;; the current emacs buffer belongs to.
-(defun kibit ()
-  "Run kibit on the current project.
-Display the results in a hyperlinked *compilation* buffer."
-  (interactive)
-  (compile "lein kibit"))
-
-(defun kibit-current-file ()
-  "Run kibit on the current file.
-Display the results in a hyperlinked *compilation* buffer."
-  (interactive)
-  (compile (concat "lein kibit " buffer-file-name)))
+```elisp
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 ```
 
-This will give you a new command `M-x kibit RET`, and the properly
-highlighted and hyperlinked kibit output is presented in a
-`*compilation*` buffer.
+(If you want to be more on the cutting edge, you can include unreleased
+versions of packages using the non-stable URL, as explained in the
+MELPA instructions, but kibit-helper is also available from the less
+exciting stable repository.)
+
+This will give you three new commands,
+
+    M-x kibit
+    M-x kibit-current-file
+    M-x kibit-accept-proposed-change
+
+The first two cause the properly highlighted and hyperlinked kibit output to be
+presented in a `*Kibit Suggestions*` buffer. The third lets you automatically
+apply most of those suggestions to your source. (Suggestions which cite large
+blocks of code including comments cannot be automatically applied, as Kibit
+discards comments during processing.)
+
+You will likely want to bind the last function to <kbd>C-x</kbd>
+<kbd>C-\`</kbd> so it is easy to alternate with the `next-error`
+function (conventionally <kbd>C-x</kbd> <kbd>\`</kbd>) as you walk
+through the suggestions made by Kibit:
+
+```elisp
+(global-set-key (kbd "C-x C-`") 'kibit-accept-proposed-change)
+```
 
 ## Known limitations
 
