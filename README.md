@@ -137,7 +137,9 @@ This will give you three new commands,
 
 The first two cause the properly highlighted and hyperlinked kibit output to be
 presented in a `*Kibit Suggestions*` buffer. The third lets you automatically
-apply any of those suggestions to your source.
+apply most of those suggestions to your source. (Suggestions which cite large
+blocks of code including comments cannot be automatically applied, as Kibit
+discards comments during processing.)
 
 You will likely want to bind the last function to <kbd>C-x</kbd>
 <kbd>C-\`</kbd> so it is easy to alternate with the `next-error`
