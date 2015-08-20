@@ -28,7 +28,7 @@
 ;; where necessary.
 ;;
 ;; For more information, see: [rules](#kibit.rules) namespace
-(def all-rules (map unifier/prep core-rules/all-rules))
+(def all-rules core-rules/all-rules)
 
 ;; Reading source files
 ;; --------------------
@@ -205,6 +205,7 @@ into the namespace."
         (merge default-args
                {:resolution :toplevel}
                (apply hash-map kw-opts))
+        rules (map unifier/prep rules)
         simplify-fn #((res->simplify resolution) % rules)]
     (check-aux expr simplify-fn guard)))
 
@@ -214,6 +215,7 @@ into the namespace."
   (let [{:keys [rules guard resolution init-ns]}
         (merge default-args
                (apply hash-map kw-opts))
+        rules (map unifier/prep rules)
         simplify-fn #((res->simplify resolution) % rules)]
     (keep #(check-aux % simplify-fn guard)
           ((res->read-seq resolution) reader init-ns))))
