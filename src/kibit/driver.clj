@@ -36,12 +36,12 @@
         source-files (mapcat #(-> % io/file find-clojure-sources-in-dir)
                              (if (empty? file-args) source-paths file-args))]
     (mapcat (fn [file] (try (check-file file
-                                       :reporter (name-to-reporter (:reporter options)
-                                                                   cli-reporter)
-                                       :rules (or rules all-rules))
-                           (catch Exception e
-                             (println "Check failed -- skipping rest of file")
-                             (println (.getMessage e)))))
+                                        :reporter (name-to-reporter (:reporter options)
+                                                                    cli-reporter)
+                                        :rules (or rules all-rules))
+                            (catch Exception e
+                              (println "Check failed -- skipping rest of file")
+                              (println (.getMessage e)))))
             source-files)))
 
 (defn external-run
