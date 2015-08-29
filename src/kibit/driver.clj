@@ -37,7 +37,7 @@
     (mapcat (fn [file] (try (check-file file :reporter (name-to-reporter (:reporter options)
                                                                          cli-reporter))
                             (catch Exception e
-                              (println "Check failed -- skipping rest of file")
+                              (println "Check failed -- skipping rest of file:" file)
                               (println (.getMessage e)))))
             source-files)))
 

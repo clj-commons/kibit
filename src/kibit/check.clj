@@ -224,15 +224,15 @@ into the namespace."
 
 (defn check-file
   ""
-  [source-file & kw-opts]
+  [source-file-name & kw-opts]
   (let [{:keys [rules guard resolution reporter init-ns]
          :or   {reporter reporters/cli-reporter}}
         (merge default-args
                (apply hash-map kw-opts))]
-    (with-open [reader (io/reader source-file)]
+    (with-open [reader (io/reader source-file-name)]
       (with-bindings default-data-reader-binding
         (doall (map (fn [simplify-map]
-                      (do (reporter (assoc simplify-map :file source-file))
+                      (do (reporter (assoc simplify-map :file source-file-name))
                           simplify-map))
                     (check-reader reader
                                   :rules rules
