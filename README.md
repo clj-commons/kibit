@@ -39,6 +39,33 @@ to analyze a Leiningen project's namespaces. Kibit will automatically pick up so
 
 If you want to know how the Kibit rule system works there are some slides available at [http://jonase.github.io/kibit-demo/](http://jonase.github.io/kibit-demo/).
 
+## Custom rules
+
+Kibit supports specifying custom rules.
+
+You can define custom rule as follows:
+
+```clojure
+(ns custom.rules.ns
+  (:require [kibit.rules.util :refer [defrules]]))
+
+
+(defrules rules
+  [(remove nil? ?coll) (keep identity ?coll)])
+```
+
+
+To use custom rules in your project, add the following in your project.clj:
+
+```clojure
+kibit {:rules (merge kibit.rules/rule-map
+                     {:ctrl custom.rules.ns/rules})
+       :source-paths ["rules"]}
+```
+
+All the rules files must be in directories specified in the `source-paths`. Specifying `source-paths` is important. Kibit will run `require` on all namespaces found in `source-paths`.
+
+
 ## Exit codes
 
 If `lein kibit` returns any suggestions to forms then it's exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
@@ -173,11 +200,6 @@ Bugs can be reported using the GitHub [issue tracker](https://github.com/jonase/
 ## Contributors
 
 Thanks to all who have [contributed](https://github.com/jonase/kibit/graphs/contributors) to kibit!
-
-## TODO
-
-* Leiningen project.clj setting for rule exclusion
-* Leiningen project.clj setting for a directory of rules to include
 
 ## License
 
