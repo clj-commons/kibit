@@ -41,4 +41,5 @@
     '(form arg) '(->> arg form)
     '(:form arg) '(->> arg :form)
     '(first-of-form rest-of-form arg) '(->> arg (first-of-form rest-of-form))
-    '(not-any? pred coll) '(not (some pred coll))))
+    '(not-any? pred coll) '(not (some pred coll))
+    \a 'a'))

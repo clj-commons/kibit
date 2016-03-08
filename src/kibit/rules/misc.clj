@@ -101,6 +101,14 @@
           (logic/project [form]
             (logic/== sbst (concat form (list arg)))))]))])
 
+  ;; Wrong character syntax
+  (let [sym (logic/lvar)]
+    [#(logic/all
+       (logic/== % sym)
+       (logic/pred sym symbol?)
+       (logic/pred sym (fn [sym] (.matches (name sym) ".'"))))
+     #(logic/project [sym]
+       (logic/== % (first (name sym))))])
 
   ;; Other
   [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
