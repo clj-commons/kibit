@@ -103,7 +103,8 @@
 
 
   ;; Other
-  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)])
+  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
+  [(with-meta ?x (?f (meta ?x) . ?arg)) (vary-meta ?x ?f . ?arg)])
 
 
 (comment
