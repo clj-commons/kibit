@@ -44,10 +44,10 @@ If you want to know how the Kibit rule system works there are some slides availa
 If `lein kibit` returns any suggestions to forms then it's exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
 
 
-    $lein kibit
+    $ lein kibit
     ... suggestions follow
 
-    $echo $?
+    $ echo $?
     1
 
 ## Automatically rerunning when files change
@@ -56,7 +56,7 @@ You can use [lein-auto](https://github.com/weavejester/lein-auto) to run kibit a
 lein-auto's README for installation instructions. Note that this will run kibit over all of your files, not just the
 ones that have changed.
 
-    $lein auto kibit
+    $ lein auto kibit
     auto> Files changed: project.clj, [...]
     auto> Running: lein kibit
     ... suggestions follow
@@ -65,6 +65,37 @@ ones that have changed.
     auto> Running: lein kibit
     ... suggestions follow
     auto> Failed.
+
+## Automatically replacing suggestions in source file
+
+You can have kibit automatically apply suggestions to your source files.
+
+Given a file:
+
+```clojure
+(ns example)
+
+(+ 1 a)
+```
+
+    $ lein kibit --replace
+
+will rewrite the file as:
+
+```clojure
+(ns example)
+
+(+ 1 a)
+```
+
+Replacement can also be run interactively:
+
+    $ lein kibit --replace --interactive
+     Would you like to replace
+       (+ 1 a)
+      with
+       (inc a)
+     in example.clj:3? [yes/no]
 
 ## Reporters
 

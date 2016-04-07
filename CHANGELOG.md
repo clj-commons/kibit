@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 ### Additions
+* Automatic replacement of suggestions (`--replace` and `--interactive` cli arguments)
 * Enabled Emacs' next error function to go to next Kibit suggestion. See the updated code in the README for the change.
 
 
