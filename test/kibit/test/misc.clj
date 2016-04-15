@@ -20,6 +20,7 @@
     '(clojure.string/reverse x) '(apply str (reverse x))
     '(mapcat x y) '(apply concat (apply map x y))
     '(mapcat x y) '(apply concat (map x y))
+    '(mapcat x y) '(flatten (map x y))
     '(remove pred coll) '(filter (complement pred) coll)
     '(remove empty? coll) '(filter seq coll)
     '(remove pred coll) '(filter #(not (pred %)) coll)

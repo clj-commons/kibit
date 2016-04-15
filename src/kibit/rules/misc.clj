@@ -10,17 +10,18 @@
     (if (neg? idx)
       (Character/isUpperCase (first sym))
       (Character/isUpperCase (nth sym (inc idx))))))
-  
+
 
 (defrules rules
   ;; clojure.string
   [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]
   [(apply str (reverse ?x)) (clojure.string/reverse ?x)]
-  [(apply str ?x) (clojure.string/join ?x)] 
+  [(apply str ?x) (clojure.string/join ?x)]
 
   ;; mapcat
   [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]
   [(apply concat (map ?x . ?y)) (mapcat ?x . ?y)]
+  [(flatten (map ?x . ?y)) (mapcat ?x . ?y)]
 
   ;; filter
   [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
@@ -49,7 +50,7 @@
 
   ;; Java stuff
   [(.toString ?x) (str ?x)]
-  
+
   (let [obj (logic/lvar)
         method (logic/lvar)
         args (logic/lvar)]
@@ -73,7 +74,7 @@
               args (if s? (rest static-method) args)
               static-method (if s? (first static-method) static-method)]
           (logic/== % `(~(symbol (str klass "/" static-method)) ~@args))))])
-  
+
   ;; Threading
   (let [form (logic/lvar)
         arg (logic/lvar)]
@@ -121,7 +122,7 @@
   (map (fn [x] (Integer/parseInteger x))
        [1 2 3])
 
-  
+
   (map (fn [m] (:key m)) [some maps])
   (map (fn [m] (:key m alt)) [a b c])
 
@@ -138,5 +139,5 @@
   (->> x f) ;; (f x)
   (->> x (f a b)) ;; (f a b x)
   (->> x (f)) ;; (f x)
-  
+
   )
