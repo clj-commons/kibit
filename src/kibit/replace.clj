@@ -63,6 +63,8 @@
   [expr reporter kw-opts]
   (if-let [check-map (apply check/check-expr
                             (rewrite.zip/sexpr expr)
+                            :resolution
+                            :subform
                             kw-opts)]
     (if (reporter (assoc check-map
                          :line
