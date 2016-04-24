@@ -58,24 +58,35 @@
       zipper
       (recur f (rewrite.zip/right zipper)))))
 
-(defn- replace-expr*
+(defn- replace-zipper*
   ""
-  [expr reporter kw-opts]
+  [zipper reporter kw-opts]
   (if-let [check-map (apply check/check-expr
-                            (rewrite.zip/sexpr expr)
+                            (rewrite.zip/sexpr zipper)
                             :resolution
                             :subform
                             kw-opts)]
     (if (reporter (assoc check-map
                          :line
-                         (-> expr rewrite.zip/node meta :row)))
-      (recur (rewrite.zip/edit expr
-                               (fn -replace-expr [sexpr]
+                         (-> zipper rewrite.zip/node meta :row)))
+      (recur (rewrite.zip/edit zipper
+                               (fn -replace-zipper [sexpr]
                                  (:alt check-map)))
              reporter
              kw-opts)
-      expr)
-    expr))
+      zipper)
+    zipper))
+
+(defn- replace-zipper
+  ""
+  [zipper & kw-opts]
+  (let [options (apply hash-map kw-opts)]
+    ;; TODO use (:reporter options) to determine format?
+    (replace-zipper* zipper
+                     (partial report-or-prompt
+                              (:file options)
+                              (:interactive options))
+                     kw-opts)))
 
 (defn replace-expr
   "Apply any suggestions to `expr`.
@@ -87,13 +98,14 @@
 
   Returns a string of the replaced form"
   [expr & kw-opts]
-  (let [options (apply hash-map kw-opts)]
-    ;; TODO use (:reporter options) to determine format?
-    (replace-expr* expr
-                   (partial report-or-prompt
-                            (:file options)
-                            (:interactive options))
-                   kw-opts)))
+  (->> (str expr)
+       rewrite.zip/of-string
+       (map-zipper (fn -replace-expr [node]
+                     (apply replace-zipper
+                            node
+                            kw-opts)))
+       rewrite.zip/root
+       rewrite.node/sexpr))
 
 (defn replace-file
   "Apply any suggestions to `file`.
@@ -106,8 +118,8 @@
   [file & kw-opts]
   (->> (slurp file)
        rewrite.zip/of-string
-       (map-zipper (fn -replace-expr [node]
-                     (apply replace-expr
+       (map-zipper (fn -replace-zipper [node]
+                     (apply replace-zipper
                             node
                             :file (str file)
                             kw-opts)))
