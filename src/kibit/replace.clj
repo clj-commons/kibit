@@ -71,7 +71,11 @@
                          (-> zipper rewrite.zip/node meta :row)))
       (recur (rewrite.zip/edit zipper
                                (fn -replace-zipper [sexpr]
-                                 (:alt check-map)))
+                                 (vary-meta (:alt check-map)
+                                            (fn -remove-loc [m]
+                                              (dissoc m
+                                                      :line
+                                                      :column)))))
              reporter
              kw-opts)
       zipper)
