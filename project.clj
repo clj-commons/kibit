@@ -9,6 +9,11 @@
                  [org.clojure/core.logic "0.8.10"]
                  [org.clojure/tools.cli "0.3.1"]]
   :profiles {:dev {:dependencies [[lein-marginalia "0.8.0"]]
-                   :resource-paths ["test/resources"]}}
+                   :resource-paths ["test/resources"]
+                   :kibit {:excludes {"arithmetic.clj" :all
+                                      "collections.clj" :all
+                                      "control_structures.clj" :all
+                                      "equality.clj" :all
+                                      "misc.clj" :all}}}}
   :deploy-repositories [["releases" :clojars]]
   :warn-on-reflection false)
