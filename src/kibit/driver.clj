@@ -39,7 +39,7 @@
                         (clojure.set/union (get excludes :all)
                                            file-entry))]
     (seq (cond (:all file-excludes) nil
-               (= nil file-excludes) (or rules all-rules)
+               (nil? file-excludes) (or rules all-rules)
                :else (or rules
                          (rule-sets (clojure.set/difference (set (keys rule-map))
                                                             file-excludes)))))))
