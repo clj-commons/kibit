@@ -105,6 +105,29 @@ instead of:
 ```clojure
   (if true (do (println "hi")))
 ```
+
+## Exclusions
+
+It's possible to exclude a particular rule from one file or from all
+files. It's also possible to exclude all rules for a given
+file. Simply modify `:exclusions` in the `:kibit` section of your
+profile.
+
+e.g.:
+```clojure
+(defproject myproject "0.1.0-SNAPSHOT"
+  ...
+  :profiles {:dev {:kibit {:excludes {"a.clj" #{:arithmetic :misc}
+                                      "b.clj" :all
+                                      :all #{:collections}}}}})
+```
+
+Currently supported rule sets for exclusion include
+`:control-structures`, `:arithmetic`, `:collections`, `:equality`, and
+`:misc`. See the current `rule-map` in
+[rules](https://github.com/jonase/kibit/blob/master/src/kibit/rules.clj)
+for reference.
+
 ...
 ----
 

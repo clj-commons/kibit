@@ -15,3 +15,30 @@
           (io/file "test/resources/second.cljx")
           (io/file "test/resources/third.cljs")]
          (driver/find-clojure-sources-in-dir (io/file "test/resources")))))
+
+(deftest filtered-rules
+  (is (= all-rules (driver/filtered-rules nil
+                                          nil
+                                          (io/file "test/resources/first.clj"))))
+  (is (= nil (driver/filtered-rules :some-rules
+                                    {"first.clj" #{:all}}
+                                    (io/file "test/resources/first.clj"))))
+  (is (= nil (driver/filtered-rules nil
+                                    {"first.clj" #{:all}}
+                                    (io/file "test/resources/first.clj"))))
+  (is (= nil (driver/filtered-rules nil
+                                    {"first.clj" :all}
+                                    (io/file "test/resources/first.clj"))))
+  (is (= '(:some-rules) (driver/filtered-rules [:some-rules]
+                                               nil
+                                               (io/file "test/resources/first.clj"))))
+  (is (= '(:some-rules) (driver/filtered-rules [:some-rules]
+                                               {"first.clj" #{:some-rule-set}}
+                                               (io/file "test/resources/first.clj"))))
+  (is (= control/rules
+         (driver/filtered-rules nil
+                                {"first.clj" (-> rule-map
+                                                 keys
+                                                 set
+                                                 (disj :control-structures))}
+                                (io/file "test/resources/first.clj")))))
