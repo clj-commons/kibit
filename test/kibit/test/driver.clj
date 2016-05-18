@@ -1,5 +1,7 @@
 (ns kibit.test.driver
   (:require [kibit.driver :as driver]
+            [kibit.rules :refer [all-rules rule-map]]
+            [kibit.rules.control-structures :as control]
             [clojure.test :refer :all]
             [clojure.java.io :as io]))
 
