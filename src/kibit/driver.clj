@@ -39,10 +39,10 @@
                                         :reporter (name-to-reporter (:reporter options)
                                                                     cli-reporter)
                                         :rules (or rules all-rules))
-                            (catch Exception e
+                            (catch Throwable e
                               (binding [*out* *err*]
-                                (println "Check failed -- skipping rest of file")
-                                (println (.getMessage e))))))
+                                (println (str "At " (.getPath file) ":0:\nCheck failed -- skipping rest of file"))
+                                (println (str "Exception message: " (pr-str (.getMessage e))))))))
             source-files)))
 
 (defn external-run
