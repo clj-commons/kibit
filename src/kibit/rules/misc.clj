@@ -27,6 +27,7 @@
   [(filter seq ?coll) (remove empty? ?coll)]
   [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
   [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
+  [(vec (filter ?pred ?coll)) (filterv ?pred ?coll)]
 
   ;; first/next shorthands
   [(first (first ?coll)) (ffirst ?coll)]
