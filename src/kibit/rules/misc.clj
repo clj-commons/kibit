@@ -74,34 +74,6 @@
               static-method (if s? (first static-method) static-method)]
           (logic/== % `(~(symbol (str klass "/" static-method)) ~@args))))])
   
-  ;; Threading
-  (let [form (logic/lvar)
-        arg (logic/lvar)]
-    [#(logic/all (logic/== % (list '-> arg form)))
-     (fn [sbst]
-       (logic/conde
-        [(logic/all
-          (logic/pred form #(or (symbol? %) (keyword? %)))
-          (logic/== sbst (list form arg)))]
-        [(logic/all
-          (logic/pred form seq?)
-          (logic/project [form]
-            (logic/== sbst (list* (first form) arg (rest form)))))]))])
-
-  (let [form (logic/lvar)
-        arg (logic/lvar)]
-    [#(logic/all (logic/== % (list '->> arg form)))
-     (fn [sbst]
-       (logic/conde
-        [(logic/all
-          (logic/pred form #(or (symbol? %) (keyword? %)))
-          (logic/== sbst (list form arg)))]
-        [(logic/all
-          (logic/pred form seq?)
-          (logic/project [form]
-            (logic/== sbst (concat form (list arg)))))]))])
-
-
   ;; Other
   [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
   [(with-meta ?x (?f (meta ?x) . ?arg)) (vary-meta ?x ?f . ?arg)])
