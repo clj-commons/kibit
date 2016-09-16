@@ -37,3 +37,11 @@
 ;; TODO: Consider a refactor for this into a function
 ;; `(defn rules-for-ns [& namespaces])`
 (def all-rules (apply concat (vals rule-map)))
+
+(defn rule-sets
+  "Returns all rules for the given rule-sets. Currently supported rule-sets
+  include :control-structures, :arithmetic, :collections, :equality, and :misc"
+  [rule-sets]
+  (reduce (fn [rules rule-set]
+            (concat rules (rule-set rule-map)))
+          [] rule-sets))
