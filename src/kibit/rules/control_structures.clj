@@ -10,6 +10,7 @@
   [(when (not ?x) . ?y) (when-not ?x . ?y)]
   [(do ?x) ?x]
   [(if-let ?binding ?expr nil) (when-let ?binding ?expr)]
+  [(if-let [?x ?expr] ?x ?y) (or ?expr ?y)]
   [(when ?x (do . ?y)) (when ?x . ?y)]
   [(when-not ?x (do . ?y)) (when-not ?x . ?y)]
   [(if-not ?x (do . ?y)) (when-not ?x . ?y)]
