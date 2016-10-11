@@ -5,7 +5,7 @@
   (:import [java.io StringWriter]))
 
 ;; Reporters are used with `check-file`, passed in with the `:reporter`
-;; keywork argument.  For more information, see the [check](#kibit.check)
+;; keyword argument.  For more information, see the [check](#kibit.check)
 ;; namespace.
 ;;
 ;; There is no limit to a reporter - Clojure Data, JSON, HTML...
