@@ -1,10 +1,14 @@
 (ns kibit.driver
+  "The (leiningen) facing interface for Kibit. Provides helpers for finding files in a project, and
+  linting a list of files."
   (:require [clojure.java.io :as io]
-            [kibit.rules :refer [all-rules]]
-            [kibit.check :refer [check-file]]
-            [kibit.reporters :refer :all]
-            [clojure.tools.cli :refer [cli]])
-  (:import [java.io File]))
+            [clojure.tools.cli :refer [cli]]
+            [kibit
+             [check :refer [check-file]]
+             [reporters :refer :all]
+             [rules :refer [all-rules]]
+             [monkeypatch :refer :all]])
+  (:import java.io.File))
 
 (def cli-specs [["-r" "--reporter"
                  "The reporter used when rendering suggestions"
@@ -31,18 +35,27 @@
   (sort-by #(.getAbsolutePath ^File %)
            (filter clojure-file? (file-seq dir))))
 
-(defn run [source-paths rules & args]
+(defn run
+  "Runs the kibit checker against the given paths, rules and args.
+
+  Paths is expected to be a sequence of io.File objects.
+
+  Rules is either a collection of rules or nil. If Rules is nil, all of kibit's checkers are used.
+
+  Optionally accepts a :reporter keyword argument, defaulting to \"text\"."
+  [source-paths rules & args]
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
-        source-files (mapcat #(-> % io/file find-clojure-sources-in-dir)
-                             (if (empty? file-args) source-paths file-args))]
-    (mapcat (fn [file] (try (check-file file
-                                        :reporter (name-to-reporter (:reporter options)
-                                                                    cli-reporter)
-                                        :rules (or rules all-rules))
-                            (catch Exception e
-                              (binding [*out* *err*]
-                                (println "Check failed -- skipping rest of file")
-                                (println (.getMessage e))))))
+        source-files                   (mapcat #(-> % io/file find-clojure-sources-in-dir)
+                                               (if (empty? file-args) source-paths file-args))]
+    (mapcat (fn [file]
+              (with-monkeypatches kibit-redefs
+                (check-file file
+                            :reporter (name-to-reporter (:reporter options) cli-reporter)
+                            :rules    (or rules all-rules))
+                (catch Exception e
+                  (binding [*out* *err*]
+                    (println "Check failed -- skipping rest of file")
+                    (println (.getMessage e))))))
             source-files)))
 
 (defn external-run
