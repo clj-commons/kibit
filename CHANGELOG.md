@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com).
 
-## [Unreleased]
+## [0.1.3]
 ### Additions
 * Enabled Emacs' next error function to go to next Kibit suggestion. See the updated code in the README for the change.
+* Kibit can now handle sets without crashing!
 
 
 ## [0.1.2] / 2015-04-21
