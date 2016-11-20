@@ -13,5 +13,9 @@
 (deftest find-clojure-sources-are
   (is (= [(io/file "test/resources/first.clj")
           (io/file "test/resources/second.cljx")
+          (io/file "test/resources/sets.clj")
           (io/file "test/resources/third.cljs")]
          (driver/find-clojure-sources-in-dir (io/file "test/resources")))))
+
+(deftest test-set-file
+  (is (driver/run ["test/resources/sets.clj"] nil)))
