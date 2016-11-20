@@ -7,8 +7,11 @@ All notable changes to this project will be documented in this file. This change
 ## [0.1.3] / 2016-11-21
 ### Additions
 * Enabled Emacs' next error function to go to next Kibit suggestion. See the updated code in the README for the change.
-* Kibit can now handle sets without crashing!
-
+* #172 Kibit can now handle sets without crashing!
+* #152 Send exceptions to STDERR instead of STDOUT
+* New rules (#154, #165, )
+* #168 Bumped to new versions of clojure and tools.cli dependencies
+* #171 Update core.logic to avoid exception from spec
 
 ## [0.1.2] / 2015-04-21
 ### Additions
