@@ -1,4 +1,4 @@
-(defproject jonase/kibit "0.1.3"
+(defproject jonase/kibit "0.1.4-SNAPSHOT"
   :description "There's a function for that!"
   :url "https://github.com/jonase/kibit"
   :license {:name "Eclipse Public License - v 1.0"
