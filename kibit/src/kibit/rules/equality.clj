@@ -3,25 +3,25 @@
 
 (defrules rules
   ;; not=
-  [(not (= . ?args)) (not= . ?args)]
+  {:rule [(not (= . ?args)) (not= . ?args)]}
 
   ;; zero?
-  [(= 0 ?x)  (zero? ?x)]
-  [(= ?x 0)  (zero? ?x)]
-  [(== 0 ?x) (zero? ?x)]
-  [(== ?x 0) (zero? ?x)]
+  {:rule [(= 0 ?x)  (zero? ?x)]}
+  {:rule [(= ?x 0)  (zero? ?x)]}
+  {:rule [(== 0 ?x) (zero? ?x)]}
+  {:rule [(== ?x 0) (zero? ?x)]}
 
-  [(< 0 ?x)  (pos? ?x)]
-  [(> ?x 0)  (pos? ?x)]
+  {:rule [(< 0 ?x)  (pos? ?x)]}
+  {:rule [(> ?x 0)  (pos? ?x)]}
 
-  [(< ?x 0) (neg? ?x)]
-  [(> 0 ?x) (neg? ?x)]
+  {:rule [(< ?x 0) (neg? ?x)]}
+  {:rule [(> 0 ?x) (neg? ?x)]}
 
   ;; true? false?
-  [(= true ?x) (true? ?x)]
-  [(= false ?x) (false? ?x)]
+  {:rule [(= true ?x) (true? ?x)]}
+  {:rule [(= false ?x) (false? ?x)]}
 
   ; nil?
-  [(= ?x nil) (nil? ?x)]
-  [(= nil ?x) (nil? ?x)])
+  {:rule [(= ?x nil) (nil? ?x)]}
+  {:rule [(= nil ?x) (nil? ?x)]})
 

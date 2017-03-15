@@ -2,25 +2,25 @@
   (:use [kibit.rules.util :only [defrules]]))
 
 (defrules rules
-  [(if ?x ?y nil) (when ?x ?y)]
-  [(if ?x nil ?y) (when-not ?x ?y)]
-  [(if ?x (do . ?y)) (when ?x . ?y)]
-  [(if (not ?x) ?y ?z) (if-not ?x ?y ?z)]
-  [(if ?x ?x ?y) (or ?x ?y)]
-  [(when (not ?x) . ?y) (when-not ?x . ?y)]
-  [(do ?x) ?x]
-  [(if-let ?binding ?expr nil) (when-let ?binding ?expr)]
-  [(when ?x (do . ?y)) (when ?x . ?y)]
-  [(when-not ?x (do . ?y)) (when-not ?x . ?y)]
-  [(if-not ?x (do . ?y)) (when-not ?x . ?y)]
-  [(if-not (not ?x) ?y ?z) (if ?x ?y ?z)]
-  [(when-not (not ?x) . ?y) (when ?x . ?y)]
+  {:rule [(if ?x ?y nil) (when ?x ?y)]}
+  {:rule [(if ?x nil ?y) (when-not ?x ?y)]}
+  {:rule [(if ?x (do . ?y)) (when ?x . ?y)]}
+  {:rule [(if (not ?x) ?y ?z) (if-not ?x ?y ?z)]}
+  {:rule [(if ?x ?x ?y) (or ?x ?y)]}
+  {:rule [(when (not ?x) . ?y) (when-not ?x . ?y)]}
+  {:rule [(do ?x) ?x]}
+  {:rule [(if-let ?binding ?expr nil) (when-let ?binding ?expr)]}
+  {:rule [(when ?x (do . ?y)) (when ?x . ?y)]}
+  {:rule [(when-not ?x (do . ?y)) (when-not ?x . ?y)]}
+  {:rule [(if-not ?x (do . ?y)) (when-not ?x . ?y)]}
+  {:rule [(if-not (not ?x) ?y ?z) (if ?x ?y ?z)]}
+  {:rule [(when-not (not ?x) . ?y) (when ?x . ?y)]}
 
   ;; suggest `while` for bindingless loop-recur
-  [(loop [] (when ?test . ?exprs (recur)))
-   (while ?test . ?exprs)]
-  [(let ?binding (do . ?exprs)) (let ?binding . ?exprs)]
-  [(loop ?binding (do . ?exprs)) (loop ?binding . ?exprs)])
+  {:rule [(loop [] (when ?test . ?exprs (recur)))
+          (while ?test . ?exprs)]}
+  {:rule [(let ?binding (do . ?exprs)) (let ?binding . ?exprs)]}
+  {:rule [(loop ?binding (do . ?exprs)) (loop ?binding . ?exprs)]})
 
 (comment
   (when (not (pred? x y)) (f x y))

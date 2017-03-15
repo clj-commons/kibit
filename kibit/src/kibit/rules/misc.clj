@@ -14,98 +14,98 @@
 
 (defrules rules
   ;; clojure.string
-  [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]
-  [(apply str (reverse ?x)) (clojure.string/reverse ?x)]
-  [(apply str ?x) (clojure.string/join ?x)] 
+  {:rule [(apply str (interpose ?x ?y)) (clojure.string/join ?x ?y)]}
+  {:rule [(apply str (reverse ?x)) (clojure.string/reverse ?x)]}
+  {:rule [(apply str ?x) (clojure.string/join ?x)]} 
 
   ;; mapcat
-  [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]
-  [(apply concat (map ?x . ?y)) (mapcat ?x . ?y)]
+  {:rule [(apply concat (apply map ?x ?y)) (mapcat ?x ?y)]}
+  {:rule [(apply concat (map ?x . ?y)) (mapcat ?x . ?y)]}
 
   ;; filter
-  [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]
-  [(filter seq ?coll) (remove empty? ?coll)]
-  [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
-  [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]
-  [(vec (filter ?pred ?coll)) (filterv ?pred ?coll)]
+  {:rule [(filter (complement ?pred) ?coll) (remove ?pred ?coll)]}
+  {:rule [(filter seq ?coll) (remove empty? ?coll)]}
+  {:rule [(filter (fn* [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]}
+  {:rule [(filter (fn [?x] (not (?pred ?x))) ?coll) (remove ?pred ?coll)]}
+  {:rule [(vec (filter ?pred ?coll)) (filterv ?pred ?coll)]}
 
   ;; first/next shorthands
-  [(first (first ?coll)) (ffirst ?coll)]
-  [(first (next ?coll))  (fnext ?coll)]
-  [(next (next ?coll))   (nnext ?coll)]
-  [(next (first ?coll))  (nfirst ?coll)]
+  {:rule [(first (first ?coll)) (ffirst ?coll)]}
+  {:rule [(first (next ?coll))  (fnext ?coll)]}
+  {:rule [(next (next ?coll))   (nnext ?coll)]}
+  {:rule [(next (first ?coll))  (nfirst ?coll)]}
 
   ;; Unneeded anonymous functions
-  (let [fun (logic/lvar)
-        args (logic/lvar)]
-    [(fn [expr]
-       (logic/all
-        (logic/conde
-         [(logic/== expr (list 'fn args (logic/llist fun args)))]
-         [(logic/== expr (list 'fn* args (logic/llist fun args)))])
-        (logic/pred fun #(or (keyword? %)
-                             (and (symbol? %)
-                                  (not-any? #{\/ \.} (str %)))))))
-     #(logic/== % fun)])
+  {:rule (let [fun (logic/lvar)
+               args (logic/lvar)]
+           [(fn [expr]
+              (logic/all
+               (logic/conde
+                [(logic/== expr (list 'fn args (logic/llist fun args)))]
+                [(logic/== expr (list 'fn* args (logic/llist fun args)))])
+               (logic/pred fun #(or (keyword? %)
+                                    (and (symbol? %)
+                                         (not-any? #{\/ \.} (str %)))))))
+            #(logic/== % fun)])}
 
   ;; Java stuff
-  [(.toString ?x) (str ?x)]
+  {:rule [(.toString ?x) (str ?x)]}
   
-  (let [obj (logic/lvar)
-        method (logic/lvar)
-        args (logic/lvar)]
-    [#(logic/all
-       (logic/== % (logic/llist '. obj method args))
-       (logic/pred obj (complement class-symbol?)))
-     #(logic/project [method args]
-        (let [s? (seq? method)
-              args (if s? (rest method) args)
-              method (if s? (first method) method)]
-          (logic/== % `(~(symbol (str "." method)) ~obj ~@args))))])
+  {:rule (let [obj (logic/lvar)
+               method (logic/lvar)
+               args (logic/lvar)]
+           [#(logic/all
+              (logic/== % (logic/llist '. obj method args))
+              (logic/pred obj (complement class-symbol?)))
+            #(logic/project [method args]
+                            (let [s? (seq? method)
+                                  args (if s? (rest method) args)
+                                  method (if s? (first method) method)]
+                              (logic/== % `(~(symbol (str "." method)) ~obj ~@args))))])}
 
-  (let [klass (logic/lvar)
-        static-method (logic/lvar)
-        args (logic/lvar)]
-    [#(logic/all
-       (logic/== % (logic/llist '. klass static-method args))
-       (logic/pred klass class-symbol?))
-     #(logic/project [klass static-method args]
-        (let [s? (seq? static-method)
-              args (if s? (rest static-method) args)
-              static-method (if s? (first static-method) static-method)]
-          (logic/== % `(~(symbol (str klass "/" static-method)) ~@args))))])
+  {:rule (let [klass (logic/lvar)
+               static-method (logic/lvar)
+               args (logic/lvar)]
+           [#(logic/all
+              (logic/== % (logic/llist '. klass static-method args))
+              (logic/pred klass class-symbol?))
+            #(logic/project [klass static-method args]
+                            (let [s? (seq? static-method)
+                                  args (if s? (rest static-method) args)
+                                  static-method (if s? (first static-method) static-method)]
+                              (logic/== % `(~(symbol (str klass "/" static-method)) ~@args))))])}
   
   ;; Threading
-  (let [form (logic/lvar)
-        arg (logic/lvar)]
-    [#(logic/all (logic/== % (list '-> arg form)))
-     (fn [sbst]
-       (logic/conde
-        [(logic/all
-          (logic/pred form #(or (symbol? %) (keyword? %)))
-          (logic/== sbst (list form arg)))]
-        [(logic/all
-          (logic/pred form seq?)
-          (logic/project [form]
-            (logic/== sbst (list* (first form) arg (rest form)))))]))])
+  {:rule (let [form (logic/lvar)
+               arg (logic/lvar)]
+           [#(logic/all (logic/== % (list '-> arg form)))
+            (fn [sbst]
+              (logic/conde
+               [(logic/all
+                 (logic/pred form #(or (symbol? %) (keyword? %)))
+                 (logic/== sbst (list form arg)))]
+               [(logic/all
+                 (logic/pred form seq?)
+                 (logic/project [form]
+                                (logic/== sbst (list* (first form) arg (rest form)))))]))])}
 
-  (let [form (logic/lvar)
-        arg (logic/lvar)]
-    [#(logic/all (logic/== % (list '->> arg form)))
-     (fn [sbst]
-       (logic/conde
-        [(logic/all
-          (logic/pred form #(or (symbol? %) (keyword? %)))
-          (logic/== sbst (list form arg)))]
-        [(logic/all
-          (logic/pred form seq?)
-          (logic/project [form]
-            (logic/== sbst (concat form (list arg)))))]))])
+  {:rule (let [form (logic/lvar)
+               arg (logic/lvar)]
+           [#(logic/all (logic/== % (list '->> arg form)))
+            (fn [sbst]
+              (logic/conde
+               [(logic/all
+                 (logic/pred form #(or (symbol? %) (keyword? %)))
+                 (logic/== sbst (list form arg)))]
+               [(logic/all
+                 (logic/pred form seq?)
+                 (logic/project [form]
+                                (logic/== sbst (concat form (list arg)))))]))])}
 
 
   ;; Other
-  [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]
-  [(with-meta ?x (?f (meta ?x) . ?arg)) (vary-meta ?x ?f . ?arg)])
+  {:rule [(not (some ?pred ?coll)) (not-any? ?pred ?coll)]}
+  {:rule [(with-meta ?x (?f (meta ?x) . ?arg)) (vary-meta ?x ?f . ?arg)]})
 
 
 (comment
