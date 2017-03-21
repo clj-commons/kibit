@@ -1,11 +1,14 @@
 (ns kibit.driver
+  "The (leiningen) facing interface for Kibit. Provides helpers for finding files in a project, and
+  linting a list of files."
   (:require [clojure.java.io :as io]
-            [kibit.rules :refer [all-rules]]
-            [kibit.check :refer [check-file]]
-            [kibit.replace :refer [replace-file]]
-            [kibit.reporters :refer :all]
-            [clojure.tools.cli :refer [cli]])
-  (:import [java.io File]))
+            [clojure.tools.cli :refer [cli]]
+            [kibit
+             [check :refer [check-file]]
+             [replace :refer [replace-file]]
+             [reporters :refer :all]
+             [rules :refer [all-rules]]])
+  (:import java.io.File))
 
 (def cli-specs [["-r" "--reporter"
                  "The reporter used when rendering suggestions"
@@ -56,9 +59,17 @@
           source-files))
 
 (defn run [source-paths rules & args]
+  "Runs the kibit checker against the given paths, rules and args.
+
+  Paths is expected to be a sequence of io.File objects.
+
+  Rules is either a collection of rules or nil. If Rules is nil, all of kibit's checkers are used.
+
+  Optionally accepts a :reporter keyword argument, defaulting to \"text\"
+  If :replace is provided in options, suggested replacements will be performed automatically."
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
-        source-files (mapcat #(-> % io/file find-clojure-sources-in-dir)
-                             (if (empty? file-args) source-paths file-args))]
+        source-files                   (mapcat #(-> % io/file find-clojure-sources-in-dir)
+                                               (if (empty? file-args) source-paths file-args))]
     (if (:replace options)
       (run-replace source-files rules options)
       (run-check source-files rules options))))

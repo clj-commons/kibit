@@ -24,6 +24,7 @@
     '(remove empty? coll) '(filter seq coll)
     '(remove pred coll) '(filter #(not (pred %)) coll)
     '(remove pred coll) '(filter (fn [x] (not (pred x))) coll)
+    '(filterv pred coll) '(vec (filter pred coll))
     '(ffirst coll) '(first (first coll))
     '(fnext coll) '(first (next coll))
     '(nnext coll) '(next (next coll))
