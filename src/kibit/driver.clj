@@ -5,14 +5,20 @@
             [clojure.tools.cli :refer [cli]]
             [kibit
              [check :refer [check-file]]
+             [replace :refer [replace-file]]
              [reporters :refer :all]
-             [rules :refer [all-rules]]
-             [monkeypatch :refer :all]])
+             [rules :refer [all-rules]]])
   (:import java.io.File))
 
 (def cli-specs [["-r" "--reporter"
                  "The reporter used when rendering suggestions"
-                 :default "text"]])
+                 :default "text"]
+                ["-e" "--replace"
+                 "Automatially apply suggestions to source file"
+                 :flag true]
+                ["-i" "--interactive"
+                 "Interactively prompt before replacing suggestions in source file (Requires `--replace`)"
+                 :flag true]])
 
 (defn ends-with?
   "Returns true if the java.io.File ends in any of the strings in coll"
@@ -35,28 +41,38 @@
   (sort-by #(.getAbsolutePath ^File %)
            (filter clojure-file? (file-seq dir))))
 
-(defn run
+(defn- run-replace [source-files rules options]
+  (doseq [file source-files]
+    (replace-file file
+                  :rules (or rules all-rules)
+                  :interactive (:interactive options))))
+
+(defn- run-check [source-files rules {:keys [reporter]}]
+  (mapcat (fn [file] (try (check-file file
+                                      :reporter (name-to-reporter reporter
+                                                                  cli-reporter)
+                                      :rules (or rules all-rules))
+                          (catch Exception e
+                            (binding [*out* *err*]
+                              (println "Check failed -- skipping rest of file")
+                              (println (.getMessage e))))))
+          source-files))
+
+(defn run [source-paths rules & args]
   "Runs the kibit checker against the given paths, rules and args.
 
   Paths is expected to be a sequence of io.File objects.
 
   Rules is either a collection of rules or nil. If Rules is nil, all of kibit's checkers are used.
 
-  Optionally accepts a :reporter keyword argument, defaulting to \"text\"."
-  [source-paths rules & args]
+  Optionally accepts a :reporter keyword argument, defaulting to \"text\"
+  If :replace is provided in options, suggested replacements will be performed automatically."
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
         source-files                   (mapcat #(-> % io/file find-clojure-sources-in-dir)
                                                (if (empty? file-args) source-paths file-args))]
-    (mapcat (fn [file]
-              (with-monkeypatches kibit-redefs
-                (check-file file
-                            :reporter (name-to-reporter (:reporter options) cli-reporter)
-                            :rules    (or rules all-rules))
-                (catch Exception e
-                  (binding [*out* *err*]
-                    (println "Check failed -- skipping rest of file")
-                    (println (.getMessage e))))))
-            source-files)))
+    (if (:replace options)
+      (run-replace source-files rules options)
+      (run-check source-files rules options))))
 
 (defn external-run
   "Used by lein-kibit to count the results and exit with exit-code 1 if results are found"
