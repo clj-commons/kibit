@@ -3,6 +3,7 @@ pom.xml
 pom.xml.asc
 *jar
 *.class
+/**/target
 
 # Leiningen
 /classes
@@ -14,8 +15,9 @@ pom.xml.asc
 .lein-failures
 .lein-env
 .lein-repl-history
+.nrepl-port
 
-# Temp Files
+# Temp Filest
 *.orig
 *~
 .*.swp
