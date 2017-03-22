@@ -1,4 +1,4 @@
-(defproject jonase/kibit "0.1.4-SNAPSHOT"
+(defproject jonase/kibit (slurp "../kibit-common/resources/jonase/kibit/VERSION")
   :description "There's a function for that!"
   :url "https://github.com/jonase/kibit"
   :license {:name "Eclipse Public License - v 1.0"
@@ -12,4 +12,9 @@
   :profiles {:dev {:dependencies [[lein-marginalia "0.9.0"]]
                    :resource-paths ["test/resources"]}}
   :deploy-repositories [["releases" :clojars]]
+            :aliases {"test-all" ["do"
+                                  ["clean"]
+                                  ["test"]
+                                  ["clean"]
+                                  ["compile" ":all"]]}
   :warn-on-reflection false)
