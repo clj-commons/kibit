@@ -85,7 +85,7 @@ will rewrite the file as:
 ```clojure
 (ns example)
 
-(+ 1 a)
+(inc a)
 ```
 
 Replacement can also be run interactively:
