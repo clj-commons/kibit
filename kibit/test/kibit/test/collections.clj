@@ -24,7 +24,6 @@
     '(assoc-in coll [k1 k2] v) '(update-in coll [k1 k2] assoc v)
     '(repeatedly 10 (constantly :foo)) '(take 10 (repeatedly (constantly :foo)))
     '(run! f coll) '(doall (map f coll))
-    '(run! f coll) '(doall (mapv f coll))
 
     ;; some wrong simplifications happened in the past:
     nil '(assoc coll k (assoc (coll k0) k1 a))
