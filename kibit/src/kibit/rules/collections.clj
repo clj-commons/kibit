@@ -20,5 +20,5 @@
   ;; set
   [(into #{} ?coll) (set ?coll)]
 
-  [(take ?n (repeatedly ?coll)) (repeatedly ?n ?coll)])
-
+  [(take ?n (repeatedly ?coll)) (repeatedly ?n ?coll)]
+  [(dorun (map ?fn ?coll)) (run! ?fn ?coll)])

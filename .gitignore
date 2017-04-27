@@ -35,3 +35,6 @@ pom.xml.asc
 /autodoc
 /docs
 
+# IntelliJ IDEA
+.idea
+*.iml
