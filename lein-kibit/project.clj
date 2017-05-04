@@ -1,4 +1,4 @@
-(defproject lein-kibit (slurp "../kibit-common/resources/jonase/kibit/VERSION")
+(defproject lein-kibit (clojure.string/trim-newline (slurp "../kibit-common/resources/jonase/kibit/VERSION"))
   :description "kibit lein plugin"
   :url "https://github.com/jonase/lein-kibit"
   :resource-paths ["../kibit-common/resources"]

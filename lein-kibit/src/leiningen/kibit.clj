@@ -1,15 +1,17 @@
 (ns leiningen.kibit
   (:require [leiningen.core.eval :refer [eval-in-project]]
             [clojure.tools.namespace.find :refer [find-namespaces]]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as str]))
 
 
 (defn ^:no-project-needed kibit
   [project & args]
   (let [src-paths     (get-in project [:kibit :source-paths] ["rules"])
-        kibit-project `{:dependencies [[jonase/kibit ~(slurp
-                                                       (io/resource
-                                                        "jonase/kibit/VERSION"))]]
+        kibit-project `{:dependencies [[jonase/kibit ~(str/trim-newline
+                                                        (slurp
+                                                          (io/resource
+                                                            "jonase/kibit/VERSION")))]]
                         :source-paths ~src-paths}
         paths         (filter some? (concat
                                      (:source-paths project)
