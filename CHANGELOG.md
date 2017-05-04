@@ -4,9 +4,16 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.1.4] / 2017-05-05
+
+### Additions
+
+* Automatic replacement of suggestions (`--replace` and `--interactive` cli arguments)
+* Rules for using `run!` instead of `(dorun (map f coll))`
+
 ## [0.1.3] / 2016-11-21
 ### Additions
-* Automatic replacement of suggestions (`--replace` and `--interactive` cli arguments)
+
 * Enabled Emacs' next error function to go to next Kibit suggestion. See the updated code in the README for the change.
 * #172 Kibit can now handle sets without crashing!
 * #152 Send exceptions to STDERR instead of STDOUT
