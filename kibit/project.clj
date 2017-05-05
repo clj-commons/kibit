@@ -11,7 +11,8 @@
                  [rewrite-clj "0.4.12"]]
   :profiles {:dev {:dependencies [[lein-marginalia "0.9.0"]]
                    :resource-paths ["test/resources"]}}
-  :deploy-repositories [["releases" :clojars]]
+  :deploy-repositories [["releases" :clojars]
+                        ["snapshots" :clojars]]
             :aliases {"test-all" ["do"
                                   ["clean"]
                                   ["test"]
