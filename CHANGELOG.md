@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.1.5] / 2017-05-02
+
+* 0.1.4, but released properly.
+
 ## [0.1.4] / 2017-05-05
 
 ### Additions
