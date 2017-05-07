@@ -5,11 +5,11 @@ echo "It could be automated in the future"
 
 set -ex
 
-echo "Bump the version in kibit-common/resources/jonase/kibit/VERSION to a release version"
+echo "Bump the version in kibit-common/resources/jonase/kibit/VERSION to a release version before running this"
 pushd kibit
-echo "lein deploy"
+lein deploy
 popd
 pushd lein-kibit
-echo "lein deploy"
+lein deploy
 popd
 echo "Bump the version in kibit-common to the next SNAPSHOT"
