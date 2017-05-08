@@ -3,9 +3,6 @@ install:
 - "pushd kibit"
 - "lein deps"
 - "popd"
-- "pushd lein-kibit"
-- "lein deps"
-- "popd"
 script:
 - "pushd kibit"
 - "lein test-all"
