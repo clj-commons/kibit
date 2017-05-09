@@ -4,7 +4,9 @@
             [clojure.core.logic.unifier :as unifier]
             [kibit.core :as core]
             [kibit.rules :as core-rules]
-            [kibit.reporters :as reporters])
+            [kibit.reporters :as reporters]
+            [kibit.monkeypatch
+             :refer [with-monkeypatches kibit-redefs]])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; ### Overview
@@ -195,7 +197,8 @@ into the namespace."
 (defn- check-aux
   "Simplify an expression, build a simplify-map, and guard the returning map"
   [expr simplify-fn guard]
-  (->> expr simplify-fn (build-simplify-map expr) guard))
+  (with-monkeypatches kibit-redefs
+    (->> expr simplify-fn (build-simplify-map expr) guard)))
 
 ;; The default resolution is overriden via the `merge`
 (defn check-expr
