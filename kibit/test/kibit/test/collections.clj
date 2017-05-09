@@ -28,9 +28,4 @@
     ;; some wrong simplifications happened in the past:
     nil '(assoc coll k (assoc (coll k0) k1 a))
     nil '(assoc coll k (assoc (get coll k0) k1 a))
-    nil '(assoc coll k (assoc (k0 coll) k1 a))
-    nil '#{#{}
-           #{#{}}
-           #{#{#{}}}
-           #{#{#{#{}}}}
-           #{#{#{#{#{}}}}}}))
+    nil '(assoc coll k (assoc (k0 coll) k1 a))))
