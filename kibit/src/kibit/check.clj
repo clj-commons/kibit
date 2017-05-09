@@ -60,17 +60,19 @@ into the namespace."
   "Generate a lazy sequence of top level forms from a
    LineNumberingPushbackReader"
   [^LineNumberingPushbackReader r init-ns]
-  (let [do-read (fn do-read [ns]
-                  (lazy-seq
-                    (let [form (binding [*ns* ns]
-                                 (read r false eof))
-                          [ns? new-ns k] (when (sequential? form) form)
-                          ns (if (and (symbol? new-ns)
-                                      (or (= ns? 'ns) (= ns? 'in-ns)))
-                               (careful-refer (create-ns new-ns))
-                               ns)]
-                      (when-not (= form eof)
-                        (cons form (do-read ns))))))]
+  (let [do-read
+        (fn do-read [ns]
+          (lazy-seq
+           (let [form           (binding [*ns* ns]
+                                  (read {:eof eof :read-cond :allow} r))
+                 [ns? new-ns k] (when (sequential? form) form)
+                 ns             (if (and (symbol? new-ns)
+                                         (or (= ns? 'ns)
+                                             (= ns? 'in-ns)))
+                                  (careful-refer (create-ns new-ns))
+                                  ns)]
+             (when-not (= form eof)
+               (cons form (do-read ns))))))]
     (do-read (careful-refer (create-ns init-ns)))))
 
 ;; ### Analyzing the pieces
@@ -218,7 +220,7 @@ into the namespace."
   (let [{:keys [rules guard resolution init-ns]}
         (merge default-args
                (apply hash-map kw-opts))
-        rules (map unifier/prep rules)
+        rules       (map unifier/prep rules)
         simplify-fn #((res->simplify resolution) % rules)]
     (keep #(check-aux % simplify-fn guard)
           ((res->read-seq resolution) reader init-ns))))
