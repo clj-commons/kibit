@@ -8,11 +8,13 @@
 (defn ^:no-project-needed kibit
   [project & args]
   (let [src-paths     (get-in project [:kibit :source-paths] ["rules"])
+        local-repo    (:local-repo project)
         kibit-project `{:dependencies [[jonase/kibit ~(str/trim-newline
                                                         (slurp
                                                           (io/resource
                                                             "jonase/kibit/VERSION")))]]
-                        :source-paths ~src-paths}
+                        :source-paths ~src-paths
+                        :local-repo ~local-repo}
         paths         (filter some? (concat
                                      (:source-paths project)
                                      [(:source-path project)]
