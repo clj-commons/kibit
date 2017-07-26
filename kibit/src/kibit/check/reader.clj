@@ -57,6 +57,11 @@
        (remove nil?)
        (into {})))
 
+(defmethod derive-aliases 'alias
+  [[_ alias namespace-sym]]
+  ;; Remove quotes
+  {(second alias) (second namespace-sym)})
+
 ;; Reading source files
 ;; --------------------
 ;; ### Extracting forms
@@ -100,7 +105,7 @@ into the namespace."
                                      (#{'ns 'in-ns} ns?))
                               (careful-refer (create-ns new-ns))
                               ns)
-                         alias-map (if (#{'require 'ns} ns?)
+                         alias-map (if (#{'require 'ns 'alias} ns?)
                                      (update alias-map ns
                                              merge
                                              (derive-aliases form))

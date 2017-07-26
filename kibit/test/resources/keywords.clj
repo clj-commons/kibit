@@ -18,3 +18,6 @@
 (defn flipped-back-aliases-still-there
   [y]
   (::io/last-fake-key y))
+
+(defn auto-namespaced-keyword [w]
+  (::local-key w))

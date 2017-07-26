@@ -11,4 +11,5 @@
         foom foo.bar.baz.macros} '(ns derive.test.one
                                     (:require [foo.bar.baz :as foo])
                                     (:require-macros [foo.bar.baz.macros :as foom]))
-      '{str clojure.string} '(require (quote [clojure.string :as str]))))
+      '{str clojure.string} '(require (quote [clojure.string :as str]))
+      '{pprint clojure.pprint} '(alias 'pprint 'clojure.pprint)))

@@ -13,6 +13,7 @@
 
 (deftest find-clojure-sources-are
   (is (= [(io/file "test/resources/first.clj")
+          (io/file "test/resources/keyword_suggestions.clj")
           (io/file "test/resources/keywords.clj")
           (io/file "test/resources/second.cljx")
           (io/file "test/resources/sets.clj")
@@ -29,3 +30,15 @@
       (driver/run ["test/resources/keywords.clj"] nil))
     (is (zero? (.size test-buf))
         (format "Test err buffer contained '%s'" (.toString test-buf)))))
+
+(deftest test-keyword-suggestions-file
+  (is (= '({:alt  (vec [:clojure.java.io/some-fake-key :resources.keyword-suggestions/local-key :some/other-key])
+            :expr (into [] [:clojure.java.io/some-fake-key :resources.keyword-suggestions/local-key :some/other-key])}
+            {:alt  (vec [:clojure.string/another-fake-key :resources.non-conforming/local-key2 :some/other-key2])
+             :expr (into [] [:clojure.string/another-fake-key :resources.non-conforming/local-key2 :some/other-key2])}
+            {:alt  (vec [:clojure.java.io/last-fake-key :resources.keyword-suggestions/local-key3 :some/other-key3])
+             :expr (into [] [:clojure.java.io/last-fake-key :resources.keyword-suggestions/local-key3 :some/other-key3])}
+            {:alt  (vec [:clojure.pprint/printing-key :resources.keyword-suggestions/local-key4 :some/other-key4])
+             :expr (into [] [:clojure.pprint/printing-key :resources.keyword-suggestions/local-key4 :some/other-key4])})
+         (map #(select-keys % [:expr :alt])
+              (driver/run ["test/resources/keyword_suggestions.clj"] nil "--reporter" "no-op")))))
