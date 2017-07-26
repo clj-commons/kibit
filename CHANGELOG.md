@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+* A long awaited feature/fix - Kibit now supports reading namespaced keywords correctly. A very special thanks to Alex Redington who took this tricky task on. [#198](https://github.com/jonase/kibit/pull/198)
+
 ## [0.1.5] / 2017-05-02
 
 * 0.1.4, but released properly.
