@@ -49,5 +49,11 @@
     (println "```")
     (newline)))
 
+(defn no-op-reporter
+  "Prints nothing to `*out*`."
+  [check-map]
+  nil)
+
 (def name-to-reporter {"markdown" gfm-reporter
-                       "text" cli-reporter})
+                       "text"     cli-reporter
+                       "no-op"    no-op-reporter})
