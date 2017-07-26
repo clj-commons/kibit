@@ -6,7 +6,8 @@
             [kibit.rules :as core-rules]
             [kibit.reporters :as reporters]
             [kibit.monkeypatch
-             :refer [with-monkeypatches kibit-redefs]])
+             :refer [with-monkeypatches kibit-redefs]]
+            [kibit.check.reader :as kibit-read])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; ### Overview
@@ -31,47 +32,6 @@
 ;;
 ;; For more information, see: [rules](#kibit.rules) namespace
 (def all-rules core-rules/all-rules)
-
-;; Reading source files
-;; --------------------
-;; ### Extracting forms
-
-;; `read-file` is intended to be used with a Clojure source file,
-;; read in by Clojure's LineNumberingPushbackReader *(LNPR)*. Expressions are
-;; extracted using the clojure reader (ala `read`), and line numbers
-;; are added as `:line` metadata to the forms (via LNPR).
-
-(defn- careful-refer
-  "Refers into the provided namespace all public vars from clojure.core
-except for those that would clobber any existing interned vars in that
-namespace.  This is needed to ensure that symbols read within syntax-quote
-end up being fully-qualified to clojure.core as appropriate, and only
-to *ns* if they're not available there.  AFAICT, this will work for all
-symbols in syntax-quote except for those referring to vars that are referred
-into the namespace."
-  [ns]
-  (binding [*ns* ns]
-    (refer 'clojure.core :exclude (or (keys (ns-interns ns)) ())))
-  ns)
-
-(def eof (Object.))
-
-(defn read-file
-  "Generate a lazy sequence of top level forms from a
-   LineNumberingPushbackReader"
-  [^LineNumberingPushbackReader r init-ns]
-  (let [do-read (fn do-read [ns]
-                  (lazy-seq
-                    (let [form (binding [*ns* ns]
-                                 (read r false eof))
-                          [ns? new-ns k] (when (sequential? form) form)
-                          ns (if (and (symbol? new-ns)
-                                      (or (= ns? 'ns) (= ns? 'in-ns)))
-                               (careful-refer (create-ns new-ns))
-                               ns)]
-                      (when-not (= form eof)
-                        (cons form (do-read ns))))))]
-    (do-read (careful-refer (create-ns init-ns)))))
 
 ;; ### Analyzing the pieces
 
@@ -160,9 +120,9 @@ into the namespace."
 
 (def ^:private res->read-seq
   {:toplevel (fn [reader init-ns]
-               (read-file (LineNumberingPushbackReader. reader) init-ns))
+               (kibit-read/read-file (LineNumberingPushbackReader. reader) init-ns))
    :subform  (fn [reader init-ns]
-               (mapcat expr-seq (read-file (LineNumberingPushbackReader. reader) init-ns)))})
+               (mapcat expr-seq (kibit-read/read-file (LineNumberingPushbackReader. reader) init-ns)))})
 
 ;; Checking the expressions
 ;; ------------------------
