@@ -26,7 +26,7 @@ it will suggest using `when` instead:
 ## Usage
 
 Add `[lein-kibit "0.1.5"]` to your `:plugins` vector in your `:user`
-profile, or `[lein-kibit "0.1.6-beta1"]` for the newest beta release. Then you can run
+profile, or `[lein-kibit "0.1.6-beta2"]` for the newest beta release. Then you can run
 
     $ lein kibit
 
