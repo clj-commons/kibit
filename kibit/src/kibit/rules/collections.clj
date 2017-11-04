@@ -20,5 +20,5 @@
   ;; set
   {:rule [(into #{} ?coll) (set ?coll)]}
 
-  {:rule (dorun (map ?fn ?coll)) (run! ?fn ?coll)}
-  {:rule [(take ?n (repeatedly ?coll)) (repeatedly ?n ?coll)]}))
+  {:rule [(dorun (map ?fn ?coll)) (run! ?fn ?coll)]}
+  {:rule [(take ?n (repeatedly ?coll)) (repeatedly ?n ?coll)]})
