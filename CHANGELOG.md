@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-* A long awaited feature/fix - Kibit now supports reading namespaced keywords correctly. A very special thanks to Alex Redington who took this tricky task on. [#198](https://github.com/jonase/kibit/pull/198)
+## [0.1.6] / 2018-11-08
+
+### Fixed
+
+* A long awaited feature/fix - Kibit now supports reading namespaced keywords correctly. A very special thanks to Alex Redington who took this tricky task on. [#198](https://github.com/jonase/kibit/pull/198).
+* Make Kibit work with local-repos. [#195](https://github.com/jonase/kibit/pull/195)
+* Fixup the monkeypatching. [#192](https://github.com/jonase/kibit/pull/192)
+* Add alias support to the reader
+* Improve source path handling to prevent checking duplicates
 
 ## [0.1.5] / 2017-05-02
 
