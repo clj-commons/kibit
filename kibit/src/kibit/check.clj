@@ -197,8 +197,9 @@
     (with-open [reader (io/reader source-file)]
       (with-bindings default-data-reader-binding
         (doall (map (fn [simplify-map]
-                      (do (reporter (assoc simplify-map :file source-file))
-                          simplify-map))
+                      (let [file-simplify (assoc simplify-map :file source-file)]
+                        (reporter file-simplify)
+                        file-simplify))
                     (check-reader reader
                                   :rules rules
                                   :guard guard

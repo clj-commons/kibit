@@ -3,10 +3,15 @@
             [clojure.string :as string]
             [clojure.test :refer :all]))
 
+(defn- reported-lines [reporting]
+  (->> (clojure.string/split reporting #"\n")
+       (mapv #(clojure.string/replace % "\r" ""))
+       (filterv (complement clojure.string/blank?))))
+
 (deftest plain
   (are [check-map result]
-       (= (with-out-str (reporters/cli-reporter check-map))
-          (string/join "\n" result))
+       (= (reported-lines (with-out-str (reporters/cli-reporter check-map)))
+          result)
        {:file "some/file.clj"
         :line 30
         :expr '(+ x 1)
@@ -14,12 +19,11 @@
                         "Consider using:"
                         "  (inc x)"
                         "instead of:"
-                        "  (+ x 1)"
-                        "" ""]))
+                        "  (+ x 1)"]))
 (deftest gfm
   (are [check-map result]
-       (= (with-out-str (reporters/gfm-reporter check-map))
-          (string/join "\n" result))
+       (= (reported-lines (with-out-str (reporters/gfm-reporter check-map)))
+          result)
        {:file "some/file.clj"
         :line 30
         :expr '(+ x 1)
@@ -32,5 +36,4 @@
                         "instead of:"
                         "```clojure"
                         "  (+ x 1)"
-                        "```"
-                        "" ""]))
+                        "```"]))
