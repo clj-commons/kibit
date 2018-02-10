@@ -10,8 +10,8 @@
 
 (deftest plain
   (are [check-map result]
-       (= (reported-lines (with-out-str (reporters/cli-reporter check-map)))
-          result)
+       (= (with-out-str (reporters/cli-reporter check-map))
+          (string/join (System/getProperty "line.separator") result))
        {:file "some/file.clj"
         :line 30
         :expr '(+ x 1)
@@ -19,11 +19,12 @@
                         "Consider using:"
                         "  (inc x)"
                         "instead of:"
-                        "  (+ x 1)"]))
+                        "  (+ x 1)"
+                               "" ""]))
 (deftest gfm
   (are [check-map result]
-       (= (reported-lines (with-out-str (reporters/gfm-reporter check-map)))
-          result)
+       (= (with-out-str (reporters/gfm-reporter check-map))
+          (string/join (System/getProperty "line.separator") result))
        {:file "some/file.clj"
         :line 30
         :expr '(+ x 1)
@@ -36,4 +37,5 @@
                         "instead of:"
                         "```clojure"
                         "  (+ x 1)"
-                        "```"]))
+                        "```"
+                               "" ""]))
