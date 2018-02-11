@@ -22,14 +22,14 @@
     (->> (str string-writer)
          string/split-lines
          (map #(str "  " %))
-         (string/join "\n")
+         (string/join (System/getProperty "line.separator"))
          println)))
 
 (defn cli-reporter
   "Print a check-map to `*out*` in plain text."
   [check-map]
   (let [{:keys [file line expr alt]} check-map]
-    (printf "At %s:%s:\nConsider using:\n" file line)
+    (printf "At %s:%s:%nConsider using:%n" file line)
     (pprint-code alt)
     (println "instead of:")
     (pprint-code expr)
@@ -39,7 +39,7 @@
   "Print a check-map to `*out*` in github flavored markdown."
   [check-map]
   (let [{:keys [file line expr alt]} check-map]
-    (printf "----\n##### `%s:%s`\nConsider using:\n" file line)
+    (printf "----%n##### `%s:%s`%nConsider using:%n" file line)
     (println "```clojure")
     (pprint-code alt)
     (println "```")
