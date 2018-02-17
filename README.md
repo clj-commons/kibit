@@ -181,6 +181,20 @@ through the suggestions made by Kibit:
 (global-set-key (kbd "C-x C-`") 'kibit-accept-proposed-change)
 ```
 
+## Usage from inside vim (through Leiningen plugin)
+
+[kibit-vim](https://github.com/fbeline/kibit-vim) allows you to analyze the current opened file by running:
+
+`:Kibit`
+
+## Usage from inside vim (with vim-fireplace)
+
+If you have [vim-fireplace](https://github.com/tpope/vim-fireplace/) installed, you can use [vim-kibit](https://github.com/humorless/vim-kibit) to run Kibit on your current buffer through the running REPL session.
+
+vim-kibit is invoked by running:
+
+`:Kibit`
+
 ## Known limitations
 
 Kibit
