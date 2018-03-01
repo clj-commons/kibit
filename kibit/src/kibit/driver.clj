@@ -53,9 +53,13 @@
                                                                   cli-reporter)
                                       :rules (or rules all-rules))
                           (catch Exception e
-                            (binding [*out* *err*]
-                              (println "Check failed -- skipping rest of file")
-                              (println (.getMessage e))))))
+                            (let [e-info (ex-data e)]
+                              (binding [*out* *err*]
+                                (println (format "Check failed -- skipping rest of file (%s:%s:%s)"
+                                                 (.getPath file)
+                                                 (:line e-info)
+                                                 (:column e-info)))
+                                (println (.getMessage e)))))))
           source-files))
 
 (defn run [source-paths rules & args]
