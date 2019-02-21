@@ -9,12 +9,14 @@
 (defn ^:no-project-needed kibit
   [project & args]
   (let [src-paths     (get-in project [:kibit :source-paths] ["rules"])
+        repositories (:repositories project)
         local-repo    (:local-repo project)
         kibit-project `{:dependencies [[jonase/kibit ~(str/trim-newline
                                                         (slurp
                                                           (io/resource
                                                             "jonase/kibit/VERSION")))]]
                         :source-paths ~src-paths
+                        :repositories ~repositories
                         :local-repo   ~local-repo}
         cwd           (.toAbsolutePath (Paths/get "" (into-array String nil)))
         ;; This could become a transducer once we want to force a dependency on Lein 1.6.0 or higher.
