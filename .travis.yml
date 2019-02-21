@@ -7,6 +7,5 @@ script:
 - "pushd kibit"
 - "lein test-all"
 jdk:
-- openjdk7
-- oraclejdk7
-- oraclejdk8
+  - openjdk8
+  - openjdk11
