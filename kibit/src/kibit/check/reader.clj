@@ -16,19 +16,7 @@
 ;; a map of aliases as it is possible to switch namespaces mid-file
 ;; and get one stream to effectively hop between two namespaces.
 
-
 (defmulti derive-aliases first :default 'ns)
-
-(defn derive-alias-from-dep
-  [[dep & rest]]
-  (let [seq? (seq rest)
-        index (and seq?
-                   (first (keep-indexed #(if (= :as %2) %1)
-                                        rest)))
-        alias (and index
-                   (nth rest (inc index)))]
-    (when alias
-      [alias dep])))
 
 (defn unquote-if-quoted
   [form]
@@ -37,25 +25,82 @@
     (second form)
     form))
 
+;; NOTE: `prefix-spec?`, `options-spec?`, and `deps-from-libspec` were derived
+;; from the private fns defined in [clojure.tools.namespace.parse][1]
+;; [1]: https://github.com/clojure/tools.namespace
+(defn- prefix-spec?
+  "Returns true if form represents a libspec prefix list like
+  (prefix name1 name1) or [com.example.prefix [name1 :as name1]]"
+  [form]
+  (and (sequential? form)  ; should be a list, but often is not
+       (symbol? (first form))
+       (not-any? keyword? form)
+       (< 1 (count form))))  ; not a bare vector like [foo]
+
+(defn- option-spec?
+  "Returns true if form represents a libspec vector containing optional
+  keyword arguments like [namespace :as alias] or
+  [namespace :refer (x y)] or just [namespace]"
+  [form]
+  (and (sequential? form)  ; should be a vector, but often is not
+       (symbol? (first form))
+       (or (keyword? (second form))  ; vector like [foo :as f]
+           (= 1 (count form)))))  ; bare vector like [foo]
+
+(defn- deps-from-libspec
+  "A slight modification from clojure.tools.namespace.parse/deps-from-libspec,
+  in which aliases are captured as metadata."
+  [prefix form alias]
+  (cond (prefix-spec? form)
+        (mapcat (fn [f] (deps-from-libspec
+                         (symbol (str (when prefix (str prefix "."))
+                                      (first form)))
+                         f
+                         nil))
+                (rest form))
+
+        (option-spec? form)
+        (let [[_ as? form-alias] form]
+          (deps-from-libspec prefix (first form) (when (= :as as?) form-alias)))
+
+        (symbol? form)
+        (list (with-meta
+                (symbol (str (when prefix (str prefix ".")) form))
+                {:alias alias}))
+
+        (keyword? form) ; Some people write (:require ... :reload-all)
+        nil
+        :else
+        (throw (ex-info "Unparsable namespace form"
+                        {:reason ::unparsable-ns-form
+                         :form   form}))))
+
+(defn derive-aliases-from-deps
+  "Takes a vector of `deps`, of which each element is in the form accepted by
+  the `ns` and `require` functions to specify dependencies. Returns a map where
+  each key is a clojure.lang.Symbol that represents the alias, and each value
+  is the clojure.lang.Symbol that represents the namespace that the alias refers to."
+  [deps]
+  (->> deps
+       (mapcat #(deps-from-libspec nil (unquote-if-quoted %) nil))
+       (remove (comp nil? :alias meta))
+       (into {} (map (fn [dep]
+                       (println (type (-> dep meta :alias)))
+                       (println (type dep))
+                       [(-> dep meta :alias) dep])))))
+
 (defmethod derive-aliases 'ns
   [[_ _ns & ns-asserts]]
   (->> ns-asserts
        (group-by first)
-       (reduce (fn [m [k v]]
-                 (assoc m k (mapcat rest v)))
-               {})
        ((juxt :require :require-macros))
        (apply concat)
-       (map derive-alias-from-dep)
-       (remove nil?)
-       (into {})))
+       (map (comp derive-aliases-from-deps rest))
+       (apply merge)))
 
 (defmethod derive-aliases 'require
   [[_ & deps]]
-  (->> deps
-       (map (comp derive-alias-from-dep unquote-if-quoted))
-       (remove nil?)
-       (into {})))
+  (derive-aliases-from-deps deps))
 
 (defmethod derive-aliases 'alias
   [[_ alias namespace-sym]]
@@ -86,8 +131,6 @@ into the namespace."
 
 (def eof (Object.))
 
-(defn trace [v] (println v) v)
-
 (defn read-file
   "Generate a lazy sequence of top level forms from a
    LineNumberingPushbackReader"
@@ -113,4 +156,3 @@ into the namespace."
                      (when-not (= form eof)
                        (cons form (do-read ns alias-map))))))]
     (do-read ns {ns {}})))
-
