@@ -84,10 +84,7 @@
   (->> deps
        (mapcat #(deps-from-libspec nil (unquote-if-quoted %) nil))
        (remove (comp nil? :alias meta))
-       (into {} (map (fn [dep]
-                       (println (type (-> dep meta :alias)))
-                       (println (type dep))
-                       [(-> dep meta :alias) dep])))))
+       (into {} (map (fn [dep] [(-> dep meta :alias) dep])))))
 
 (defmethod derive-aliases 'ns
   [[_ _ns & ns-asserts]]
