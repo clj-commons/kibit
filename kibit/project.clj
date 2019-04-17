@@ -1,4 +1,4 @@
-(defproject gorillalabs.jonase/kibit "0.0.0"
+(defproject gorillalabs/kibit "0.0.0"
   :plugins [[lein-monolith "1.2.0"]
             [com.roomkey/lein-v "7.1.0"]]
   :monolith/inherit true
