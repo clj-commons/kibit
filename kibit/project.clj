@@ -1,6 +1,10 @@
-(defproject jonase/kibit (clojure.string/trim-newline (slurp "../kibit-common/resources/jonase/kibit/VERSION"))
+(defproject gorillalabs.jonase/kibit (clojure.string/trim-newline (slurp "kibit-common/resources/jonase/kibit/VERSION"))
+  :monolith/inherit true
+  :middleware [leiningen.v/version-from-scm
+               leiningen.v/dependency-version-from-scm
+               leiningen.v/add-workspace-data]
   :description "There's a function for that!"
-  :url "https://github.com/jonase/kibit"
+  :url "https://github.com/gorillalabs/kibit"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
@@ -14,9 +18,9 @@
                    :resource-paths ["test/resources"]}}
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]]
-            :aliases {"test-all" ["do"
-                                  ["clean"]
-                                  ["test"]
-                                  ["clean"]
-                                  ["compile" ":all"]]}
+  :aliases {"test-all" ["do"
+                        ["clean"]
+                        ["test"]
+                        ["clean"]
+                        ["compile" ":all"]]}
   :warn-on-reflection false)

@@ -1,11 +1,8 @@
 language: clojure
 install:
-- "pushd kibit"
-- "lein deps"
-- "popd"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each deps"
 script:
-- "pushd kibit"
-- "lein test-all"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs.jonase/kibit test-all"
 jdk:
   - openjdk8
   - openjdk11
