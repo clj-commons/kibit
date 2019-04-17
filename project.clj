@@ -17,4 +17,4 @@
                   ["v" "update"] ;; compute new version & tag it
                   ["v" "push-tags"]
                   ["cache-version"]
-                  ["monolith" "each" "deploy"]])
+                  ["monolith" "each" "deploy" "clojars"]])

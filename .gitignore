@@ -38,3 +38,4 @@ pom.xml.asc
 # IntelliJ IDEA
 .idea
 *.iml
+kibit-common
