@@ -7,11 +7,11 @@
                leiningen.v/add-workspace-data]
   :description "kibit lein plugin"
   :url "https://github.com/jonase/kibit"
-  :resource-paths ["../kibit-common/resources"]
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/tools.namespace "0.2.11"]
-                 [gorillalabs/kibit ~(:version (clojure.edn/read-string (slurp "kibit-common/resources/jonase/kibit/version.edn")))]]
+                 [gorillalabs/kibit ~(:version (clojure.edn/read-string (slurp "lein-kibit/resources/version.edn")))]]
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]]
+  :prep-tasks [["v" "cache" "lein-kibit/resources" "edn"]]
   :eval-in-leiningen true)
