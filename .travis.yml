@@ -1,9 +1,9 @@
 language: clojure
 install:
 - "LEIN_USE_BOOTCLASSPATH=no lein cache-version"
-- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs.jonase/kibit deps"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs/kibit deps"
 script:
-- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs.jonase/kibit test-all"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs/kibit test-all"
 - "LEIN_USE_BOOTCLASSPATH=no lein cache-version"
 - "LEIN_USE_BOOTCLASSPATH=no lein monolith each install"
 jdk:
