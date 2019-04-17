@@ -1,4 +1,4 @@
-(defproject gorillalabs/kibit (clojure.string/trim-newline (slurp "kibit-common/resources/jonase/kibit/VERSION"))
+(defproject gorillalabs/kibit "0.0.0"
   :description "There's a function for that!"
   :url "https://github.com/gorillalabs/kibit"
   :license {:name "Eclipse Public License - v 1.0"
@@ -10,4 +10,7 @@
   :middleware [leiningen.v/version-from-scm
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
-  :monolith {:project-dirs ["*"]})
+  :monolith {:inherit [:plugins]
+             :project-dirs ["*"]}
+  :aliases {"cache-version" ["v" "cache" "kibit-common/resources/jonase/kibit/" "edn"]}
+  )

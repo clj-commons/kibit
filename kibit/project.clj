@@ -1,4 +1,6 @@
-(defproject gorillalabs.jonase/kibit (clojure.string/trim-newline (slurp "kibit-common/resources/jonase/kibit/VERSION"))
+(defproject gorillalabs.jonase/kibit "0.0.0"
+  :plugins [[lein-monolith "1.2.0"]
+            [com.roomkey/lein-v "7.1.0"]]
   :monolith/inherit true
   :middleware [leiningen.v/version-from-scm
                leiningen.v/dependency-version-from-scm
