@@ -11,7 +11,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/tools.namespace "0.2.11"]
-                 [gorillalabs.jonase/kibit ~(:version (clojure.edn/read-string (slurp "kibit-common/resources/jonase/kibit/version.edn")))]]
+                 [gorillalabs/kibit ~(:version (clojure.edn/read-string (slurp "kibit-common/resources/jonase/kibit/version.edn")))]]
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]]
   :eval-in-leiningen true)
