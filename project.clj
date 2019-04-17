@@ -13,4 +13,8 @@
   :monolith {:inherit [:plugins]
              :project-dirs ["*"]}
   :aliases {"cache-version" ["v" "cache" "kibit-common/resources/jonase/kibit/" "edn"]}
-  )
+  :release-tasks [["vcs" "assert-committed"]
+                  ["v" "update"] ;; compute new version & tag it
+                  ["v" "push-tags"]
+                  ["cache-version"]
+                  ["deploy"]])
