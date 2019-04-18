@@ -1,4 +1,5 @@
 language: clojure
+lein: 2.9.1
 install:
 - "LEIN_USE_BOOTCLASSPATH=no lein cache-version"
 - "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs/kibit deps"
