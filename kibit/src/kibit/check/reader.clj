@@ -68,8 +68,9 @@
                 (symbol (str (when prefix (str prefix ".")) form))
                 {:alias alias}))
 
-        (keyword? form) ; Some people write (:require ... :reload-all)
+        (#{:reload-all} form) ; Some people write (:require ... :reload-all)
         nil
+
         :else
         (throw (ex-info "Unparsable namespace form"
                         {:reason ::unparsable-ns-form
@@ -89,7 +90,7 @@
 (defmethod derive-aliases 'ns
   [[_ _ns & ns-asserts]]
   (->> ns-asserts
-       (group-by first)
+       (group-by (comp keyword name first))
        ((juxt :require :require-macros))
        (apply concat)
        (map (comp derive-aliases-from-deps rest))
