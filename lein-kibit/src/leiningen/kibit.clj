@@ -11,21 +11,20 @@
   (let [src-paths     (get-in project [:kibit :source-paths] ["rules"])
         repositories (:repositories project)
         local-repo    (:local-repo project)
-        kibit-project `{:dependencies [[jonase/kibit ~(str/trim-newline
-                                                        (slurp
-                                                          (io/resource
-                                                            "jonase/kibit/VERSION")))]]
+        kibit-version       (clojure.edn/read-string
+                             (slurp (io/resource "version.edn")))
+        kibit-project `{:dependencies [[gorillalabs/kibit ~(:version kibit-version)]]
                         :source-paths ~src-paths
                         :repositories ~repositories
                         :local-repo   ~local-repo}
         cwd           (.toAbsolutePath (Paths/get "" (into-array String nil)))
         ;; This could become a transducer once we want to force a dependency on Lein 1.6.0 or higher.
         paths         (->> (concat                          ;; Collect all of the possible places sources can be defined.
-                             (:source-paths project)
-                             [(:source-path project)]
-                             (mapcat :source-paths (get-in project [:profiles]))
-                             (mapcat :source-paths (get-in project [:cljsbuild :builds]))
-                             (mapcat :source-paths (get-in project [:cljx :builds])))
+                            (:source-paths project)
+                            [(:source-path project)]
+                            (mapcat :source-paths (get-in project [:profiles]))
+                            (mapcat :source-paths (get-in project [:cljsbuild :builds]))
+                            (mapcat :source-paths (get-in project [:cljx :builds])))
                            (filter some?)                   ;; Remove nils
                            ;; Convert all String paths to absolute paths (Leiningen turns root :source-paths into absolute path).
                            (map #(.toAbsolutePath (Paths/get % (into-array String nil))))

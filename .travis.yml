@@ -1,11 +1,13 @@
 language: clojure
+lein: 2.9.1
 install:
-- "pushd kibit"
-- "lein deps"
-- "popd"
+- "LEIN_USE_BOOTCLASSPATH=no lein cache-version"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs/kibit deps"
 script:
-- "pushd kibit"
-- "lein test-all"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each :in gorillalabs/kibit test-all"
+- "LEIN_USE_BOOTCLASSPATH=no lein cache-version"
+- "LEIN_USE_BOOTCLASSPATH=no lein monolith each install"
 jdk:
   - openjdk8
   - openjdk11
+  - oraclejdk11
