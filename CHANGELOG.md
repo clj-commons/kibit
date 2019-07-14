@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.1.7] / 2019-07-15
+
+### Added
+
+* Print the file path, column, and line number if an error occurs while reading a file. [#212](https://github.com/jonase/kibit/pull/212) - [@LukasRychtecky](https://github.com/LukasRychtecky)
+
+### Changed
+
+* Use platform-independent newlines when joining strings
+
+### Fixed
+
+* Make tests pass on Windows. [#208](https://github.com/jonase/kibit/pull/208) - [@voytech](https://github.com/voytech)
+* Transfer `:repositories` from the original project.clj. [#222](https://github.com/jonase/kibit/pull/226) - [@tomjkidd](https://github.com/tomjkidd)
+* Handle nested requires with aliases. [#226](https://github.com/jonase/kibit/pull/226)- [@tomjkidd](https://github.com/tomjkidd)
+
 ## [0.1.6] / 2018-11-08
 
 ### Fixed
