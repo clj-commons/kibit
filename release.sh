@@ -2,6 +2,7 @@
 
 echo "This is just a dummy representation of what steps you need to take"
 echo "It could be automated in the future"
+exit 1
 
 set -ex
 
