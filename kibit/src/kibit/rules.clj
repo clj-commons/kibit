@@ -22,7 +22,7 @@
 ;; * a pattern expression (e.g. `(+ ?x 1)`)
 ;; * a substitution expression (e.g. `(inc ?x)`
 ;;
-;; These rules are used in the unifcation process to generate suggested
+;; These rules are used in the unification process to generate suggested
 ;; code alternatives.  For more information see:
 ;; [core](#jonase.kibit.core) namespace
 

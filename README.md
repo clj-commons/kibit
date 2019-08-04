@@ -40,7 +40,7 @@ If you want to know how the Kibit rule system works there are some slides availa
 
 ## Exit codes
 
-If `lein kibit` returns any suggestions to forms then it's exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
+If `lein kibit` returns any suggestions to forms then its exit code will be 1. Otherwise it will exit 0. This can be useful to add in a build step for automated testing.
 
 
     $ lein kibit

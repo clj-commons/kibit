@@ -7,7 +7,7 @@
            java.io.StringWriter))
 
 (defmacro discard-output
-  "Like `with-out-str`, but discards was was written to *out*"
+  "Like `with-out-str`, but discards what was written to *out*"
   [& body]
   `(binding [*out* (StringWriter.)]
      ~@body))
