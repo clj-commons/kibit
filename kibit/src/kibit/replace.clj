@@ -95,7 +95,7 @@
 (defn replace-expr
   "Apply any suggestions to `expr`.
 
-  `expr`    - Code form to check and replace in
+  `expr`    - Code form to check and replace
   `kw-opts` - any valid option for `check/check-expr`, as well as:
               - `:file` current filename
               - `:interactive` prompt for confirmation before replacement or not

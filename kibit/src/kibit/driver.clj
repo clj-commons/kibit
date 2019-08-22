@@ -67,7 +67,7 @@
 
   Paths is expected to be a sequence of io.File objects.
 
-  Rules is either a collection of rules or nil. If Rules is nil, all of kibit's checkers are used.
+  Rules is either a collection of rules or nil. If rules is nil, all of kibit's checkers are used.
 
   Optionally accepts a :reporter keyword argument, defaulting to \"text\"
   If :replace is provided in options, suggested replacements will be performed automatically."
