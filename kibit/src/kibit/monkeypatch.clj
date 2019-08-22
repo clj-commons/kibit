@@ -7,7 +7,7 @@
            [clojure.core.logic.protocols
             ITreeTerm]))
 
-(defn ^:pivate tree-term? [x]
+(defn- tree-term? [x]
   (and (or (coll? x)
            (instance? ITreeTerm x))
        (not (instance? IPersistentSet x))))
