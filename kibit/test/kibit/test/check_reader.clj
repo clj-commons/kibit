@@ -6,6 +6,17 @@
   (are [expected-alias-map ns-form]
       (= expected-alias-map (reader/derive-aliases ns-form))
       '{foo foo.bar.baz} '(ns derive.test.one
+                            "This is a namespace string, which should not cause problems"
+                            {:author "Alice"
+                             :purpose "Make sure that attr-map also doesn't cause problems"}
+                            (:require [foo.bar.baz :as foo]))
+      '{foo foo.bar.baz} '(ns ^{:doc "Docstring as metadata"}
+                              derive.test.one
+                            (:require [foo.bar.baz :as foo]))
+      '{foo foo.bar.baz} '(ns ^:metadata-x derive.test.one
+                            (:require [foo.bar.baz :as foo]))
+
+      '{foo foo.bar.baz} '(ns derive.test.one
                             (:require [foo.bar.baz :as foo]))
       '{foo foo.bar.baz
         foom foo.bar.baz.macros} '(ns derive.test.one
