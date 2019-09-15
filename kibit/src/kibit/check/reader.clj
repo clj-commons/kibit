@@ -90,6 +90,7 @@
 (defmethod derive-aliases 'ns
   [[_ _ns & ns-asserts]]
   (->> ns-asserts
+       (remove #(or (string? %) (map? %)))
        (group-by (comp keyword name first))
        ((juxt :require :require-macros))
        (apply concat)
