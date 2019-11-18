@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.1.8] / 2019-11-18
+
+### Fixed
+
+* Handle namespace docstrings [231](https://github.com/jonase/kibit/issues/231) - [@tomjkidd](https://github.com/tomjkidd)
+
 ## [0.1.7] / 2019-07-15
 
 ### Added
