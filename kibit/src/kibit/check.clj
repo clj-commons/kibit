@@ -4,6 +4,7 @@
             [clojure.core.logic.unifier :as unifier]
             [kibit.core :as core]
             [kibit.rules :as core-rules]
+            [kibit.rules.util :as util]
             [kibit.reporters :as reporters]
             [kibit.monkeypatch
              :refer [with-monkeypatches kibit-redefs]]
@@ -160,15 +161,28 @@
   (with-monkeypatches kibit-redefs
     (->> expr simplify-fn (build-simplify-map expr) guard)))
 
+(defn- apply-config-map-opts
+       [rules exclusions custom]
+       (->> rules
+            (concat (for [c custom]
+                         {:form c
+                          :compiled (if (util/raw-rule? c)
+                                      (eval c)
+                                      (util/compile-rule c))}))
+            (remove (fn [r]
+                        (and (map? r)
+                             ((set exclusions) (:form r)))))
+            (map #(if (map? %) (:compiled %) %))))
+
 ;; The default resolution is overriden via the `merge`
 (defn check-expr
   ""
   [expr & kw-opts]
-  (let [{:keys [rules guard resolution]}
+  (let [{:keys [rules guard resolution exclusions custom]}
         (merge default-args
                {:resolution :toplevel}
                (apply hash-map kw-opts))
-        rules (map unifier/prep rules)
+        rules (map unifier/prep (apply-config-map-opts rules exclusions custom))
         simplify-fn #((res->simplify resolution) % rules)]
     (check-aux expr simplify-fn guard)))
 
@@ -190,7 +204,7 @@
 (defn check-file
   ""
   [source-file & kw-opts]
-  (let [{:keys [rules guard resolution reporter init-ns]
+  (let [{:keys [rules guard resolution reporter init-ns exclusions custom]
          :or   {reporter reporters/cli-reporter}}
         (merge default-args
                (apply hash-map kw-opts))]
@@ -201,7 +215,7 @@
                         (reporter file-simplify)
                         file-simplify))
                     (check-reader reader
-                                  :rules rules
+                                  :rules (apply-config-map-opts rules exclusions custom)
                                   :guard guard
                                   :resolution resolution
                                   :init-ns init-ns)))))))
