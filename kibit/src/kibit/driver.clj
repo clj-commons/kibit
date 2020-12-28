@@ -23,13 +23,13 @@
 (defn ends-with?
   "Returns true if the java.io.File ends in any of the strings in coll"
   [file coll]
-  (some #(.endsWith (.getName file) %) coll))
+  (some #(.endsWith (.getName ^File file) %) coll))
 
 (defn clojure-file?
   "Returns true if the java.io.File represents a Clojure source file.
   Extensions taken from https://github.com/github/linguist/blob/master/lib/linguist/languages.yml"
   [file]
-  (and (.isFile file)
+  (and (.isFile ^File file)
        (ends-with? file [".clj" ".cl2" ".cljc" ".cljs" ".cljscm" ".cljx" ".hic" ".hl"])))
 
 (defn find-clojure-sources-in-dir
@@ -56,7 +56,7 @@
                             (let [e-info (ex-data e)]
                               (binding [*out* *err*]
                                 (println (format "Check failed -- skipping rest of file (%s:%s:%s)"
-                                                 (.getPath file)
+                                                 (.getPath ^File file)
                                                  (:line e-info)
                                                  (:column e-info)))
                                 (println (.getMessage e)))))))
