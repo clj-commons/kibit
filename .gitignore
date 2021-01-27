@@ -38,3 +38,6 @@ pom.xml.asc
 # IntelliJ IDEA
 .idea
 *.iml
+
+.clj-kondo/
+.lsp/

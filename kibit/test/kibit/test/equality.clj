@@ -1,6 +1,6 @@
 (ns kibit.test.equality
-  (:require [kibit.check :as kibit])
-  (:use [clojure.test]))
+  (:require [kibit.check :as kibit]
+            [clojure.test :refer [deftest are]]))
 
 (deftest equality-are
   (are [expected-alt-form test-form]
@@ -17,5 +17,5 @@
     '(true? x) '(= true x)
     '(false? x) '(= false x)
     '(nil? x) '(= nil x)
-    '(nil? x) '(= x nil)))
-
+    '(nil? x) '(= x nil)
+    '(some? x) '(not (nil? x))))
