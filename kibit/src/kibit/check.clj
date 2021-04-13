@@ -67,10 +67,12 @@
   "Construct the canonical simplify-map
   given an expression and a simplified expression."
   [expr simplified-expr]
-  {:expr   expr
-   :line   (-> expr meta :line)
-   :column (-> expr meta :column)
-   :alt    simplified-expr})
+  {:expr       expr
+   :line       (-> expr meta :line)
+   :column     (-> expr meta :column)
+   :end-line   (-> expr meta :end-line)
+   :end-column (-> expr meta :end-column)
+   :alt        simplified-expr})
 
 ;; ### Guarding the check
 
