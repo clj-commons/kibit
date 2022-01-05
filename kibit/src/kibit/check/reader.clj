@@ -47,6 +47,15 @@
        (or (keyword? (second form))  ; vector like [foo :as f]
            (= 1 (count form)))))  ; bare vector like [foo]
 
+(defn- js-dep-spec?
+  "A version of `option-spec?` for native JS dependencies, i.e. vectors
+   like [\"react-dom\" :as react-dom] or just [\"some-polyfill\"]"
+  [form]
+  (and (sequential? form)  ; should be a vector, but often is not
+       (string? (first form))
+       (or (keyword? (second form))  ; vector like ["foo" :as f]
+           (= 1 (count form)))))
+
 (defn- deps-from-libspec
   "A slight modification from clojure.tools.namespace.parse/deps-from-libspec,
   in which aliases are captured as metadata."
@@ -67,6 +76,9 @@
         (list (with-meta
                 (symbol (str (when prefix (str prefix ".")) form))
                 {:alias alias}))
+
+        (js-dep-spec? form)
+        nil
 
         (#{:reload-all} form) ; Some people write (:require ... :reload-all)
         nil
