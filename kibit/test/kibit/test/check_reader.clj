@@ -55,4 +55,12 @@
                                                 [bar
                                                  [war :as foo-bar-war]]
                                                 [baz
-                                                 [waz :as foo-baz-waz]]])))
+                                                 [waz :as foo-baz-waz]]])
+      '{} '(ns derive.test.one
+             "JS deps should be simply ignored/omitted"
+             (:require ["react-dom" :as react-dom]
+                       ["some-polyfill"]))))
+
+(deftest js-dep-spec?
+  (is (true? (#'reader/js-dep-spec? '["react-dom" :as react-dom])))
+  (is (true? (#'reader/js-dep-spec? '["some-polyfill"]))))

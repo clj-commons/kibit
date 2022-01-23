@@ -77,7 +77,7 @@
                 (symbol (str (when prefix (str prefix ".")) form))
                 {:alias alias}))
 
-        (js-dep-spec? form)
+        (js-dep-spec? form) ; to stop it from going into the JS code
         nil
 
         (#{:reload-all} form) ; Some people write (:require ... :reload-all)
