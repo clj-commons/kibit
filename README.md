@@ -138,6 +138,25 @@ instead of:
 ...
 ----
 
+## Rule exclusions and custom rules
+
+You need to create a config map inside `.kibit/config.edn`. 
+You can exclude some rules inside kibit, also you can define custom rules:
+```clojure
+{:exclusions [
+              [(< ?x 0) (neg? ?x)]
+              [(> 0 ?x) (neg? ?x)]
+              [(< 0 ?x)  (pos? ?x)]
+              [(> ?x 0)  (pos? ?x)]
+              ]
+ :custom [
+          [(reduce ?r (map ?m (filter ?f ?form))) (->> ?form 
+                                                       (filter ?f)
+                                                       (map ?m) 
+                                                       (reduce ?r))]
+          ]}
+```
+
 ### Usage from inside Emacs
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
