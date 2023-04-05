@@ -14,9 +14,9 @@
                    :resource-paths ["test/resources"]}}
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]]
-            :aliases {"test-all" ["do"
-                                  ["clean"]
-                                  ["test"]
-                                  ["clean"]
-                                  ["compile" ":all"]]}
+  :aliases {"test-all" ["do"
+                        ["clean"]
+                        ["test"]
+                        ["clean"]
+                        ["compile" ":all"]]}
   :warn-on-reflection false)
