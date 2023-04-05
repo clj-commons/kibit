@@ -152,7 +152,7 @@ into the namespace."
                    (let [form (binding [*ns* ns
                                         reader/*alias-map* (merge (ns-aliases ns)
                                                                   (alias-map ns))]
-                                (reader/read r false eof))
+                                (reader/read {:eof eof :read-cond :preserve} r))
                          [ns? new-ns k] (when (sequential? form) form)
                          new-ns (unquote-if-quoted new-ns)
                          ns (if (and (symbol? new-ns)

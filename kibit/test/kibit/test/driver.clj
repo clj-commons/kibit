@@ -15,6 +15,7 @@
   (is (= [(io/file "test/resources/first.clj")
           (io/file "test/resources/keyword_suggestions.clj")
           (io/file "test/resources/keywords.clj")
+          (io/file "test/resources/reader_conditionals.cljc")
           (io/file "test/resources/second.cljx")
           (io/file "test/resources/sets.clj")
           (io/file "test/resources/third.cljs")]
@@ -42,3 +43,6 @@
              :expr (into [] [:clojure.pprint/printing-key :resources.keyword-suggestions/local-key4 :some/other-key4])})
          (map #(select-keys % [:expr :alt])
               (driver/run ["test/resources/keyword_suggestions.clj"] nil "--reporter" "no-op")))))
+
+(deftest process-cljc-file
+  (is (driver/run ["test/resources/reader_conditionals.cljc"] nil)))
