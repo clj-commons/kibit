@@ -1,7 +1,7 @@
 (ns kibit.test.reporters
   (:require [kibit.reporters :as reporters]
             [clojure.string :as string]
-            [clojure.test :refer :all]))
+            [clojure.test :refer [deftest are]]))
 
 (deftest plain
   (are [check-map result]

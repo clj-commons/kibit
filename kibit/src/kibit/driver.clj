@@ -3,11 +3,10 @@
   linting a list of files."
   (:require [clojure.java.io :as io]
             [clojure.tools.cli :refer [cli]]
-            [kibit
-             [check :refer [check-file]]
-             [replace :refer [replace-file]]
-             [reporters :refer :all]
-             [rules :refer [all-rules]]])
+            [kibit.check :refer [check-file]]
+            [kibit.replace :refer [replace-file]]
+            [kibit.reporters :refer [name-to-reporter cli-reporter]]
+            [kibit.rules :refer [all-rules]])
   (:import java.io.File))
 
 (def cli-specs [["-r" "--reporter"
@@ -62,7 +61,7 @@
                                 (println (.getMessage e)))))))
           source-files))
 
-(defn run [source-paths rules & args]
+(defn run
   "Runs the kibit checker against the given paths, rules and args.
 
   Paths is expected to be a sequence of io.File objects.
@@ -71,6 +70,7 @@
 
   Optionally accepts a :reporter keyword argument, defaulting to \"text\"
   If :replace is provided in options, suggested replacements will be performed automatically."
+  [source-paths rules & args]
   (let [[options file-args usage-text] (apply (partial cli args) cli-specs)
         source-files                   (mapcat #(-> % io/file find-clojure-sources-in-dir)
                                                (if (empty? file-args) source-paths file-args))]

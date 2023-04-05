@@ -1,6 +1,6 @@
 (ns kibit.test.driver
   (:require [kibit.driver :as driver]
-            [clojure.test :refer :all]
+            [clojure.test :refer [deftest is are]]
             [clojure.java.io :as io])
   (:import (java.io ByteArrayOutputStream PrintWriter)))
 
