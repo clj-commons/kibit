@@ -1,6 +1,6 @@
 (ns kibit.test.check
-  (:require [kibit.check :as kibit])
-  (:use [clojure.test]))
+  (:require [kibit.check :as kibit]
+            [clojure.test :refer [deftest are]]))
 
 ;; These tests are identical to the tests in kibit.test.core
 ;; They are here to illustrate kibit use via `check`
@@ -20,6 +20,3 @@
        (= expected-expr (:expr (kibit/check-expr test-expr)))
     '(do [1 2 3])   '(do [1 2 3])
     nil             '(if (> 2 3) :one :two)))
-
-
-

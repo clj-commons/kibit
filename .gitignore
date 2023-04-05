@@ -4,6 +4,7 @@ pom.xml.asc
 *jar
 *.class
 /**/target
+.cpcache
 
 # Leiningen
 /classes
@@ -16,6 +17,7 @@ pom.xml.asc
 .lein-env
 .lein-repl-history
 .nrepl-port
+profiles.clj
 
 # Temp Filest
 *.orig

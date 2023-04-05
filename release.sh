@@ -6,14 +6,14 @@ exit 1
 
 set -ex
 
-echo "Bump the version in kibit-common/resources/jonase/kibit/VERSION to a release version before running this"
+echo "Bump the version in resources/jonase/kibit/VERSION to a release version before running this"
 git tag $version
-pushd kibit
 lein deploy
-popd
+
 pushd lein-kibit
 lein deploy
 popd
-echo "Bump the version in kibit-common to the next SNAPSHOT"
+
+echo "Bump the version in resources to the next SNAPSHOT"
 git push
 git push --tags
