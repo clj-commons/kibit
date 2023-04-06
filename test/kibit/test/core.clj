@@ -2,10 +2,10 @@
   (:require [kibit.check :as kibit]
             [kibit.core :as core]
             [clojure.core.logic.unifier :as unifier]
-            [kibit.rules :as core-rules])
-  (:use [clojure.test]))
+            [kibit.rules :as core-rules]
+            [clojure.test :refer [deftest are]]))
 
-(def all-rules  (map unifier/prep core-rules/all-rules))
+(def all-rules (map unifier/prep core-rules/all-rules))
 
 (deftest simplify-alts
   (are [expected-alt test-expr]

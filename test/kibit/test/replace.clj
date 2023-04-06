@@ -1,8 +1,6 @@
 (ns kibit.test.replace
-  (:require [kibit.check :as check]
-            [kibit.rules :as rules]
-            [kibit.replace :as replace])
-  (:use [clojure.test])
+  (:require [kibit.replace :as replace]
+            [clojure.test :refer [deftest are]])
   (:import java.io.File
            java.io.StringWriter))
 

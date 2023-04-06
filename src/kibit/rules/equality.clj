@@ -1,5 +1,5 @@
 (ns kibit.rules.equality
-  (:use [kibit.rules.util :only [defrules]]))
+  (:require [kibit.rules.util :refer [defrules]]))
 
 (defrules rules
   ;; not=

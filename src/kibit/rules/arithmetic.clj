@@ -1,5 +1,5 @@
 (ns kibit.rules.arithmetic
-  (:use [kibit.rules.util :only [defrules]]))
+  (:require [kibit.rules.util :refer [defrules]]))
 
 (defrules rules
   [(+ ?x 1) (inc ?x)]

@@ -1,6 +1,6 @@
 (ns kibit.rules.misc
-  (:require [clojure.core.logic :as logic])
-  (:use [kibit.rules.util :only [defrules]]))
+  (:require [clojure.core.logic :as logic]
+            [kibit.rules.util :refer [defrules]]))
 
 ;; Returns true if symbol is of
 ;; form Foo or foo.bar.Baz

@@ -1,6 +1,6 @@
 (ns kibit.test.collections
-  (:require [kibit.check :as kibit])
-  (:use [clojure.test]))
+  (:require [kibit.check :as kibit]
+            [clojure.test :refer [deftest are]]))
 
 (deftest collections-are
   (are [expected-alt-form test-form]

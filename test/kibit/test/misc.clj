@@ -1,7 +1,7 @@
 (ns kibit.test.misc
   (:require [kibit.check :as kibit]
-            [kibit.rules.misc :as misc])
-  (:use [clojure.test]))
+            [kibit.rules.misc :as misc]
+            [clojure.test :refer [deftest are]]))
 
 (deftest class-symbol-are
   (are [valid? class-symbol]

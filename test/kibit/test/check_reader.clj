@@ -1,6 +1,6 @@
 (ns kibit.test.check-reader
-  (:require [kibit.check.reader :as reader])
-  (:use [clojure.test]))
+  (:require [kibit.check.reader :as reader]
+            [clojure.test :refer [deftest are is]]))
 
 (deftest derive-aliases-test
   (are [expected-alias-map ns-form]
