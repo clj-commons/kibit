@@ -18,5 +18,4 @@
                         ["clean"]
                         ["test"]
                         ["clean"]
-                        ["compile" ":all"]]}
-  :warn-on-reflection false)
+                        ["compile" ":all"]]})
