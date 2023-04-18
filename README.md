@@ -135,7 +135,18 @@ instead of:
 ...
 ----
 
-### Usage from inside Emacs
+## Usage from deps.edn
+
+Add the following to your aliases
+
+```clojure
+:kibit {:extra-deps {jonase/kibit {:mvn/version "0.1.8"}}
+         :main-opts ["-e" "(require,'[kibit.driver,:as,k])(k/external-run,[\"src\"],nil)"]}
+```
+
+For alternative options to use kibit from inside deps.edn, check out [this issue](https://github.com/clj-commons/kibit/issues/221)
+
+## Usage from inside Emacs
 
 If you use Emacs for hacking Clojure, here's a way to use kibit from
 inside Emacs with all the fanciness you are used to from `M-x compile`.
