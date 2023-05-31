@@ -84,3 +84,62 @@
   (if (zero? (count (apply run source-paths rules args)))
     (System/exit 0)
     (System/exit 1)))
+
+(defn exec
+  "Given a [Clojure CLI-style map][Execute a function] `options`, turn this map
+  into an equivalent set of options as expected by run and external-run above.
+
+  Please note that rules is not supported. nil is passed to external-run below
+  which enables all rules (see kibit.rules/all-rules). I don't know what rules
+  should be. A list of rule names as strings doesn't seem to be it.
+
+  **DO NOT** escape the dobule-quotes in deps.edn or on the command-line.
+
+  To make use of this, add an alias, e.g. kibit, to deps.edn:
+
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+              :exec-fn kibit.driver/exec
+              :exec-args {:paths [\"src\" \"test\"]}}
+
+  Then run:
+
+      clojure -X:kibit
+
+  Additional command-line options can be added in deps.edn or on the
+  command-line. For example, in deps.edn:
+
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+              :exec-fn kibit.driver/exec
+              :exec-args {:paths [\"src\" \"test\"]
+                         :interactive true}}
+
+  Or on the command-line:
+
+      clojure -X:kibit :interactive true
+
+  To use [babashka.cli][babashka.cli], update the kibit aliasn in deps.edn:
+
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+                           org.babashka/cli {:mvn/version \"0.7.51\"}}
+              :exec-fn kibit.driver/exec
+              :exec-args {:paths [\"src\" \"test\"]}
+              :main-opts [\"-m\" \"babashka.cli.exec\"]}
+
+  Then run:
+
+      clojure -X:kibit -i -r markdown
+
+  [Execute a function]: https://clojure.org/reference/deps_and_cli#_execute_a_function
+  [babashka.cli]: https://github.com/babashka/cli
+  "
+  {:org.babashka/cli {:alias {:r :reporter
+                              :e :replace
+                              :i :interactive}
+                      :coerce {:paths [:string]
+                               :reporter :string
+                               :replace :boolean
+                               :interactive :boolean}}}
+  [{:keys [paths reporter replace interactive] :as _options}]
+  (apply (partial external-run paths nil) ["-r" (or reporter "text")
+                                           (when replace "-e")
+                                           (when interactive "-i")]))
