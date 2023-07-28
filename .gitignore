@@ -41,5 +41,6 @@ profiles.clj
 .idea
 *.iml
 
-.clj-kondo/
-.lsp/
+.clj-kondo/.cache
+.lsp/.cache
+.portal/vs-code.edn
