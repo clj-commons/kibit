@@ -9,7 +9,7 @@
   [(* ?x (* . ?xs)) (* ?x . ?xs)]
   [(+ ?x (+ . ?xs)) (+ ?x . ?xs)]
 
-  ;;trivial identites
+  ;;trivial identities
   [(+ ?x 0) ?x]
   [(- ?x 0) ?x]
   [(* ?x 1) ?x]

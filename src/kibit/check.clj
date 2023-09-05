@@ -89,7 +89,7 @@
 
 (defn unique-alt?
   "A 'check guard' that only returns a result if the
-  alternative is different than the original expresion"
+  alternative is different than the original expression"
   [simplify-map]
   (let [{:keys [expr alt]} simplify-map]
     (when-not (= alt expr)
@@ -162,7 +162,7 @@
   (with-monkeypatches kibit-redefs
     (->> expr simplify-fn (build-simplify-map expr) guard)))
 
-;; The default resolution is overriden via the `merge`
+;; The default resolution is overridden via the `merge`
 (defn check-expr
   ""
   [expr & kw-opts]
