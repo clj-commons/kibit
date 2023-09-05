@@ -16,7 +16,7 @@
   {#'c.c.l/tree-term? tree-term?})
 
 (defmacro with-monkeypatches
-  "Builds a try/finally which captures Var bindings (and ^:macro tags) comming in, creates new Var
+  "Builds a try/finally which captures Var bindings (and ^:macro tags) coming in, creates new Var
   bindings within the try and in the finally restores the original bindings. This allows users to
   establish stack-local patched contexts."
   {:style/indent [1]}

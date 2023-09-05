@@ -13,7 +13,7 @@
                  "The reporter used when rendering suggestions"
                  :default "text"]
                 ["-e" "--replace"
-                 "Automatially apply suggestions to source file"
+                 "Automatically apply suggestions to source file"
                  :flag true]
                 ["-i" "--interactive"
                  "Interactively prompt before replacing suggestions in source file (Requires `--replace`)"
