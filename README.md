@@ -142,7 +142,7 @@ Add the following to your aliases
 ```clojure
 :kibit {:extra-deps {jonase/kibit {:mvn/version "0.X.Y"}}
         :exec-fn kibit.driver/exec
-        :exec-args {:paths ["."]}
+        :exec-args {:paths ["."]}}
 ```
 
 Then run `clojure -X:kibit`. For more options, please see the
