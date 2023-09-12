@@ -13,6 +13,7 @@
     '(when-not test then) '(when (not test) then)
     'single-expression '(do single-expression)
     '(when-let [a test] expr) '(if-let [a test] expr nil)
+    '(or test expr) '(if-let [a test] a expr)
     '(let [a 1] (println a) a) '(let [a 1] (do (println a) a))
     '(when test (println a) then) '(when test (do (println a) then))
     '(when-not test (println a) then) '(when-not test (do (println a) then))
