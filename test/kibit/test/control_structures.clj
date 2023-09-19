@@ -18,6 +18,7 @@
     '(when-not test (println a) then) '(when-not test (do (println a) then))
     '(when-not test body) '(if (not test) (do body))
     '(when-not test body) '(if-not test (do body))
+    '(when-not test body) '(if-not test body)
     
     '(loop [a 4] (println a) (if (zero? a) a (recur (dec a))))
     '(loop [a 4] (do (println a) (if (zero? a) a (recur (dec a)))))))

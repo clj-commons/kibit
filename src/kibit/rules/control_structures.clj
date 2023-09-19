@@ -13,6 +13,7 @@
   [(when ?x (do . ?y)) (when ?x . ?y)]
   [(when-not ?x (do . ?y)) (when-not ?x . ?y)]
   [(if-not ?x (do . ?y)) (when-not ?x . ?y)]
+  [(if-not ?x ?y) (when-not ?x ?y)]
   [(if-not (not ?x) ?y ?z) (if ?x ?y ?z)]
   [(when-not (not ?x) . ?y) (when ?x . ?y)]
 
