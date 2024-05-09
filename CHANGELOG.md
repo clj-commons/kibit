@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## 0.1.10 / 2024-05-09
+
+* Fix scm information in generated pom.xml.
+
 ## [0.1.9] / 2024-05-09
 
 ### Added
