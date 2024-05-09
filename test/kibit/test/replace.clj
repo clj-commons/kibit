@@ -19,6 +19,9 @@
     '(inc a)
     '(+ 1 a)
 
+    '1
+    '(do 1)
+
     '(defn "Documentation" ^{:my-meta 1} [a]
        ;; a comment
        (inc a))
@@ -37,6 +40,9 @@
 
     "(inc a)"
     "(+ 1 a)"
+
+    "1"
+    "(do 1)"
 
     "(ns replace-file)
 
