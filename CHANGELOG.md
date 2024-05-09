@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.1.9] / 2024-05-09
+
+### Added
+
+* Add deps.edn section to the README [#251](https://github.com/clj-commons/kibit/pull/251) - [@port19x](https://github.com/port19x)
+* Add `kibit.driver/exec` to further support deps.edn usage [#252](https://github.com/clj-commons/kibit/pull/252) - [@carrete](https://github.com/carrete)
+
+### Changed
+
+* Include end of range in `simplify-map` [#239](https://github.com/clj-commons/kibit/pull/239) - [@svdo](https://github.com/svdo)
+* Update README, fix various typos [#256](https://github.com/clj-commons/kibit/pull/256) - [@terop](https://github.com/terop)
+
+### Fixed
+
+* Kibit cannot parse ns with string requires [#244](https://github.com/clj-commons/kibit/pull/244) and [#247](https://github.com/clj-commons/kibit/pull/247) - [@marksto](https://github.com/marksto)
+
 ## [0.1.8] / 2019-11-18
 
 ### Fixed
