@@ -5,7 +5,7 @@
             [clojure.core.logic :as logic]))
 
 ;; ### Important notes
-;; Feel free to contribute rules to [kibit's github repo](https://github.com/jonase/kibit)
+;; Feel free to contribute rules to [kibit's github repo](https://github.com/clj-commons/kibit)
 
 ;; Building an alternative form
 ;; ----------------------------

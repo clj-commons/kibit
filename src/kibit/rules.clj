@@ -24,7 +24,7 @@
 ;;
 ;; These rules are used in the unification process to generate suggested
 ;; code alternatives.  For more information see:
-;; [core](#jonase.kibit.core) namespace
+;; [core](#kibit.core) namespace
 
 
 ;; A map of the individual rule sets, keyed by rule group
