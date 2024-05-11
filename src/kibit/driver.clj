@@ -90,14 +90,13 @@
   into an equivalent set of options as expected by run and external-run above.
 
   Please note that rules is not supported. nil is passed to external-run below
-  which enables all rules (see kibit.rules/all-rules). I don't know what rules
-  should be. A list of rule names as strings doesn't seem to be it.
+  which enables all rules (see kibit.rules/all-rules).
 
   **DO NOT** escape the dobule-quotes in deps.edn or on the command-line.
 
   To make use of this, add an alias, e.g. kibit, to deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]}}
 
@@ -108,18 +107,18 @@
   Additional command-line options can be added in deps.edn or on the
   command-line. For example, in deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]
-                         :interactive true}}
+                          :interactive true}}
 
   Or on the command-line:
 
       clojure -X:kibit :interactive true
 
-  To use [babashka.cli][babashka.cli], update the kibit aliasn in deps.edn:
+  To use [babashka.cli][babashka.cli], update the kibit alias in deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.2.0\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
                            org.babashka/cli {:mvn/version \"0.7.51\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]}
