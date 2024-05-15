@@ -15,7 +15,8 @@
     "Hello"           '(do "Hello")
     '(when test then) '(do (when test then))
     :one              '(do :one)
-    {:one 1}          '(do {:one 1})))
+    {:one 1}          '(do {:one 1})
+    #{:a :b}          '#{(do :a) (do :b)}))
 
 ;; This test confirms when checking will happen and when it won't
 (deftest simplify-exprs

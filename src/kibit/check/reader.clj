@@ -69,8 +69,8 @@
                 (rest form))
 
         (option-spec? form)
-        (let [[_ as? form-alias] form]
-          (deps-from-libspec prefix (first form) (when (= :as as?) form-alias)))
+        (let [opts (apply hash-map (next form))]
+          (deps-from-libspec prefix (first form) (or (:as opts) (:as-alias opts))))
 
         (symbol? form)
         (list (with-meta

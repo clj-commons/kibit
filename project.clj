@@ -9,7 +9,7 @@
         :url "https://github.com/clj-commons/kibit"
         :connection "scm:git:git://github.com/clj-commons/kibit.git"
         :developerConnection "scm:git:ssh://git@github.com/clj-commons/kibit.git"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/core.logic "1.1.0"]
                  [org.clojure/tools.cli "1.1.230"]
                  [rewrite-clj "1.1.47"]

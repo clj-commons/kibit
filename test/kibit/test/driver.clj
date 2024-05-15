@@ -12,9 +12,12 @@
        false "test.resources/fourth.txt"))
 
 (deftest find-clojure-sources-are
-  (is (= [(io/file "test/resources/first.clj")
+  (is (= [(io/file "test/resources/as_alias.clj")
+          (io/file "test/resources/double_pound_reader_macros.clj")
+          (io/file "test/resources/first.clj")
           (io/file "test/resources/keyword_suggestions.clj")
           (io/file "test/resources/keywords.clj")
+          (io/file "test/resources/namespaced_maps.clj")
           (io/file "test/resources/reader_conditionals.cljc")
           (io/file "test/resources/second.cljx")
           (io/file "test/resources/sets.clj")
@@ -44,5 +47,20 @@
          (map #(select-keys % [:expr :alt])
               (driver/run ["test/resources/keyword_suggestions.clj"] nil "--reporter" "no-op")))))
 
-(deftest process-cljc-file
-  (is (driver/run ["test/resources/reader_conditionals.cljc"] nil)))
+(defmacro with-err-str
+  [& body]
+  `(let [s# (java.io.StringWriter.)]
+     (binding [*err* s#]
+       ~@body
+       (str s#))))
+
+(deftest process-reader-macros
+  (is (= ["" "" "" ""]
+         [(with-err-str
+            (driver/run ["test/resources/reader_conditionals.cljc"] nil))
+          (with-err-str
+            (driver/run ["test/resources/double_pound_reader_macros.clj"] nil))
+          (with-err-str
+            (driver/run ["test/resources/namespaced_maps.clj"] nil))
+          (with-err-str
+            (driver/run ["test/resources/as_alias.clj"] nil))])))
