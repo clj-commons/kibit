@@ -1,0 +1,42 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    name: Run tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+     # exclusions: babashka, clj-kondo and cljstyle
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@12.5
+        with:
+          lein: 2.9.1
+
+      - name: Cache lein project dependencies
+        id: clj-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2
+            ~/.lein
+          key: ${{ runner.os }}-clojure-${{ hashFiles('**/project.clj') }}
+          restore-keys: ${{ runner.os }}-clojure
+
+      - name: Run tests
+        run: lein test-all
