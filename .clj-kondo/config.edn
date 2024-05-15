@@ -1,0 +1,1 @@
+{:lint-as {kibit.rules.util/defrules clj-kondo.lint-as/def-catch-all}}
