@@ -13,8 +13,7 @@
                  [org.clojure/core.logic "1.1.0"]
                  [org.clojure/tools.cli "1.1.230"]
                  [rewrite-clj "1.1.47"]
-                 [org.clojure/tools.reader "1.4.2"]]
-  :profiles {:dev {:resource-paths ["test/resources"]}}
+                 [borkdude/edamame "1.4.25"]]
   :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
                                     :sign-releases false}]
                         ["snapshots" :clojars]]

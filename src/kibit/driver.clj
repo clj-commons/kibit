@@ -22,7 +22,7 @@
 (defn ends-with?
   "Returns true if the java.io.File ends in any of the strings in coll"
   [file coll]
-  (some #(.endsWith (.getName ^File file) %) coll))
+  (boolean (some #(.endsWith (.getName ^File file) %) coll)))
 
 (defn clojure-file?
   "Returns true if the java.io.File represents a Clojure source file.

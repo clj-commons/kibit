@@ -6,32 +6,33 @@
 
 (deftest clojure-file-are
   (are [expected file] (= expected (driver/clojure-file? (io/file file)))
-       true "test/resources/first.clj"
-       true "test/resources/second.cljx"
-       true "test/resources/third.cljs"
-       false "test.resources/fourth.txt"))
+       true "corpus/first.clj"
+       true "corpus/second.cljx"
+       true "corpus/third.cljs"
+       false "corpus/fourth.txt"))
 
 (deftest find-clojure-sources-are
-  (is (= [(io/file "test/resources/as_alias.clj")
-          (io/file "test/resources/double_pound_reader_macros.clj")
-          (io/file "test/resources/first.clj")
-          (io/file "test/resources/keyword_suggestions.clj")
-          (io/file "test/resources/keywords.clj")
-          (io/file "test/resources/namespaced_maps.clj")
-          (io/file "test/resources/reader_conditionals.cljc")
-          (io/file "test/resources/second.cljx")
-          (io/file "test/resources/sets.clj")
-          (io/file "test/resources/third.cljs")]
-         (driver/find-clojure-sources-in-dir (io/file "test/resources")))))
+  (is (= [(io/file "corpus/as_alias.clj")
+          (io/file "corpus/double_pound_reader_macros.clj")
+          (io/file "corpus/first.clj")
+          (io/file "corpus/keyword_suggestions.clj")
+          (io/file "corpus/keywords.clj")
+          (io/file "corpus/namespaced_maps.clj")
+          (io/file "corpus/read_eval.clj")
+          (io/file "corpus/reader_conditionals.cljc")
+          (io/file "corpus/second.cljx")
+          (io/file "corpus/sets.clj")
+          (io/file "corpus/third.cljs")]
+         (driver/find-clojure-sources-in-dir (io/file "corpus")))))
 
 (deftest test-set-file
-  (is (driver/run ["test/resources/sets.clj"] nil)))
+  (is (driver/run ["corpus/sets.clj"] nil)))
 
 (deftest test-keywords-file
   (let [test-buf (ByteArrayOutputStream.)
         test-err (PrintWriter. test-buf)]
     (binding [*err* test-err]
-      (driver/run ["test/resources/keywords.clj"] nil))
+      (driver/run ["corpus/keywords.clj"] nil))
     (is (zero? (.size test-buf))
         (format "Test err buffer contained '%s'" (.toString test-buf)))))
 
@@ -45,7 +46,7 @@
             {:alt  (vec [:clojure.pprint/printing-key :resources.keyword-suggestions/local-key4 :some/other-key4])
              :expr (into [] [:clojure.pprint/printing-key :resources.keyword-suggestions/local-key4 :some/other-key4])})
          (map #(select-keys % [:expr :alt])
-              (driver/run ["test/resources/keyword_suggestions.clj"] nil "--reporter" "no-op")))))
+              (driver/run ["corpus/keyword_suggestions.clj"] nil "--reporter" "no-op")))))
 
 (defmacro with-err-str
   [& body]
@@ -57,10 +58,21 @@
 (deftest process-reader-macros
   (is (= ["" "" "" ""]
          [(with-err-str
-            (driver/run ["test/resources/reader_conditionals.cljc"] nil))
+            (driver/run ["corpus/reader_conditionals.cljc"] nil "--reporter" "no-op"))
           (with-err-str
-            (driver/run ["test/resources/double_pound_reader_macros.clj"] nil))
+            (driver/run ["corpus/double_pound_reader_macros.clj"] nil "--reporter" "no-op"))
           (with-err-str
-            (driver/run ["test/resources/namespaced_maps.clj"] nil))
+            (driver/run ["corpus/namespaced_maps.clj"] nil "--reporter" "no-op"))
           (with-err-str
-            (driver/run ["test/resources/as_alias.clj"] nil))])))
+            (driver/run ["corpus/as_alias.clj"] nil "--reporter" "no-op"))])))
+
+(deftest no-read-eval-test
+  (is (= [{:expr
+           '(if true (do (edamame.core/read-eval (prn :hello :world!)) :a))
+           :line 1
+           :column 1
+           :end-line 1
+           :end-column 41
+           :alt '(when true (edamame.core/read-eval (prn :hello :world!)) :a)}]
+         (map #(dissoc % :file)
+              (driver/run ["corpus/read_eval.clj"] nil "--reporter" "no-op")))))

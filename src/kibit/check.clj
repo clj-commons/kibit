@@ -164,7 +164,6 @@
 
 ;; The default resolution is overridden via the `merge`
 (defn check-expr
-  ""
   [expr & kw-opts]
   (let [{:keys [rules guard resolution]}
         (merge default-args
@@ -175,7 +174,6 @@
     (check-aux expr simplify-fn guard)))
 
 (defn check-reader
-  ""
   [reader & kw-opts]
   (let [{:keys [rules guard resolution init-ns]}
         (merge default-args
@@ -190,7 +188,6 @@
     {(resolve '*default-data-reader-fn*) (fn [tag val] val)}))
 
 (defn check-file
-  ""
   [source-file & kw-opts]
   (let [{:keys [rules guard resolution reporter init-ns]
          :or   {reporter reporters/cli-reporter}}
