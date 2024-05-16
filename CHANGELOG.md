@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## 0.1.11 / 2024-05-16
+
 * Update to Clojure 1.11 to handle ##Inf etc. [#237](https://github.com/clj-commons/kibit/pull/237)
 * Switch to borkdude/edamame for side-effect free parsing. [#235](https://github.com/clj-commons/kibit/pull/235), [#246](https://github.com/clj-commons/kibit/pull/246)
 * Correctly gather options-spec require vectors as maps so we can check for :as and :as-alias. [#238](https://github.com/clj-commons/kibit/pull/238)

@@ -148,7 +148,7 @@ instead of:
 Add the following to your aliases
 
 ```clojure
-:kibit {:extra-deps {jonase/kibit {:mvn/version "0.1.10"}}
+:kibit {:extra-deps {jonase/kibit {:mvn/version "0.1.11"}}
         :exec-fn kibit.driver/exec
         :exec-args {:paths ["."]}}
 ```
@@ -156,7 +156,7 @@ Add the following to your aliases
 Then run `clojure -X:kibit`. For more options, please see the
 docstring on `kibit.driver/exec`.
 
-**NOTE:** At least Clojure v1.9 and Kibit v0.1.10 are required to use this
+**NOTE:** At least Clojure v1.9 and Kibit v0.1.11 are required to use this
 exec-fn method.
 
 ## Usage from inside Emacs

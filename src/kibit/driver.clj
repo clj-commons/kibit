@@ -96,7 +96,7 @@
 
   To make use of this, add an alias, e.g. kibit, to deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.11\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]}}
 
@@ -107,7 +107,7 @@
   Additional command-line options can be added in deps.edn or on the
   command-line. For example, in deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.11\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]
                           :interactive true}}
@@ -118,7 +118,7 @@
 
   To use [babashka.cli][babashka.cli], update the kibit alias in deps.edn:
 
-      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.10\"}}
+      :kibit {:extra-deps {jonase/kibit {:mvn/version \"0.1.11\"}}
                            org.babashka/cli {:mvn/version \"0.7.51\"}}
               :exec-fn kibit.driver/exec
               :exec-args {:paths [\"src\" \"test\"]}
