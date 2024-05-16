@@ -20,6 +20,14 @@ it will suggest using `when` instead:
   (some action))
 ```
 
+## Maintenance Status
+
+`kibit` is currently in maintenance. It will receive bug fixes and support for new versions of Clojure, but there are no plans for major changes or additions to the core functionality. Why not? `core.logic` is very clever but quite slow, and the existing architecture is such that to move away from `core.logic` would be to rewrite almost the entire library.
+
+[Splint](https://github.com/NoahTheDuke/splint) is such a rewrite, built from the ground-up to be fast and extensible. It supports all of `kibit`'s rules (and many others), runs in a fraction of the time, can be configured from a file, and can output warnings in `kibit`-like text and markdown, as well as clj-kondo-compatible, json, and edn.
+
+For other Clojure linters, see [clj-kondo](https://github.com/borkdude/clj-kondo) and [Eastwood](https://github.com/jonase/eastwood).
+
 ## Usage
 
 Add `[lein-kibit "0.1.9"]` to your `:plugins` vector in your `:user` profile. Then you can run
