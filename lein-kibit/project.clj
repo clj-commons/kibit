@@ -6,6 +6,7 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/tools.namespace "1.5.0"]
                  [jonase/kibit ~(clojure.string/trim-newline (slurp "../resources/jonase/kibit/VERSION"))]]
-  :deploy-repositories [["releases" :clojars]
+  :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
+                                    :sign-releases false}]
                         ["snapshots" :clojars]]
   :eval-in-leiningen true)

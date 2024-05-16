@@ -1,7 +1,6 @@
 (ns kibit.check
   "Kibit's integration point and public API"
   (:require [clojure.java.io :as io]
-            [clojure.core.logic.unifier :as unifier]
             [kibit.core :as core]
             [kibit.rules :as core-rules]
             [kibit.reporters :as reporters]
@@ -67,12 +66,13 @@
   "Construct the canonical simplify-map
   given an expression and a simplified expression."
   [expr simplified-expr]
-  {:expr       expr
-   :line       (-> expr meta :line)
-   :column     (-> expr meta :column)
-   :end-line   (-> expr meta :end-line)
-   :end-column (-> expr meta :end-column)
-   :alt        simplified-expr})
+  (let [expr-meta (meta expr)]
+    {:expr       expr
+     :line       (:line expr-meta)
+     :column     (:column expr-meta)
+     :end-line   (:end-line expr-meta)
+     :end-column (:end-column expr-meta)
+     :alt        simplified-expr}))
 
 ;; ### Guarding the check
 
@@ -164,23 +164,19 @@
 
 ;; The default resolution is overridden via the `merge`
 (defn check-expr
-  ""
   [expr & kw-opts]
   (let [{:keys [rules guard resolution]}
         (merge default-args
                {:resolution :toplevel}
                (apply hash-map kw-opts))
-        rules (map unifier/prep rules)
         simplify-fn #((res->simplify resolution) % rules)]
     (check-aux expr simplify-fn guard)))
 
 (defn check-reader
-  ""
   [reader & kw-opts]
   (let [{:keys [rules guard resolution init-ns]}
         (merge default-args
                (apply hash-map kw-opts))
-        rules (map unifier/prep rules)
         simplify-fn #((res->simplify resolution) % rules)]
     (keep #(check-aux % simplify-fn guard)
           ((res->read-seq resolution) reader init-ns))))
@@ -190,7 +186,6 @@
     {(resolve '*default-data-reader-fn*) (fn [tag val] val)}))
 
 (defn check-file
-  ""
   [source-file & kw-opts]
   (let [{:keys [rules guard resolution reporter init-ns]
          :or   {reporter reporters/cli-reporter}}

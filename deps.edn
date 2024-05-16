@@ -1,13 +1,11 @@
 {:paths ["src"]
- :deps {org.clojure/clojure {:mvn/version "1.8.0"}
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
         org.clojure/core.logic {:mvn/version "1.1.0"}
         org.clojure/tools.cli {:mvn/version "1.1.230"}
-        org.clojure/tools.reader {:mvn/version "1.4.2"}
+        borkdude/edamame {:mvn/version "1.4.25"}
         rewrite-clj/rewrite-clj {:mvn/version "1.1.47"}}
- ;; At least Clojure v1.9 is required to run `clojure -X:`. Run this as
- ;; `clojure -X:exec` or `clojure -X:exec -i -r markdown`, for example.
- :aliases {:exec {:extra-deps {org.clojure/clojure {:mvn/version "1.9.0"}
-                               org.babashka/cli {:mvn/version "0.7.51"}}
+ ;; Run this as `clojure -X:exec` or `clojure -X:exec -i -r markdown`, for example.
+ :aliases {:exec {:extra-deps {org.babashka/cli {:mvn/version "0.7.51"}}
                   :exec-fn kibit.driver/exec
                   :exec-args {:paths ["."]}
                   :main-opts ["-m" "babashka.cli.exec"]}}}

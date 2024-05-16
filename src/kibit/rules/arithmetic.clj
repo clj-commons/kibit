@@ -23,7 +23,4 @@
   [(dec (Math/exp ?x)) (Math/expm1 ?x)]
 
   ;;ugly rounding tricks
-  [(long (+ ?x 0.5)) (Math/round ?x)]
-)
-
-
+  [(long (+ ?x 0.5)) (Math/round ?x)])

@@ -1,5 +1,5 @@
 (ns kibit.check.reader
-  (:require [clojure.tools.reader :as reader])
+  (:require [edamame.core :as e])
   (:import [clojure.lang LineNumberingPushbackReader]))
 
 ;; Preprocessing
@@ -69,8 +69,8 @@
                 (rest form))
 
         (option-spec? form)
-        (let [[_ as? form-alias] form]
-          (deps-from-libspec prefix (first form) (when (= :as as?) form-alias)))
+        (let [opts (apply hash-map (next form))]
+          (deps-from-libspec prefix (first form) (or (:as opts) (:as-alias opts))))
 
         (symbol? form)
         (list (with-meta
@@ -142,6 +142,26 @@ into the namespace."
 
 (def eof (Object.))
 
+(defn- make-edamame-opts [alias-map]
+  (e/normalize-opts
+    {:all true
+     :read_eval true
+     :eof eof
+     :row-key :line
+     :col-key :column
+     :end-row-key :end-line
+     :end-col-key :end-column
+     :end-location true
+     :features #{:clj :cljs}
+     :read-cond :allow
+     :readers (fn reader [r]
+                (fn reader-value [v]
+                  (list r v)))
+     :auto-resolve (fn [x]
+                     (if (= :current x)
+                       *ns*
+                       (get alias-map x)))}))
+
 (defn read-file
   "Generate a lazy sequence of top level forms from a
    LineNumberingPushbackReader"
@@ -149,11 +169,11 @@ into the namespace."
   (let [ns (careful-refer (create-ns init-ns))
         do-read (fn do-read [ns alias-map]
                   (lazy-seq
-                   (let [form (binding [*ns* ns
-                                        reader/*alias-map* (merge (ns-aliases ns)
-                                                                  (alias-map ns))]
-                                (reader/read {:eof eof :read-cond :preserve} r))
-                         [ns? new-ns k] (when (sequential? form) form)
+                   (let [form (binding [*ns* ns]
+                                (e/parse-next r (make-edamame-opts
+                                                  (merge (ns-aliases ns)
+                                                         (alias-map ns)))))
+                         [ns? new-ns] (when (sequential? form) form)
                          new-ns (unquote-if-quoted new-ns)
                          ns (if (and (symbol? new-ns)
                                      (#{'ns 'in-ns} ns?))

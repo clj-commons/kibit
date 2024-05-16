@@ -12,7 +12,8 @@
 
 (defmacro defrules [name & rules]
   `(let [rules# (for [rule# '~rules]
-                  (if (raw-rule? rule#)
-                    (eval rule#) ;; raw rule, no need to compile
-                    (compile-rule rule#)))]
+                  (unifier/prep
+                    (if (raw-rule? rule#)
+                      (eval rule#) ;; raw rule, no need to compile
+                      (compile-rule rule#))))]
      (def ~name (vec rules#))))
