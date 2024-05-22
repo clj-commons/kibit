@@ -30,7 +30,7 @@ For other Clojure linters, see [clj-kondo](https://github.com/borkdude/clj-kondo
 
 ## Usage
 
-Add `[lein-kibit "0.1.9"]` to your `:plugins` vector in your `:user` profile. Then you can run
+Add `[lein-kibit "0.1.11"]` to your `:plugins` vector in your `:user` profile. Then you can run
 
     $ lein kibit
 
